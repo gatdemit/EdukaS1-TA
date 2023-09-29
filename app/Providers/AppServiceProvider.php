@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
+use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
