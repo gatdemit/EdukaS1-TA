@@ -66,6 +66,7 @@ Route::get('/quiz', [DashboardController::class, 'kuis'])->middleware('tamu');
 Route::resource('/adPanel/video', VideoController::class)->middleware('tamu');
 
 Route::get('/adPanel/users', [AdPanelController::class, 'adUsers']);
+Route::post('/adPanel/users', [AdPanelController::class, 'delUser']);
 
 Route::post('/keranjang', [TransaksiController::class, 'keranjang']);
 Route::get('/adPanel/transaksi', [TransaksiController::class, 'transaksi']);

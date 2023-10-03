@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
+use Illuminate\Support\Str;
 use Kreait\Firebase\Auth\UserQuery;
 
 class AdPanelController extends Controller
@@ -34,6 +35,16 @@ class AdPanelController extends Controller
         ]);
     }
 
+    public function delUser(Request $request){
+        $auth = Firebase::auth();
+        $db = Firebase::database();
+        $email = Str::replace('.com', 'com', $request['email']);
+        $auth->deleteUser($request['uid']);
+        $db->getReference('users/' . $email)->remove();
+
+        return redirect('/adPanel/users');
+    }
+
     public function userList(){
         $auth = Firebase::auth();
 
@@ -43,6 +54,7 @@ class AdPanelController extends Controller
         {
             dump($user);
             dump($user->displayName);
+            dump($user->uid);
         }
     }
 
@@ -92,6 +104,27 @@ class AdPanelController extends Controller
         // dump($jurusan);
         // dump(count($jurusan));
 
-        dump($db->getReference('transaksi')->getValue());
+        // dump($db->getReference('users/yahyariz14@gmailcom')->getChildKeys());
+        // dump($db->getReference('users')->getSnapshot()->hasChildren());
+        foreach($db->getReference('users')->getSnapshot() as $snapshot){
+            dump($snapshot->getKey());
+            // if(array_key_exists('vids', $snapshot)){
+            //     dump($snapshot['vids']);
+            // } else{
+            //     dump('nop');
+            // }
+        }
+
+        foreach($db->getReference('users')->getValue() as $snapshot){
+            if(array_key_exists('vids', $snapshot)){
+                if(array_key_exists('v5jmdOliHM2fsuev0G7XFvix0NlhgMmrz3Te9HqU_mp4', $snapshot['vids'])){
+                    dump(true);
+                } else{
+                    dump('lanjut');
+                }
+            } else{
+                dump('nop');
+            }
+        }
     }
 }

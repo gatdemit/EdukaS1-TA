@@ -37,6 +37,12 @@
                             <td>{{ $video['Jurusan'] }}</td>
                             <td>
                                 <a href="/adPanel/quiz/{{ $video['Video'] }}/edit" class="btn btn-warning">Edit Kuis</a>
+                                <form action="/adPanel/quiz/{{ $video['Video'] }}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <input type="hidden" name="video" id="video" value="{{ $video['Video'] }}">
+                                    <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Hapus Kuis</button>
+                                </form>
                             </td>
                         </tr>
                     @endif

@@ -75,7 +75,9 @@ class KuisController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('adPanel.sidemenu.kuis.edit',[
+            'title' => 'Admin Panel | Quiz'
+        ]);
     }
 
     /**
@@ -83,15 +85,39 @@ class KuisController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $db = Firebase::database();
+        $updates = [];
+        for($i=0; $i<=$request['count']; $i++){
+            $updates += [
+                'pertanyaan ' . $i+1 => [
+                    'pertanyaan' => $request['pertanyaan' . $i+1],
+                    'jawaban' => [
+                        'jawaban 1' => $request['jawaban' . ($i*5)+1],
+                        'jawaban 2' => $request['jawaban' . ($i*5)+2],
+                        'jawaban 3' => $request['jawaban' . ($i*5)+3],
+                        'jawaban 4' => $request['jawaban' . ($i*5)+4],
+                        'jawaban 5' => $request['jawaban' . ($i*5)+5],
+                        'kunci jawaban' => $request['radio' . $i+1]
+                    ]
+                ], 
+            ];
+        }
+
+        $db->getReference('videos/' . $request['video']. '/kuis')->update($updates);
+
+        return redirect('adPanel/quiz');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $db=Firebase::database();
+
+        $db->getReference('videos/' . $request['video'] . '/kuis')->remove();
+
+        return redirect('adPanel/quiz');
     }
 
     public function tampilKuis(){

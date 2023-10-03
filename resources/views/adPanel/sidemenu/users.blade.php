@@ -19,7 +19,14 @@
                     <tr>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->displayName }}</td>
-                        <td><a href="#" class="btn btn-danger">Delete</a></td>
+                        <td>
+                            <form action="/adPanel/users" method="POST">
+                                @csrf
+                                <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
+                                <input type="hidden" name="email" id="email" value="{{ $user->email }}">
+                                <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

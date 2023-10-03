@@ -29,7 +29,14 @@
                             <td>{{ $snapshot['Jurusan'] }}</td>
                             <td>{{ $snapshot['Harga'] }}</td>
                             <td><a href="/adPanel/video/{{ $snapshot['Video'] }}/edit" class="btn btn-warning">Edit</a></td>
-                            <td><a href="#" class="btn btn-danger">Delete</a></td>
+                            <td>
+                                <form action="/adPanel/video/{{ $snapshot['Video'] }}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <input type="hidden" name="video" id="video" value="{{ $snapshot['Video'] }}">
+                                    <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 @else

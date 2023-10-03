@@ -121,8 +121,24 @@ class VideoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $db=Firebase::database();
+
+        foreach($db->getReference('users')->getValue() as $snapshot){
+            if(array_key_exists('vids', $snapshot)){
+                if(array_key_exists($request['video'], $snapshot['vids'])){
+                    $email = Str::replace('.com', 'com', $snapshot['email']);
+                    $db->getReference('users/' . $email . '/vids/' . $request['video'])->remove();
+                } else{
+                    dump('lanjut');
+                }
+            } else{
+                dump('nop');
+            }
+        }
+
+        $db->getReference('videos/' . $request['video'])->remove();
+        return redirect('adPanel/video');
     }
 }

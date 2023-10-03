@@ -42,7 +42,8 @@ class RegisterController extends Controller
             'username' => $request->input('username'),
             'profile' => 'empty',
             'profpic' => 'profile_picture/default.jpg',
-            'tnc' => $request->input('tnc')
+            'tnc' => $request->input('tnc'),
+            'email' => $email
         ];
 
         try {
