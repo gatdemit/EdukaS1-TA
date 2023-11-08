@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Auth\UserQuery;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class AdPanelController extends Controller
 {
@@ -38,11 +40,43 @@ class AdPanelController extends Controller
     public function delUser(Request $request){
         $auth = Firebase::auth();
         $db = Firebase::database();
-        $email = Str::replace('.com', 'com', $request['email']);
-        $auth->deleteUser($request['uid']);
-        $db->getReference('users/' . $email)->remove();
+        $email = Str::replace('.', '', $request['email']);
+        try{
+            $auth->deleteUser($request['uid']);
+            $db->getReference('users/' . $email)->remove();
+    
+            return redirect('/adPanel/users')->with('success', 'User Berhasil Dihapus!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'User Gagal Dihapus. Silakan Coba Lagi.');
+        }
+    }
 
-        return redirect('/adPanel/users');
+    public function laporan(Request $request){
+        $db = Firebase::database();
+        if($request['tahun']){
+            return view('adPanel.sidemenu.laporan.index', [
+                'title' => 'Admin Panel | Laporan',
+                'snapshots' => $db->getReference('transaksi/validated')->getValue(),
+                'tahun' => $request['tahun']
+            ]);
+        } else{
+            return view('adPanel.sidemenu.laporan.index', [
+                'title' => 'Admin Panel | Laporan',
+                'snapshots' => $db->getReference('transaksi/validated')->getValue(),
+                'tahun' => date('Y', strtotime(Carbon::now()))
+            ]);
+        }
+    }
+
+    public function addData(){
+        $db = Firebase::database();
+
+        for($i=0; $i<=11; $i++){
+            $db->getReference('transaksi/validated/anu' . rand(1000000, 5000000))->update([
+                'total' => rand(1000000, 5000000),
+                'validation_date' => '2022-' . $i+1 . '-01'
+            ]);
+        }
     }
 
     public function userList(){
@@ -50,12 +84,31 @@ class AdPanelController extends Controller
 
         $users = $auth->listUsers();
 
+        // dump(Session::get('firebaseUserId'));
+        // dump($auth->getUser(Session::get('firebaseUserId'))->customClaims['role']);
+        dump(Carbon::now()->toDateString());
+        dump(Carbon::now()->toTimeString());
+        dump(Carbon::now()->toDateTimeString());
+
         foreach($users as $user)
         {
             dump($user);
             dump($user->displayName);
             dump($user->uid);
+            dump($user->customClaims['role']);
         }
+    }
+
+    public function makeUser(){
+        $auth = Firebase::Auth();
+
+        $customClaims = [
+            'role' => 'user'
+        ];
+
+        $auth->setCustomUserClaims(Session::get('firebaseUserId'), $customClaims);
+
+        return redirect('/userList');
     }
 
     public function vidList(){
@@ -115,6 +168,7 @@ class AdPanelController extends Controller
             // }
         }
 
+        dump($db->getReference('users')->getValue());
         foreach($db->getReference('users')->getValue() as $snapshot){
             if(array_key_exists('vids', $snapshot)){
                 if(array_key_exists('v5jmdOliHM2fsuev0G7XFvix0NlhgMmrz3Te9HqU_mp4', $snapshot['vids'])){

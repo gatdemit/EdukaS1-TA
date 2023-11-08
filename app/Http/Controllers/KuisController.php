@@ -41,25 +41,29 @@ class KuisController extends Controller
     {
         $db = Firebase::database();
         $updates = [];
-        for($i=0; $i<=$request['count']; $i++){
-            $updates += [
-                'pertanyaan ' . $i+1 => [
-                    'pertanyaan' => $request['pertanyaan' . $i+1],
-                    'jawaban' => [
-                        'jawaban 1' => $request['jawaban' . ($i*5)+1],
-                        'jawaban 2' => $request['jawaban' . ($i*5)+2],
-                        'jawaban 3' => $request['jawaban' . ($i*5)+3],
-                        'jawaban 4' => $request['jawaban' . ($i*5)+4],
-                        'jawaban 5' => $request['jawaban' . ($i*5)+5],
-                        'kunci jawaban' => $request['radio' . $i+1]
-                    ]
-                ], 
-            ];
+        try{
+            for($i=0; $i<=$request['count']; $i++){
+                $updates += [
+                    'pertanyaan ' . $i+1 => [
+                        'pertanyaan' => $request['pertanyaan' . $i+1],
+                        'jawaban' => [
+                            'jawaban 1' => $request['jawaban' . ($i*5)+1],
+                            'jawaban 2' => $request['jawaban' . ($i*5)+2],
+                            'jawaban 3' => $request['jawaban' . ($i*5)+3],
+                            'jawaban 4' => $request['jawaban' . ($i*5)+4],
+                            'jawaban 5' => $request['jawaban' . ($i*5)+5],
+                            'kunci jawaban' => $request['radio' . $i+1]
+                        ]
+                    ], 
+                ];
+            }
+    
+            $db->getReference('videos/' . $request['video']. '/kuis')->update($updates);
+    
+            return redirect('adPanel/quiz')->with('success', 'Kuis Berhasil Ditambahkan!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Penambahan Kuis Gagal. Silakan Coba Lagi.');
         }
-
-        $db->getReference('videos/' . $request['video']. '/kuis')->update($updates);
-
-        return redirect('adPanel/quiz');
     }
 
     /**
@@ -87,25 +91,29 @@ class KuisController extends Controller
     {
         $db = Firebase::database();
         $updates = [];
-        for($i=0; $i<=$request['count']; $i++){
-            $updates += [
-                'pertanyaan ' . $i+1 => [
-                    'pertanyaan' => $request['pertanyaan' . $i+1],
-                    'jawaban' => [
-                        'jawaban 1' => $request['jawaban' . ($i*5)+1],
-                        'jawaban 2' => $request['jawaban' . ($i*5)+2],
-                        'jawaban 3' => $request['jawaban' . ($i*5)+3],
-                        'jawaban 4' => $request['jawaban' . ($i*5)+4],
-                        'jawaban 5' => $request['jawaban' . ($i*5)+5],
-                        'kunci jawaban' => $request['radio' . $i+1]
-                    ]
-                ], 
-            ];
+        try{
+            for($i=0; $i<=$request['count']; $i++){
+                $updates += [
+                    'pertanyaan ' . $i+1 => [
+                        'pertanyaan' => $request['pertanyaan' . $i+1],
+                        'jawaban' => [
+                            'jawaban 1' => $request['jawaban' . ($i*5)+1],
+                            'jawaban 2' => $request['jawaban' . ($i*5)+2],
+                            'jawaban 3' => $request['jawaban' . ($i*5)+3],
+                            'jawaban 4' => $request['jawaban' . ($i*5)+4],
+                            'jawaban 5' => $request['jawaban' . ($i*5)+5],
+                            'kunci jawaban' => $request['radio' . $i+1]
+                        ]
+                    ], 
+                ];
+            }
+    
+            $db->getReference('videos/' . $request['video']. '/kuis')->update($updates);
+    
+            return redirect('adPanel/quiz')->with('success', 'Kuis Berhasil Diperbarui!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Pembaruan Kuis Gagal. Silakan Coba Lagi.');
         }
-
-        $db->getReference('videos/' . $request['video']. '/kuis')->update($updates);
-
-        return redirect('adPanel/quiz');
     }
 
     /**
@@ -115,9 +123,13 @@ class KuisController extends Controller
     {
         $db=Firebase::database();
 
-        $db->getReference('videos/' . $request['video'] . '/kuis')->remove();
-
-        return redirect('adPanel/quiz');
+        try{
+            $db->getReference('videos/' . $request['video'] . '/kuis')->remove();
+    
+            return redirect('adPanel/quiz')->with('success', 'Penghapusan Kuis Berhasil!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Penghapusan Kuis Gagal.');
+        }
     }
 
     public function tampilKuis(){
@@ -129,18 +141,23 @@ class KuisController extends Controller
     public function jawabKuis(Request $request){
         $db = Firebase::database();
         $nilai = 0;
-        for($i=1; $i <= $request['question_count']; $i++){
-            if($request['Pertanyaan_' . $i] == $db->getReference('videos/' . $request['video'] . '/kuis')->getValue()['pertanyaan '. $i]['jawaban']['kunci jawaban']){
-                $nilai++;
+
+        try{
+            for($i=1; $i <= $request['question_count']; $i++){
+                if($request['Pertanyaan_' . $i] == $db->getReference('videos/' . $request['video'] . '/kuis')->getValue()['pertanyaan '. $i]['jawaban']['kunci jawaban']){
+                    $nilai++;
+                }
             }
+    
+            $score = $nilai/count($db->getReference('videos/' . $request['video'] . '/kuis')->getValue())*100;
+    
+            $db->getReference('users/' . Session::get('email') . '/vids/' . $request['video'])->update([
+                'nilai' => $score
+            ]);
+    
+            return redirect('/dashboard/quiz')->with('success', 'Kuis Berhasil Dikerjakan!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Dalam Pengerjaan Kuis. Silakan Coba Lagi.');
         }
-
-        $score = $nilai/count($db->getReference('videos/' . $request['video'] . '/kuis')->getValue())*100;
-
-        $db->getReference('users/' . Session::get('email') . '/vids/' . $request['video'])->update([
-            'nilai' => $score
-        ]);
-
-        return redirect('/quiz');
     }
 }

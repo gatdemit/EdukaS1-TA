@@ -70,10 +70,10 @@ class VideoController extends Controller
         try{
             $db->getReference('videos/'. $storVid)->update($updates);
         } catch(\Exception $e){
-            Session::flash('error', 'Data storage failed. Please try again.');
+            return redirect()->back()->with('error', 'Upload Video Gagal. Silakan Coba Lagi.');
         }
 
-        return redirect('/adPanel/video')->with('success', 'profile has been created!');
+        return redirect('/adPanel/video')->with('success', 'Upload Video Berhasil!');
     }
 
     /**
@@ -110,12 +110,12 @@ class VideoController extends Controller
         ];
 
         try{
-            $db->getReference('videos/'.$request['fakultas']. '/' . $request['video'])->update($updates);
+            $db->getReference('videos/' . $request['video'])->update($updates);
         } catch(\Exception $e){
-            Session::flash('error', 'Data storage failed. Please try again.');
+            return redirect()->back()->with('error', 'Pembaruan Video Gagal. Silakan Coba Lagi');
         }
 
-        return redirect('/adPanel/video')->with('success', 'profile has been created!');
+        return redirect('/adPanel/video')->with('success', 'Pembaruan Video Berhasil!');
     }
 
     /**
@@ -125,20 +125,20 @@ class VideoController extends Controller
     {
         $db=Firebase::database();
 
-        foreach($db->getReference('users')->getValue() as $snapshot){
-            if(array_key_exists('vids', $snapshot)){
-                if(array_key_exists($request['video'], $snapshot['vids'])){
-                    $email = Str::replace('.com', 'com', $snapshot['email']);
-                    $db->getReference('users/' . $email . '/vids/' . $request['video'])->remove();
-                } else{
-                    dump('lanjut');
+        try{
+            foreach($db->getReference('users')->getValue() as $snapshot){
+                if(array_key_exists('vids', $snapshot)){
+                    if(array_key_exists($request['video'], $snapshot['vids'])){
+                        $email = Str::replace('.com', 'com', $snapshot['email']);
+                        $db->getReference('users/' . $email . '/vids/' . $request['video'])->remove();
+                    } 
                 }
-            } else{
-                dump('nop');
             }
+    
+            $db->getReference('videos/' . $request['video'])->remove();
+            return redirect()->back()->with('success', 'Video Berhasil Dihapus!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Video Gagal Dihapus. Silakan Coba Lagi.');
         }
-
-        $db->getReference('videos/' . $request['video'])->remove();
-        return redirect('adPanel/video');
     }
 }

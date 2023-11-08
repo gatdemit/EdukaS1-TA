@@ -6,7 +6,7 @@
       <div class="offcanvas-body d-md-flex flex-column p-0 py-lg-2 overflow-y-auto">
         <ul class="nav flex-column align-items-center">
           <li class="nav-item">
-            <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/quiz">
+            <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/dashboard/quiz">
               My Quiz
             </a>
           </li>

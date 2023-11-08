@@ -49,8 +49,13 @@
                         @enderror
                     </div>
                     <div class="form-check">
-                        <input type="checkbox" class="form-control-input" name="tnc" id="tnc">
-                        <label for="tnc" class="form-control-label">I have Read and Agreed to EdukaS1's User Terms & Agreements</label>
+                        <input type="checkbox" class="form-control-input @error('terms') is-invalid @enderror" name="terms" id="terms">
+                        <label for="terms" class="form-control-label">I have Read and Agreed to EdukaS1's User Terms & Agreements</label>
+                        @error('terms')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     <button class="btn btn-primary" type="submit">Sign Up</button>
                 </form>

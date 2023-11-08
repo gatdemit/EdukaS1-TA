@@ -2,7 +2,13 @@
 
 <div class="container">
     <div class="row">
-        <form action="/quiz/{{ request()->segment(count(request()->segments())) }}" method="POST">
+        @if(session()->has('error'))
+            <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}" method="POST">
             @csrf
             @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/kuis')->getValue() as $questions)
             <p>{{ $questions['pertanyaan'] }}</p>

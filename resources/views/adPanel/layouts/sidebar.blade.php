@@ -36,15 +36,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link d-flex align-items-center gap-2" href="#">
+            <a class="nav-link d-flex align-items-center gap-2" href="/adPanel/laporan">
                 <span data-feather="file-text"></span>
               Reports
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <span data-feather="file-text"></span>
-              Settings
             </a>
           </li>
         </ul>

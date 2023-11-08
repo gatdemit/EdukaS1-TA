@@ -5,10 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Session;
 use Kreait\Laravel\Firebase\Facades\Firebase;
+use Illuminate\Support\Facades\Session;
 
-class isGuest
+class isAdmin
 {
     /**
      * Handle an incoming request.
@@ -17,10 +17,8 @@ class isGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Session::has('user')){
-            return redirect('/login');
-        } else if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']=='admin'){
-            return redirect('/adPanel');
+        if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']!='admin'){
+            return redirect('/dashboard');
         }
         return $next($request);
     }

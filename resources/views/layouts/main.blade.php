@@ -17,13 +17,19 @@
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    @include('partials.navbar')
 
-    <div class="container mt-4">
-        @yield('container')
-    </div>
+    <header class="row mx-5 mt-2">
+        @include('layouts.header')
+    </header>
 
+    <main class="row mx-5 pb-5">
+        <div>
+            @yield('container')
+        </div>
+    </main>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <footer class="row mt-5 pt-5">
+        @include('layouts.footer')
+    </footer>
 </body>
 </html>

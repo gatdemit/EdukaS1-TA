@@ -43,18 +43,20 @@ class DashboardController extends Controller
             'tanggal_lahir' => $request['tanggal_lahir'],
             'nomor_telp' => $request['phone-number'],
             'alamat' => $request['address'],
-            'profpic' => $request['image']->store('profile_picture'),
             'profile' => 'fill'
         ];
 
         try{
-            $db->getReference('users/'.$request['email'])->update($updates);
+            if($request['image']==null){
+                $db->getReference('users/'.$request['email'])->update($updates);
+            } else{
+                $updates += ['profpic' => $request['image']->store('profile_picture')];
+                $db->getReference('users/'.$request['email'])->update($updates);
+            }
         } catch(\Exception $e){
-            Session::flash('error', 'Data storage failed. Please try again.');
+            Session::flash('error', 'Pengisian Data Gagal. Silakan Coba Lagi.');
         }
-
-        return redirect('/dashboard')->with('success', 'profile has been created!');
-
+        return redirect('/dashboard')->with('success', 'Profile Dibuat dengan Sukses!');
     }
 
     /**
@@ -88,24 +90,68 @@ class DashboardController extends Controller
             'tanggal_lahir' => $request['tanggal_lahir'],
             'nomor_telp' => $request['phone-number'],
             'alamat' => $request['address'],
-            'profpic' => $request['image']->store('profile_picture')
         ];
-        Storage::delete($db->getReference('users/'.Session::get('email'))->getValue()['profpic']);
         try{
-            $db->getReference('users/'.$request['email'])->update($updates);
+            if($request['image']==null){
+                $db->getReference('users/'.$request['email'])->update($updates);
+            } else{
+                Storage::delete($db->getReference('users/'.Session::get('email'))->getValue()['profpic']);
+                $updates += ["profpic" => $request['image']->store('profile_picture')];
+                $db->getReference('users/'.$request['email'])->update($updates);
+            }
         } catch(\Exception $e){
-            Session::flash('error', 'Data storage failed. Please try again.');
+            Session::flash('error', 'Pembaruan Gagal. Silakan Coba Lagi.');
         }
 
-        return redirect('/dashboard')->with('success', 'profile has been created!');
+        return redirect('/dashboard')->with('success', 'Profil Berhasil Diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+    public function manageAccount(){
+        return view('dashboard.menu.akun', [
+            'title' => 'dashboard'
+        ]);
+    }
+
+    public function passwordChange(Request $request){
+        $auth = Firebase::Auth();
+
+        $validator = $request->validate([
+            'oldpassword' => 'required|string|min:6',
+            'password' => 'required|confirmed|string|min:6',
+        ]);
+
+        $email = Str::replace('com', '.com', $request['email']);
+
+        try{
+            if($auth->signInWithEmailAndPassword($email, $validator['oldpassword'])){
+                $auth->changeUserPassword(Session::get('firebaseUserId'), $validator['password']);
+                return redirect('/dashboard')->with('success', 'Password Berhasil Diubah!');
+            }
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Perubahan Password Gagal. Silakan Coba Lagi');
+        }
+    }
+    
+    public function destroy(Request $request)
     {
-        //
+        $auth = Firebase::Auth();
+        $db = Firebase::database();
+
+        try{
+            $db->getReference('users/' . $request['email'])->remove();
+            Session::forget('user');
+                
+            Session::save();
+            $auth->deleteUser(Session::get('firebaseUserId'));
+    
+            return redirect('/login')->with('success', 'Penghapusan Akun Berhasil!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('delError', 'Penghapusan Akun Gagal. Silakan Coba Lagi.');
+        }
     }
 
     public function kuis(){

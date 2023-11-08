@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Storage;
 class CourseController extends Controller
 {
     public function index(){
-        $jurusan = [
-            'Teknik' => ['Teknik Sipil', 'Arsitektur', 'Teknik Kimia', 'Teknik Perencanaan Wilayah dan Kota', 'Teknik Mesin', 'Teknik Elektro', 'Teknik Perkapalan', 'Teknik Industri', 'Teknik Lingkungan', 'Teknik Geologi', 'Teknik Geodesi', 'Teknik Komputer'],
-            'Kedokteran' => ['Kedokteran', 'Kedokteran Gigi', 'Farmasi'],
-            'Kesehatan Masyarakat' => ['Kesehatan Masyarakat'],
-            'Sains dan Matematika' => ['Matematika', 'Biologi', 'Fisika', 'Kimia', 'Statistika', 'Informatika', 'Bioteknologi'],
-            'Peternakan dan Pertanian' => ['Peternakan', 'Teknologi Pangan', 'Agroekoteknologi', 'Agribisnis'],
-            'Perikanan dan Ilmu Kelautan' => ['Sumber Daya Perairan', 'Akuakultur', 'Perikanan Tangkap', 'Teknologi Hasil Perikanan', 'Ilmu Kelautan', 'Oseanografi'],
-            'Hukum' => ['Hukum'],
-            'Ekonomika dan Bisnis' => ['Akuntansi', 'Manajemen', 'Bisnis Digital', 'Ilmu Ekonomi', 'Ekonomi Islam'],
-            'Ilmu Sosial dan Ilmu Politik' => ['Administrasi Bisnis', 'Administrasi Publik', 'Hubungan Internasional', 'Ilmu Komunikasi', 'Ilmu Pemerintahan'],
-            'Ilmu Budaya' => ['Sejarah', 'Sastra Indonesia', 'Bahasa dan Kebudayaan Jepang', 'Sastra Inggris', 'Antropologi Sosial', 'Ilmu Perpustakaan'],
-            'Psikologi' => ['Psikologi']
+        $jurusan = [ 
+            'Mata Kuliah Umum' => ['Umum'],
+            'Fakultas Ekonomika dan Bisnis' => ['Akuntansi', 'Manajemen', 'Bisnis Digital', 'Ilmu Ekonomi', 'Ekonomi Islam'],
+            'Fakultas Hukum' => ['Hukum'],
+            'Fakultas Ilmu Budaya' => ['Sejarah', 'Sastra Indonesia', 'Bahasa dan Kebudayaan Jepang', 'Sastra Inggris', 'Antropologi Sosial', 'Ilmu Perpustakaan'],
+            'Fakultas Ilmu Sosial dan Ilmu Politik' => ['Administrasi Bisnis', 'Administrasi Publik', 'Hubungan Internasional', 'Ilmu Komunikasi', 'Ilmu Pemerintahan'],
+            'Fakultas Kedokteran' => ['Kedokteran', 'Kedokteran Gigi', 'Farmasi'],
+            'Fakultas Kesehatan Masyarakat' => ['Kesehatan Masyarakat'],
+            'Fakultas Perikanan dan Ilmu Kelautan' => ['Sumber Daya Perairan', 'Akuakultur', 'Perikanan Tangkap', 'Teknologi Hasil Perikanan', 'Ilmu Kelautan', 'Oseanografi'],
+            'Fakultas Peternakan dan Pertanian' => ['Peternakan', 'Teknologi Pangan', 'Agroekoteknologi', 'Agribisnis'],
+            'Fakultas Psikologi' => ['Psikologi'],
+            'Fakultas Sains dan Matematika' => ['Matematika', 'Biologi', 'Fisika', 'Kimia', 'Statistika', 'Informatika', 'Bioteknologi'],
+            'Fakultas Teknik' => ['Teknik Sipil', 'Arsitektur', 'Teknik Kimia', 'Teknik Perencanaan Wilayah dan Kota', 'Teknik Mesin', 'Teknik Elektro', 'Teknik Perkapalan', 'Teknik Industri', 'Teknik Lingkungan', 'Teknik Geologi', 'Teknik Geodesi', 'Teknik Komputer'],
         ];
         return view('course.index', [
             'title' => "Our Course",
@@ -43,5 +44,49 @@ class CourseController extends Controller
         return view('course.vidStream', [
             'title' => 'Our Course'
         ]);
+    }
+
+    public function rate(Request $request){
+        $db=Firebase::database();
+        try{   
+            if($db->getReference('users/' . $request['email'] . '/vids/' . $request['link']. '/rated')->getSnapshot()->exists()){
+                $user_rate = $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->getValue()['user_rate'];
+                $rate = $db->getReference('videos/' . $request['link'])->getValue()['rating'];
+                $db->getReference('videos/' . $request['link'])->update([
+                    'rating' => ($rate - $user_rate) + $request['rating'],
+                ]);
+                $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                    'user_rate' => $request['rating']
+                ]);
+                return redirect()->back()->with('success', 'Rating Berhasil!');
+            } else{
+                if($db->getReference('videos/' . $request['link'] . '/rating')->getSnapshot()->exists()){
+                    $rate = $db->getReference('videos/' . $request['link'])->getValue()['rating'];
+                    $rate_count = $db->getReference('videos/' . $request['link'])->getValue()['rate_count'];
+                    $db->getReference('videos/' . $request['link'])->update([
+                        'rating' => $request['rating'] + $rate,
+                        'rate_count' => $rate_count + 1
+                    ]);
+                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                        'user_rate' => $request['rating'],
+                        'rated' => true
+                    ]);
+    
+                    return redirect()->back()->with('success', 'Rating Berhasil!');
+                } else{
+                    $db->getReference('videos/' . $request['link'])->update([
+                        'rating' => $request['rating'],
+                        'rate_count' => 1
+                    ]);
+                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                        'user_rate' => $request['rating'],
+                        'rated' => true
+                    ]);
+                    return redirect()->back()->with('success', 'Rating Berhasil!');
+                }
+            }
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Rating Gagal. Silakan Coba Lagi.');
+        }
     }
 }

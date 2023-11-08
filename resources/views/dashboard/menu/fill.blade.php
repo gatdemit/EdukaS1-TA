@@ -12,6 +12,12 @@
             @csrf
             <div class="col">
                 <div class="form-floating mb-3 text-center thumbnail">
+                    @if(session()->has('success'))
+                        <div class="alert alert-success  alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <img src="http://via.placeholder.com/150x150" class="img-preview" style="border-radius: 50%; height:120px; width:120px; max-height:120px; max-width:120px;" role="button" id="myfile" name="myfile">
                     <div role="button" class="caption" id="other" name="other">
                         <i class="bi bi-camera-fill"></i>

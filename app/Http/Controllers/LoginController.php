@@ -31,28 +31,32 @@ class LoginController extends Controller
             Session::put('user', true);
             Session::save();
             
-            return redirect('/dashboard');
+            return redirect('/dashboard')->with('success', 'Login Berhasil!');
         } catch(\Exception $e){
-            Session::flash('error', 'Login failed. Please try again.');
+            return redirect()->back()->with('belumLogin', 'Login failed. Please try again.');
         }
     }
 
     protected function adLog(Request $request){
+        $firebaseAuth = Firebase::Auth();
         $validator = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
         try{
-            $firebaseAuth = Firebase::Auth();
-            $signInResult = $firebaseAuth->signInWithEmailAndPassword($request['email'], $request['password']);
-            $inputEmail = Str::replace('.', '', $request['email']);
-            Session::put('firebaseUserId', $signInResult->firebaseUserId());
-            Session::put('email', $inputEmail);
-            Session::put('user', true);
-            Session::save();
-            
-            return redirect('/adPanel');
+            if($firebaseAuth->getUserByEmail($request['email'])->customClaims['role']!='admin'){
+                return redirect('/login')->with('belumLogin', 'Akun Anda User Biasa. Silakan Login di Laman Ini.');
+            } else{
+                $signInResult = $firebaseAuth->signInWithEmailAndPassword($request['email'], $request['password']);
+                $inputEmail = Str::replace('.', '', $request['email']);
+                Session::put('firebaseUserId', $signInResult->firebaseUserId());
+                Session::put('email', $inputEmail);
+                Session::put('user', true);
+                Session::save();
+                
+                return redirect('/adPanel');
+            }
         } catch(\Exception $e){
             Session::flash('error', 'Login failed. Please try again.');
         }
@@ -65,11 +69,28 @@ class LoginController extends Controller
             Session::forget('user');
             
             Session::save();
-            Session::flash('logoutSuccess', "Logout berhasil!");
+            Session::flash('success', "Logout berhasil!");
             return redirect('/login');
         } else{
             Session::flash('belumLogin', 'User Belum Login');
             return redirect('/login');
+        }
+    }
+
+    public function forgotPass(){
+        return view('login.forgotpass', [
+            'title' => 'login'
+        ]);
+    }
+
+    public function resetPass(Request $request){
+        $auth = Firebase::Auth();
+
+        try{
+            $auth->sendPasswordResetLink($request['email']);
+            return redirect('/login')->with('success', 'Reset Password Berhasil! Silakan Login dengan Password yang Baru!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Reset Password Gagal. Silakan Coba Lagi');
         }
     }
 }

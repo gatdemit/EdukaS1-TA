@@ -30,7 +30,7 @@ class RegisterController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'password' => 'required|confirmed|string|min:6',
-            'tnc' => 'required'
+            'terms' => 'required'
         ]);
 
 
@@ -42,17 +42,18 @@ class RegisterController extends Controller
             'username' => $request->input('username'),
             'profile' => 'empty',
             'profpic' => 'profile_picture/default.jpg',
-            'tnc' => $request->input('tnc'),
+            'tnc' => $request->input('terms'),
             'email' => $email
         ];
 
         try {
-            $createdUser = $this->firebaseAuth->createUserWithEmailAndPassword($email, $password)   ;
+            $createdUser = $this->firebaseAuth->createUserWithEmailAndPassword($email, $password);
 
             $customClaims = [
                 'role' => 'user'
             ];
             $this->firebaseAuth->setCustomUserClaims($createdUser->uid, $customClaims);
+            $this->firebaseAuth->updateUser($createdUser->uid, ['displayName' => $request['username']]);
 
             $this->database->getReference($ref_tablename)->set($postData);
         } catch(\Exception $e){

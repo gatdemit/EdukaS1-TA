@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
@@ -15,11 +16,16 @@ class TransaksiController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.transaksi.index', [
             'title' => 'Admin Panel | Transaksi',
-            'snapshots' => $db->getReference('transaksi')->getValue(),
-            'tagihan' => 0
+            'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
         ]);
     }
 
+    public function keranjangku(){
+        return view('keranjang', [
+            'title' => 'Keranjang'
+        ]);
+    }
+    
     public function keranjang(Request $request){
         $db = Firebase::database();
        
@@ -35,33 +41,89 @@ class TransaksiController extends Controller
             ],
         ];
 
-        $db->getReference('transaksi/' . $request['email'])->update(["email" => $email]);
-        $db->getReference('transaksi/' . $request['email'] . '/Keranjang')->update($updates);
-
-        return redirect()->back();
+        try{
+            $db->getReference('transaksi/unvalidated/' . $request['email'])->update(["email" => $email, "checkout" => false]);
+            $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->update($updates);
+    
+            return redirect()->back()->with('success', 'Video Berhasil Ditambahkan ke Keranjang!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Video Gagal Ditambahkan ke Keranjang. Silakan Coba Lagi.');
+        }
     }
+
+    public function checkout(Request $request){
+        $db=Firebase::database();
+
+        try{
+            $db->getReference('transaksi/unvalidated/' . $request['email'])->update(['checkout' => true]);
+    
+            return redirect('/dashboard')->with('success', 'Checkout Berhasil!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Checkout Gagal. Silakan Coba Lagi.');
+        }
+    }
+
+    public function remove(Request $request){
+        $db=Firebase::database();
+
+        try{
+            $db->getReference('transaksi/unvalidated/' . $request['email'] . "/Keranjang/" . $request['video'])->remove();
+    
+            return redirect()->back()->with('success', 'Video Berhasil Dihapus dari Keranjang!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Video Gagal Dihapus dari Keranjang. Silakan Coba Lagi.');
+        }
+    }
+    
+    public function removeAll(Request $request){
+        $db=Firebase::database();
+
+        try{
+            $db->getReference('transaksi/unvalidated/' . $request['email'])->remove();
+    
+            return redirect()->back()->with('success', 'Keranjang Berhasil Dikosongkan!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Keranjang Gagal Dikosongkan. Silakan Coba Lagi.');
+        }
+    }
+
 
     public function validasi(Request $request){
         $db = Firebase::database();
 
+        $date = Carbon::now()->toDateString();
+        $time = Carbon::now()->toTimeString();
+
         $updates = [];
 
-        $videos = $db->getReference('transaksi/' . $request['email'] . '/Keranjang')->getValue();
+        $videos = $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->getValue();
 
-        foreach($videos as $video){
-            $updates += [
-                $video['Video'] => [
-                    'Video' => $video['Video'],
-                    'Fakultas' => $video['Fakultas'],
-                    'Jurusan' => $video['Jurusan']
-                ]
-            ];
+        try{
+            foreach($videos as $video){
+                $updates += [
+                    $video['Video'] => [
+                        'Video' => $video['Video'],
+                        'Fakultas' => $video['Fakultas'],
+                        'Jurusan' => $video['Jurusan']
+                    ]
+                ];
+    
+                if($db->getReference('videos/' . $video['Video']. '/buy_count')->getSnapshot()->exists()){
+                    $buy_count = $db->getReference('videos/' . $video['Video'])->getValue()['buy_count'];
+                    $db->getReference('videos/' . $video['Video'])->update(['buy_count' => $buy_count+1 ]);
+                } else{
+                    $db->getReference('videos/' . $video['Video'])->update(['buy_count' => 1]);
+                }
+            }
+    
+            $db->getReference('users/' . $request['email'] . '/vids')->update($updates);
+    
+            $db->getReference('transaksi/validated/' . $request['email'] . '_' . $date . '_' . $time)->update(['validation_date' => $date, 'total' => $request['total'] ]);
+            $db->getReference('transaksi/unvalidated/' . $request['email'])->remove();
+    
+            return redirect()->back()->with('success', 'Transaksi Berhasil Divalidasi!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Transaksi Gagal Divalidasi. Silakan Coba Lagi.');
         }
-
-        $db->getReference('users/' . $request['email'] . '/vids')->update($updates);
-
-        $db->getReference('transaksi/' . $request['email'])->remove();
-
-        return redirect()->back();
     }
 }
