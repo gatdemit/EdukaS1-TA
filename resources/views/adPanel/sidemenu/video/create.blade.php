@@ -1,23 +1,19 @@
 @extends('adPanel.layouts.main')
 
-@section('container-header')
-    <h1>Video</h1>
-@endsection
-
 @section('container')
-    <div class="table-responsive col-lg-8">
+    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
+        <h1 style="color: #0038CF; font-weight: 700;">Upload Video</h1>
         @if(session()->has('error'))
-            <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form class= "row" action="/adPanel/video" method="post" enctype="multipart/form-data">
+        <form class="row" action="/adPanel/video" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="col">
                 <div class="form-floating mb-3 text-center">
                     <input class="form-control @error('video') is-invalid @enderror" accept="video/*" type="file" id="video" name="video">
-                    <label for="video" class="form-label">Upload Video</label>
+                    <label for="video" class="form-label">Upload Video (Max: 5 MB)</label>
                     @error('video') 
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -36,24 +32,24 @@
                 <div class="form-floating mb-3">
                     <select class="form-select" id="fakultas" name="fakultas" onchange="return showcategory();">
                         <option selected disabled>--Fakultas--</option>
-                        @for($i=0; $i< count($faks); $i++)
-                            <option value="{{ array_keys($faks)[$i] }}">{{ array_keys($faks)[$i] }}</option>
-                        @endfor
+                        @foreach($faks as $fakultas)
+                            <option value="{{ $fakultas['Value'] }}">{{ $fakultas['Value'] }}</option>
+                        @endforeach
                     </select>
                     <label for="fakultas">Fakultas</label>
                 </div>
                 <div class="form-floating mb-3" id="divJur">
-                    <select class="form-select" name="jurusan">
+                    <select class="form-select" name="jurusan" id="jurusan">
                         <option selected disabled>--Jurusan--</option>
-                    @for($k=0; $k< count($faks); $k++)
-                    <optgroup label ="{{ array_keys($faks)[$k] }}" id="{{ array_keys($faks)[$k] }}" style="display:none;">
-                        @for($l=0; $l< count($faks[array_keys($faks)[$k]]); $l++)
-                            <option value="{{ $faks[array_keys($faks)[$k]][$l] }}">{{ $faks[array_keys($faks)[$k]][$l] }}</option>
-                        @endfor
-                        <label for="{{ array_keys($faks)[$k] }}">Jurusan</label>
-                    </optgroup>
-                        @endfor
-                    </select>
+                        @foreach($faks as $fakultas)
+                            <optgroup label ="{{ $fakultas['Value'] }}" id="{{ $fakultas['Value'] }}" style="display:none;">
+                                @foreach($fakultas['jurusan'] as $jurusan)
+                                    <option value="{{ $jurusan }}">{{ $jurusan }}</option>
+                                @endforeach
+                            </optgroup>
+                            @endforeach
+                        </select>
+                        <label for="jurusan">Jurusan</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" required autofocus>
@@ -64,8 +60,6 @@
                     </div>
                     @enderror
                 </div>
-            </div>
-            <div class="col">
                 <div class="form-floating mb-3">
                     <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required autofocus></textarea>
                     <label for="deskripsi" class="form-control-label">Deskripsi Video</label>
@@ -75,8 +69,7 @@
                     </div>
                     @enderror
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+                <button type="submit" class="btn btn-primary" style="font-weight: 500; font-family: Raleway;">Submit</button>
         </form>
     </div>
     <script>

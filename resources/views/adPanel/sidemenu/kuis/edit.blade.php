@@ -1,11 +1,11 @@
 @extends('adPanel.layouts.main')
 
 @section('container-header')
-    <h1>Quiz</h1>
 @endsection
 
 @section('container')
-    <div class="table-responsive col-lg-8">
+    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
+        <h1 style="color: #0038CF; font-weight: 700;">Ubah Quiz</h1>
         @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -16,7 +16,7 @@
             @method('put')
             @csrf
             <div class="col" id="parentbody">
-                @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/kuis')->getValue() as $kuis)
+                @foreach(Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getValue() as $kuis)
                 <div class="form-floating mb-3">
                     <textarea name="pertanyaan{{ $loop->iteration }}" id="pertanyaan{{ $loop->iteration }}" class="form-control" autofocus>{{ $kuis['pertanyaan'] }}</textarea>
                     <label for="pertanyaan" class="form-control-label">Pertanyaan {{ $loop->iteration }}</label>
@@ -81,16 +81,17 @@
                 <input type="hidden" name="count" id="count" value=0>
                 @endforeach
             </div>
-            <a href="#" class="btn btn-success mt-2" onclick=addRow()>Tambah</a>
+            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-family: Raleway; font-weight: 500;">Tambah</a>
             <input type="hidden" name="video" id="video" value="{{ request()->segment(count(request()->segments())-1) }}">
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            <input type="hidden" name="jurusan" id="jurusan" value="{{ $jurusan }}">
+            <button type="submit" class="btn btn-primary mt-3" style="font-family: Raleway; font-weight: 500;">Submit</button>
         </form>
     </div>
 
     <script>
         var parBody = document.getElementById('parentbody');
 
-        var count = {{ count(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/kuis')->getValue()) }}-1;
+        var count = {{ count(Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getValue()) }}-1;
 
         console.log(count);
 

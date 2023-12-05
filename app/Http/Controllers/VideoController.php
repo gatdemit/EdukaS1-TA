@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 
 class VideoController extends Controller
 {
@@ -18,7 +19,8 @@ class VideoController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.video.index', [
             'title' => 'Admin Panel | Video',
-            'videos' => $db->getReference('videos')->getValue()
+            'jurusan' => $db->getReference('videos')->getValue(),
+            'search' => false
         ]);
     }
 
@@ -27,19 +29,7 @@ class VideoController extends Controller
      */
     public function create()
     {
-        $jurusan = [
-            'Teknik' => ['Teknik Sipil', 'Arsitektur', 'Teknik Kimia', 'Teknik Perencanaan Wilayah dan Kota', 'Teknik Mesin', 'Teknik Elektro', 'Teknik Perkapalan', 'Teknik Industri', 'Teknik Lingkungan', 'Teknik Geologi', 'Teknik Geodesi', 'Teknik Komputer'],
-            'Kedokteran' => ['Kedokteran', 'Kedokteran Gigi', 'Farmasi'],
-            'Kesehatan Masyarakat' => ['Kesehatan Masyarakat'],
-            'Sains dan Matematika' => ['Matematika', 'Biologi', 'Fisika', 'Kimia', 'Statistika', 'Informatika', 'Bioteknologi'],
-            'Peternakan dan Pertanian' => ['Peternakan', 'Teknologi Pangan', 'Agroekoteknologi', 'Agribisnis'],
-            'Perikanan dan Ilmu Kelautan' => ['Sumber Daya Perairan', 'Akuakultur', 'Perikanan Tangkap', 'Teknologi Hasil Perikanan', 'Ilmu Kelautan', 'Oseanografi'],
-            'Hukum' => ['Hukum'],
-            'Ekonomika dan Bisnis' => ['Akuntansi', 'Manajemen', 'Bisnis Digital', 'Ilmu Ekonomi', 'Ekonomi Islam'],
-            'Ilmu Sosial dan Ilmu Politik' => ['Administrasi Bisnis', 'Administrasi Publik', 'Hubungan Internasional', 'Ilmu Komunikasi', 'Ilmu Pemerintahan'],
-            'Ilmu Budaya' => ['Sejarah', 'Sastra Indonesia', 'Bahasa dan Kebudayaan Jepang', 'Sastra Inggris', 'Antropologi Sosial', 'Ilmu Perpustakaan'],
-            'Psikologi' => ['Psikologi']
-        ];
+        $jurusan = Firebase::database()->getReference('faculties')->getValue();
         return view('adPanel.sidemenu.video.create', [
             'title' => 'Admin Panel | Video',
             'faks' => $jurusan
@@ -51,29 +41,53 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        $db = Firebase::database();
+        if($request['search']){
+            $db = Firebase::database();
+            return view('adPanel.sidemenu.video.index', [
+                'title' => 'Admin Panel | Video',
+                'jurusan' => $db->getReference('videos')->getValue(),
+                'search' => true,
+                'query' => $request['search']
+            ]);
+        } else{
+            $db = Firebase::database();
+    
+            $inVid = Str::replace('video/','', $request->file('video')->store('video'));
+    
+            $storVid = Str::replace('.','_',$inVid);
 
-        $inVid = Str::replace('video/','', $request->file('video')->store('video'));
+            $storeJur = Str::replace(' ', '_', $request['jurusan']);
 
-        $storVid = Str::replace('.','_',$inVid);
+            $size = 50;
+    
+            $request->validate([
+                'video' => [
+                    'required',
+                    File::default()->max($size . 'mb')
+                ]
+            ], [
+                'video.max' => 'The video field must not be greater than ' . $size . ' MB.'
+            ]);
 
-        $updates = [
-            'Judul_Video' => $request['judul'],
-            'Fakultas' => $request['fakultas'],
-            'Jurusan' => $request['jurusan'],
-            'Harga' => $request['harga'],
-            'Deskripsi' => $request['deskripsi'],
-            'Link' => $request['video']->store('video'),
-            'Video' => $storVid
-        ];
-
-        try{
-            $db->getReference('videos/'. $storVid)->update($updates);
-        } catch(\Exception $e){
-            return redirect()->back()->with('error', 'Upload Video Gagal. Silakan Coba Lagi.');
+            $updates = [
+                'Judul_Video' => $request['judul'],
+                'Fakultas' => $request['fakultas'],
+                'Jurusan' => $request['jurusan'],
+                'Harga' => $request['harga'],
+                'Deskripsi' => $request['deskripsi'],
+                'Link' => $request['video']->store('video'),
+                'Video' => $storVid,
+                'Active' => true
+            ];
+    
+            try{
+                $db->getReference('videos/' . $storeJur . '/'. $storVid)->update($updates);
+            } catch(\Exception $e){
+                return redirect()->back()->with('error', 'Upload Video Gagal. Silakan Coba Lagi.');
+            }
+    
+            return redirect('/adPanel/video')->with('success', 'Upload Video Berhasil!');
         }
-
-        return redirect('/adPanel/video')->with('success', 'Upload Video Berhasil!');
     }
 
     /**
@@ -89,10 +103,11 @@ class VideoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
         return view('adPanel.sidemenu.video.edit', [
-            'title' => 'Admin Panel | Video'
+            'title' => 'Admin Panel | Video',
+            'jurusan' => $request['jurusan']
         ]);
     }
 
@@ -110,7 +125,7 @@ class VideoController extends Controller
         ];
 
         try{
-            $db->getReference('videos/' . $request['video'])->update($updates);
+            $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'])->update($updates);
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Pembaruan Video Gagal. Silakan Coba Lagi');
         }
@@ -126,19 +141,22 @@ class VideoController extends Controller
         $db=Firebase::database();
 
         try{
-            foreach($db->getReference('users')->getValue() as $snapshot){
-                if(array_key_exists('vids', $snapshot)){
-                    if(array_key_exists($request['video'], $snapshot['vids'])){
-                        $email = Str::replace('.com', 'com', $snapshot['email']);
-                        $db->getReference('users/' . $email . '/vids/' . $request['video'])->remove();
-                    } 
-                }
-            }
-    
-            $db->getReference('videos/' . $request['video'])->remove();
-            return redirect()->back()->with('success', 'Video Berhasil Dihapus!');
+            $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'])->update(['Active' => false]);
+            return redirect()->back()->with('success', 'Video Berhasil Dinonaktifkan!');
         } catch(\Exception $e){
-            return redirect()->back()->with('error', 'Video Gagal Dihapus. Silakan Coba Lagi.');
+            return redirect()->back()->with('error', 'Video Gagal Dinonaktifkan. Silakan Coba Lagi.');
+        }
+    }
+
+    public function reactivate(Request $request)
+    {
+        $db=Firebase::database();
+
+        try{
+            $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'])->update(['Active' => true]);
+            return redirect()->back()->with('success', 'Video Berhasil Diaktifkan!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Video Gagal Diaktifkan. Silakan Coba Lagi.');
         }
     }
 }

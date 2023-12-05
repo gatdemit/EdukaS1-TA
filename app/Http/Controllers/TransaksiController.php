@@ -12,12 +12,24 @@ use Carbon\Carbon;
 class TransaksiController extends Controller
 {
 
-    public function transaksi(){
+    public function transaksi(Request $request){
         $db = Firebase::database();
-        return view('adPanel.sidemenu.transaksi.index', [
-            'title' => 'Admin Panel | Transaksi',
-            'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
-        ]);
+        if($request['search']){
+            return view('adPanel.sidemenu.transaksi.index', [
+                'title' => 'Admin Panel | Transaksi',
+                'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
+                'validateds' => $db->getReference('transaksi/validated')->getValue(),
+                'search' => true,
+                'query' => $request['search']
+            ]);
+        } else{
+            return view('adPanel.sidemenu.transaksi.index', [
+                'title' => 'Admin Panel | Transaksi',
+                'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
+                'validateds' => $db->getReference('transaksi/validated')->getValue(),
+                'search' => false
+            ]);
+        }
     }
 
     public function keranjangku(){
@@ -96,8 +108,9 @@ class TransaksiController extends Controller
 
         $updates = [];
 
-        $videos = $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->getValue();
+        $email = Str::replace('com', '.com', $request['email']);
 
+        $videos = $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->getValue();
         try{
             foreach($videos as $video){
                 $updates += [
@@ -105,20 +118,19 @@ class TransaksiController extends Controller
                         'Video' => $video['Video'],
                         'Fakultas' => $video['Fakultas'],
                         'Jurusan' => $video['Jurusan']
-                    ]
+                    ],
                 ];
-    
-                if($db->getReference('videos/' . $video['Video']. '/buy_count')->getSnapshot()->exists()){
-                    $buy_count = $db->getReference('videos/' . $video['Video'])->getValue()['buy_count'];
-                    $db->getReference('videos/' . $video['Video'])->update(['buy_count' => $buy_count+1 ]);
+                
+                if($db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video']. '/buy_count')->getSnapshot()->exists()){
+                    $buy_count = $db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video'])->getValue()['buy_count'];
+                    $db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video'])->update(['buy_count' => $buy_count+1 ]);
                 } else{
-                    $db->getReference('videos/' . $video['Video'])->update(['buy_count' => 1]);
+                    $db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video'])->update(['buy_count' => 1]);
                 }
             }
-    
             $db->getReference('users/' . $request['email'] . '/vids')->update($updates);
     
-            $db->getReference('transaksi/validated/' . $request['email'] . '_' . $date . '_' . $time)->update(['validation_date' => $date, 'total' => $request['total'] ]);
+            $db->getReference('transaksi/validated/' . $request['email'] . '_' . $date . '_' . $time)->update(['validation_date' => $date, 'total' => $request['total'], 'email' => $email ]);
             $db->getReference('transaksi/unvalidated/' . $request['email'])->remove();
     
             return redirect()->back()->with('success', 'Transaksi Berhasil Divalidasi!');

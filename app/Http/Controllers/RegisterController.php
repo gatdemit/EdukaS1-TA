@@ -30,7 +30,6 @@ class RegisterController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'password' => 'required|confirmed|string|min:6',
-            'terms' => 'required'
         ]);
 
 
@@ -42,7 +41,6 @@ class RegisterController extends Controller
             'username' => $request->input('username'),
             'profile' => 'empty',
             'profpic' => 'profile_picture/default.jpg',
-            'tnc' => $request->input('terms'),
             'email' => $email
         ];
 

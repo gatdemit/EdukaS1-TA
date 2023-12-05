@@ -37,31 +37,6 @@ class LoginController extends Controller
         }
     }
 
-    protected function adLog(Request $request){
-        $firebaseAuth = Firebase::Auth();
-        $validator = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        try{
-            if($firebaseAuth->getUserByEmail($request['email'])->customClaims['role']!='admin'){
-                return redirect('/login')->with('belumLogin', 'Akun Anda User Biasa. Silakan Login di Laman Ini.');
-            } else{
-                $signInResult = $firebaseAuth->signInWithEmailAndPassword($request['email'], $request['password']);
-                $inputEmail = Str::replace('.', '', $request['email']);
-                Session::put('firebaseUserId', $signInResult->firebaseUserId());
-                Session::put('email', $inputEmail);
-                Session::put('user', true);
-                Session::save();
-                
-                return redirect('/adPanel');
-            }
-        } catch(\Exception $e){
-            Session::flash('error', 'Login failed. Please try again.');
-        }
-    }
-
     protected function logout(){
         $firebaseAuth = Firebase::Auth();
         if(Session::has('user')){

@@ -1,25 +1,26 @@
 @extends('dashboard.layouts.main')
 
-@section('container-header')
-    <h1>Welcome, {{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['username'] }}</h1>
-@endsection
-
 @section('container-top')
     @include('dashboard.layouts.header')
-    @include('dashboard.layouts.sidebar')
-@endsection
-
-@section('container-main')
-    @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids')->getValue() != null)
-        @foreach(Firebase::database()->getReference('users/'. Session::get('email') . '/vids')->getValue() as $data)
-            <div class="card my-3 pb-3">
-                <a href="/course/{{ $data['Jurusan'] }}/{{ $data['Video'] }}">
-                    <div id="{{ $data['Video'] }}"></div>
-                    <h5>{{ Firebase::database()->getReference('videos/'. $data['Video'])->getValue()['Judul_Video'] }}</h5>
-                    <p>Fakultas: {{ Firebase::database()->getReference('videos/'. $data['Video'])->getValue()['Fakultas'] }}</p>
-                    <p>Jurusan: {{ Firebase::database()->getReference('videos/'. $data['Video'])->getValue()['Jurusan'] }}</p>
-                    <p>{{ Firebase::database()->getReference('videos/'. $data['Video'])->getValue()['Deskripsi'] }}</p>
-                </a>
+    <div class="row">
+        <div class="col-3">
+            @include('dashboard.layouts.sidebar2')
+        </div>
+        <div class="col-9 border border-1 rounded shadow shadow-md p-4">
+            <h3 style="color: #000C2E; font-weight: 700;">My Videos</h3>
+            @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids')->getValue() != null)
+            <div class="row">
+            @foreach(Firebase::database()->getReference('users/'. Session::get('email') . '/vids')->getValue() as $data)
+                <div class="col-4 mb-4 mx-5">
+                    <div class="card" style="width: 334px;">
+                        <div id="{{ $data['Video'] }}" style="text-align: center;"></div>
+                        <div class="card-body">
+                          <h5 class="card-title" style="color: #0038CF; font-weight: 800; font-family: Raleway;">{{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $data['Jurusan']) . '/' . $data['Video'])->getValue()['Judul_Video']) }}</h5>
+                          <p class="card-text">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $data['Jurusan']) . '/' . $data['Video'])->getValue()['Deskripsi'] }}</p>
+                          <a href="/course/{{ Str::replace(' ', '_', Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $data['Jurusan']) . '/' . $data['Video'])->getValue()['Jurusan']) }}/{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $data['Jurusan']) . '/' . $data['Video'])->getValue()['Video'] }}" class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">Watch Video</a>
+                        </div>
+                    </div>
+                </div>
                 <script>
                     function getVideoImage(path, secs, callback) {
                         var me = this, video = document.createElement('video');
@@ -37,7 +38,7 @@
                             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                             var img = new Image();
                             img.src = canvas.toDataURL();
-                            img.style = "height: 86px; width:86px; max-height:86px; max-width:86px;";
+                            img.style = "height: 179px; width: 300px;";
                             callback.call(me, img, this.currentTime, e);
                         };
                         video.onerror = function(e) {
@@ -49,7 +50,7 @@
                         function showImageAt(secs) {
                             var duration;
                             getVideoImage(
-                                "{{ asset('storage/' . Firebase::database()->getReference('videos/' . $data['Video'])->getValue()['Link']) }}",
+                                "{{ asset('storage/' . Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $data['Jurusan']) . '/' . $data['Video'])->getValue()['Link']) }}",
                                 0,
                                 function(img, secs, event) {
                                     if (event.type == 'seeked') {
@@ -63,9 +64,11 @@
                         }
                         showImageAt(0);
                 </script>
-            </div>
         @endforeach
+    </div>
     @else
-        <h1>You don't have any videos yet</h1>
+        <h1 class="text-center">You don't have any videos yet</h1>
     @endif
+        </div>
+    </div>
 @endsection

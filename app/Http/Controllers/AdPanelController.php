@@ -17,24 +17,28 @@ class AdPanelController extends Controller
         ]);
     }
 
-    public function adLog(){
-        return view('adLog.index', [
-            'title' => 'Admin Login'
-        ]);
-    }
-
     public function adPanel(){
         return view('adPanel.index', [
             'title' => 'Admin Panel'
         ]);
     }
 
-    public function adUsers(){
+    public function adUsers(Request $request){
         $auth=Firebase::auth();
-        return view('adPanel.sidemenu.users',[
-            'title' => 'Admin Panel | Users',
-            'users' => $auth->listUsers()
-        ]);
+        if($request['search']){
+            return view('adPanel.sidemenu.users',[
+                'title' => 'Admin Panel | Users',
+                'users' => $auth->listUsers(),
+                'search' => true,
+                'query' => $request['search']
+            ]);
+        } else{
+            return view('adPanel.sidemenu.users',[
+                'title' => 'Admin Panel | Users',
+                'users' => $auth->listUsers(),
+                'search' => false
+            ]);
+        }
     }
 
     public function delUser(Request $request){
@@ -68,117 +72,28 @@ class AdPanelController extends Controller
         }
     }
 
-    public function addData(){
-        $db = Firebase::database();
-
-        for($i=0; $i<=11; $i++){
-            $db->getReference('transaksi/validated/anu' . rand(1000000, 5000000))->update([
-                'total' => rand(1000000, 5000000),
-                'validation_date' => '2022-' . $i+1 . '-01'
-            ]);
-        }
-    }
-
-    public function userList(){
-        $auth = Firebase::auth();
-
-        $users = $auth->listUsers();
-
-        // dump(Session::get('firebaseUserId'));
-        // dump($auth->getUser(Session::get('firebaseUserId'))->customClaims['role']);
-        dump(Carbon::now()->toDateString());
-        dump(Carbon::now()->toTimeString());
-        dump(Carbon::now()->toDateTimeString());
-
-        foreach($users as $user)
-        {
-            dump($user);
-            dump($user->displayName);
-            dump($user->uid);
-            dump($user->customClaims['role']);
-        }
-    }
-
-    public function makeUser(){
-        $auth = Firebase::Auth();
-
-        $customClaims = [
-            'role' => 'user'
-        ];
-
-        $auth->setCustomUserClaims(Session::get('firebaseUserId'), $customClaims);
-
-        return redirect('/userList');
-    }
-
-    public function vidList(){
-        $db = Firebase::database();
-
-        dump($db->getReference('videos')->getSnapshot()->getValue('Jurusan'));
-    }
-
     public function dataTest(){
-        $db = Firebase::database();
+        $db=Firebase::database();
 
-        $fak = [
-            'ft' => 'teknik',
-            'fpp'=> 'pertanian dan peternakan',
-            'fisip' => 'ilmu sosial dan ilmu politik',
-            'fh' => 'hukum',
-            'fib' => 'ilmu budaya',
-            'feb' => 'ekonomika dan bisnis',
-            'fk' => 'kedokteran',
-            'fpsi' => 'psikologi',
-            'fsm' => 'sains dan matematika',
-            'fkm' => 'kesehatan masyarakat',
-            'fpik' => 'perikanan dan ilmu kelautan'
-        ];
+        $auth=Firebase::Auth();
 
-        $jurusan = [
-            'Teknik' => ['Teknik Sipil', 'Arsitektur', 'Teknik Kimia', 'Teknik Perencanaan Wilayah dan Kota', 'Teknik Mesin', 'Teknik Elektro', 'Teknik Perkapalan', 'Teknik Industri', 'Teknik Lingkungan', 'Teknik Geologi', 'Teknik Geodesi', 'Teknik Komputer'],
-            'Kedokteran' => ['Kedokteran', 'Kedokteran Gigi', 'Farmasi'],
-            'Kesehatan Masyarakat' => ['Kesehatan Masyarakat'],
-            'Sains dan Matematika' => ['Matematika', 'Biologi', 'Fisika', 'Kimia', 'Statistika', 'Informatika', 'Bioteknologi'],
-            'Peternakan dan Pertanian' => ['Peternakan', 'Teknologi Pangan', 'Agroekoteknologi', 'Agribisnis'],
-            'Perikanan dan Ilmu Kelautan' => ['Sumber Daya Perairan', 'Akuakultur', 'Perikanan Tangkap', 'Teknologi Hasil Perikanan', 'Ilmu Kelautan', 'Oseanografi'],
-            'Hukum' => ['Hukum'],
-            'Ekonomika dan Bisnis' => ['Akuntansi', 'Manajemen', 'Bisnis Digital', 'Ilmu Ekonomi', 'Ekonomi Islam'],
-            'Ilmu Sosial dan Ilmu Politik' => ['Administrasi Bisnis', 'Administrasi Publik', 'Hubungan Internasional', 'Ilmu Komunikasi', 'Ilmu Pemerintahan'],
-            'Ilmu Budaya' => ['Sejarah', 'Sastra Indonesia', 'Bahasa dan Kebudayaan Jepang', 'Sastra Inggris', 'Antropologi Sosial', 'Ilmu Perpustakaan'],
-            'Psikologi' => ['Psikologi']
-        ];
+        dump(Str::title('aku adalah anak gembala selalu riang serta gembira'));
 
-        // $db->getReference('data_test')->set($fak);
-
-        // dump(array_keys($jurusan));
-        // dump(key($jurusan));
-        // dump($jurusan['Teknik'][0]);
-        // dump($jurusan['Teknik']);
-        // dump($jurusan);
-        // dump(count($jurusan));
-
-        // dump($db->getReference('users/yahyariz14@gmailcom')->getChildKeys());
-        // dump($db->getReference('users')->getSnapshot()->hasChildren());
-        foreach($db->getReference('users')->getSnapshot() as $snapshot){
-            dump($snapshot->getKey());
-            // if(array_key_exists('vids', $snapshot)){
-            //     dump($snapshot['vids']);
-            // } else{
-            //     dump('nop');
-            // }
+        if(Str::contains(Str::title('teknik komputer'), $db->getReference('faculties/Teknik/jurusan')->getValue())){
+            dump('Sudah Ada');
+        } else{
+            dump('Belum Ada');
         }
 
-        dump($db->getReference('users')->getValue());
-        foreach($db->getReference('users')->getValue() as $snapshot){
-            if(array_key_exists('vids', $snapshot)){
-                if(array_key_exists('v5jmdOliHM2fsuev0G7XFvix0NlhgMmrz3Te9HqU_mp4', $snapshot['vids'])){
-                    dump(true);
-                } else{
-                    dump('lanjut');
-                }
-            } else{
-                dump('nop');
-            }
+        dump($db->getReference('data_test')->getSnapshot()->numChildren());
+        // dump($auth->getUser(Session::get('firebaseUserId'))->customClaims['role']);
+        dump(array_keys($db->getReference('faculties')->getValue()));
+        dump(array_keys($db->getReference('users')->getValue()));
+        dump($db->getReference('faculties/Teknik/jurusan')->getValue());
+        dump(Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue()));
+        dump(Str::contains('Teknik', Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue())));
+        foreach($auth->listUsers() as $user){
+            dump($user->customClaims['role']);
         }
     }
 }

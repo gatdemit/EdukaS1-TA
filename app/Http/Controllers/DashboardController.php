@@ -86,8 +86,6 @@ class DashboardController extends Controller
 
         $updates = [
             'name' => $request['name'],
-            'gender' => $request['gender'],
-            'tanggal_lahir' => $request['tanggal_lahir'],
             'nomor_telp' => $request['phone-number'],
             'alamat' => $request['address'],
         ];

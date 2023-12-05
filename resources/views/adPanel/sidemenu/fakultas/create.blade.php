@@ -1,0 +1,45 @@
+@extends('adPanel.layouts.main')
+
+@section('container')
+    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
+        <h1 style="color: #0038CF; font-weight: 700;">Tambah Fakultas dan Jurusan</h1>
+        @if(session()->has('error'))
+            <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        <form class= "row" action="/adPanel/fakultas" method="post">
+            @csrf
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <textarea name="fakultas" id="fakultas" class="form-control" autofocus required></textarea>
+                    <label for="pertanyaan" class="form-control-label">Fakultas</label>
+                </div>
+                <div id="parentbody">
+                    <div class="form-check my-1">
+                        <input type="text" name="jurusan1" id="jurusan1" placeholder="Jurusan" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-family: Raleway; font-weight: 500;">Tambah</a>
+            <button type="submit" class="btn btn-primary mt-3" style="font-family: Raleway; font-weight: 500;">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        var parBody = document.getElementById('parentbody');
+
+        var count = 0;
+
+        function addRow()
+        {
+            count++
+
+            var tr = 
+            `<div class='form-check my-1'><input type='text' name='jurusan${count+1}' id='jurusan${count+1}' placeholder='Jurusan' class='form-control' required></div>`+
+            `<input type="hidden" name="count" id="count" value=${count}>`;
+            $(parBody).append(tr);
+        }
+    </script>
+@endsection

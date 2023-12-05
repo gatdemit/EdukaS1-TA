@@ -1,8 +1,10 @@
 <div>
-    <div style="float:left;">
-        <a href="/" class="nav-link bold" style="font-size: 34px;">EdukaS<span style="color: #0038CF">1</span></a>
-    </div>
-    <div style="float:right;">
-        @include('partials.navbar')
+    <div class="d-flex justify-content-between">
+        <div>
+            <a href="/" class="nav-link fw-bold ff-inter" style="font-size: 34px;">Edukas<span style="color: #0038CF">1</span></a>
+        </div>
+        <div>
+            @include('partials.navbar')
+        </div>
     </div>
 </div>

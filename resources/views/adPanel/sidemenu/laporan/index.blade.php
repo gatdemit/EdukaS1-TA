@@ -1,9 +1,5 @@
 @extends('adPanel.layouts.main')
 
-@section('container-header')
-    <h1>Laporan</h1>
-@endsection
-
 @section('container')
 @php
     $bulan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -18,6 +14,7 @@
     @endif
 @endforeach
     <div style="height:400px; width: 900px; margin:auto;">
+        <h1 style="color: #0038CF;; font-weight: 700;">Laporan Pendapatan Bruto EdukaS1</h1>
         <form action="/adPanel/laporan" id="formTahun" method="post">
             @csrf
             <div class="form-floating mb-3">
@@ -52,16 +49,24 @@
                     data: ["{{ $bulan[0] }}", "{{ $bulan[1] }}", "{{ $bulan[2] }}", "{{ $bulan[3] }}", "{{ $bulan[4] }}", "{{ $bulan[5] }}", "{{ $bulan[6] }}", "{{ $bulan[7] }}", "{{ $bulan[8] }}", "{{ $bulan[9] }}", "{{ $bulan[10] }}", "{{ $bulan[11] }}",],
                     backgroundColor: "rgba(0,0,255,0.2)",
                     borderColor: "black",
-                    borderWidth: 1
+                    borderWidth: 1,
                 }]
             },
             options:{
                 scales:{
-                    yAxis:[{
-                        ticks:{
-                            beginAtZero: true
-                        },
-                    }]
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Bulan Penjualan'
+                        }
+                    }, 
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Bruto Penjualan Video EdukaS1'
+                        }
+                    }
                 }
             }
         });

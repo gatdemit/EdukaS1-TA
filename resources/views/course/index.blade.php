@@ -1,45 +1,70 @@
-@extends('layouts.main')
+@extends('dashboard.layouts.main')
 
-<h1>ini course</h1>
+@section('container')
+
+<style>
+  .hover-primary:hover {
+    background-color: #3B71CA;
+    color: white;
+  }
+</style>
 
 <div class="container">
-  <div class="row">
-    @for($i=0; $i< count($facs); $i++)
-      <div class="col-md-3 mb-4">
-        <div class="card">
-          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#{{ Str::replace(' ','',array_keys($facs)[$i]) }}">
-            <img src="{{ asset('storage/asset/'. array_keys($facs)[$i].'.jpg') }}" class="img-preview" style="height:130px; width:200px; max-height:130px; max-width:200px;" role="button" id="myfile" name="myfile">
-            <div role="button" class="caption" id="other" name="other">
-              <p style="margin-top:-57.5px;">{{ array_keys($facs)[$i] }}</p>
+  <div class="row my-5">
+    <div class="col-12 bold mb-5 text-dark" style="font-size: 36px; font-weight: 600; text-align:center; color: #101828">
+      Selamat Datang Di Pusat Kursus Edukas1!
+    </div>
+  </div>
+  <div class="row mt-5">
+    @foreach($fakultas as $facs)
+      <div class="col-3 my-4"  style='width: 375px;' id="div{{ $facs['Value'] }}">
+        <div class="card shadow shadow-lg">
+          <button type="button" data-bs-toggle="modal" data-bs-target="#{{ Str::replace(' ', '', $facs['Value']) }}" class="btn">
+            <img src="https://source.unsplash.com/300x300/?{{ $facs['Value'] }}" class="img-preview" style="max-height:300px; max-width:100%;" role="button" id="myfile" name="myfile">
+            <div role="button" class="card-body" style="text-align: left;">
+              @if($facs['Value'] == 'Umum')
+                <p class="bold">Mata Kuliah {{ $facs['Value'] }}</p>
+              @else
+                <p class="bold">Fakultas {{ $facs['Value'] }}</p>
+              @endif
+              <p style="font-weight: 500;">Kunjungi ></p>
             </div>
           </button>
         </div>
       </div>
       <!-- Modal -->
-      <div class="modal fade" id="{{ Str::replace(' ','',array_keys($facs)[$i]) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="{{ Str::replace(' ','',$facs['Value']) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">{{ array_keys($facs)[$i] }}</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Fakultas {{ $facs['Value'] }}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-              @for($k=0; $k < count($facs[array_keys($facs)[$i]]); $k++)
-                <a href="/course/{{ Str::replace(' ','_',$facs[array_keys($facs)[$i]][$k]) }}">
-                  <p>
-                    {{ $facs[array_keys($facs)[$i]][$k] }}
-                  </p>
-                </a>
-              @endfor
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="modal-body" id="modal{{ $facs['Value'] }}">
+              @foreach($facs['jurusan'] as $jurusan)
+                @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan))->getSnapshot()->exists())
+                  <a href="/course/{{ Str::replace(' ','_',$jurusan) }}">
+                    <p>
+                      {{ $jurusan }}
+                    </p>
+                  </a>
+                @endif
+              @endforeach
             </div>
           </div>
         </div>
       </div>
       <!--End Modal-->
-    @endfor
+      <script>
+        var div = document.getElementById("div{{ $facs['Value'] }}");
+        var modal = document.getElementById("modal{{ $facs['Value'] }}");
+        console.log(modal.children.length <= 0);
+        if(modal.children.length <= 0){
+          div.style.display="none";
+        }
+      </script>
+    @endforeach
   </div>
 </div>
+
+@endsection
