@@ -1,11 +1,8 @@
 @extends('dashboard.layouts.main')
 
-@section('container-top')
-<div class="col-3">
-    @include('dashboard.layouts.sidebar3')
-</div>
-<div class="col-9">
-    <div class="align-items-center border bg-body-tertiary p-3 mb-3">
+@section('container')
+<div class="card mb-4">
+    <div class="card-body">
         <h1 style="color: #0038CF; font-weight: 700;">Manage your account!</h1>
         <div class="my-0">
             <div class="container">

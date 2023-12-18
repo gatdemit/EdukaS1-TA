@@ -1,8 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="color: #0038CF; font-weight: 700;">Tambah Quiz</h1>
         @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -45,7 +43,6 @@
             <input type="hidden" name="jurusan" id="jurusan" value="{{ $jurusan }}">
             <button type="submit" class="btn btn-primary mt-3" style="font-family: Raleway; font-weight: 500;">Submit</button>
         </form>
-    </div>
 
     <script>
         var parBody = document.getElementById('parentbody');

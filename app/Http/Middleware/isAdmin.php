@@ -17,8 +17,10 @@ class isAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']!='admin'){
+        if(Session::has('user') && Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']!='admin'){
             return redirect('/dashboard');
+        } else if(!Session::has('user')){
+            return redirect('/login');
         }
         return $next($request);
     }

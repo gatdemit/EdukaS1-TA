@@ -17,9 +17,21 @@ class AdPanelController extends Controller
         ]);
     }
 
-    public function adPanel(){
+    public function adPanel(Request $request){
+        $video = Firebase::database()->getReference('videos')->getValue();
+        if($request['jurusan']){
+            return view('adPanel.index', [
+                'title' => 'Admin Panel',
+                'header' => "Welcome to EdukaS1's Admin Panel",
+                'videos' => $video,
+                'jurusan' => $request['jurusan']
+            ]);
+        }
         return view('adPanel.index', [
-            'title' => 'Admin Panel'
+            'title' => 'Admin Panel',
+            'header' => "Welcome to EdukaS1's Admin Panel",
+            'videos' => $video,
+            'jurusan' => array_keys($video)[0]
         ]);
     }
 
@@ -28,6 +40,7 @@ class AdPanelController extends Controller
         if($request['search']){
             return view('adPanel.sidemenu.users',[
                 'title' => 'Admin Panel | Users',
+                'header' => "Users",
                 'users' => $auth->listUsers(),
                 'search' => true,
                 'query' => $request['search']
@@ -35,6 +48,7 @@ class AdPanelController extends Controller
         } else{
             return view('adPanel.sidemenu.users',[
                 'title' => 'Admin Panel | Users',
+                'header' => "Users",
                 'users' => $auth->listUsers(),
                 'search' => false
             ]);
@@ -60,12 +74,14 @@ class AdPanelController extends Controller
         if($request['tahun']){
             return view('adPanel.sidemenu.laporan.index', [
                 'title' => 'Admin Panel | Laporan',
+                'header' => "Laporan",
                 'snapshots' => $db->getReference('transaksi/validated')->getValue(),
                 'tahun' => $request['tahun']
             ]);
         } else{
             return view('adPanel.sidemenu.laporan.index', [
                 'title' => 'Admin Panel | Laporan',
+                'header' => "Laporan Pendapatan Bruto EdukaS1",
                 'snapshots' => $db->getReference('transaksi/validated')->getValue(),
                 'tahun' => date('Y', strtotime(Carbon::now()))
             ]);
@@ -87,13 +103,13 @@ class AdPanelController extends Controller
 
         dump($db->getReference('data_test')->getSnapshot()->numChildren());
         // dump($auth->getUser(Session::get('firebaseUserId'))->customClaims['role']);
-        dump(array_keys($db->getReference('faculties')->getValue()));
-        dump(array_keys($db->getReference('users')->getValue()));
-        dump($db->getReference('faculties/Teknik/jurusan')->getValue());
-        dump(Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue()));
-        dump(Str::contains('Teknik', Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue())));
+        // dump(array_keys($db->getReference('faculties')->getValue()));
+        // dump(array_keys($db->getReference('users')->getValue()));
+        // dump($db->getReference('faculties/Teknik/jurusan')->getValue());
+        // dump(Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue()));
+        // dump(Str::contains('Teknik', Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue())));
         foreach($auth->listUsers() as $user){
-            dump($user->customClaims['role']);
+            dump($user->email);
         }
     }
 }

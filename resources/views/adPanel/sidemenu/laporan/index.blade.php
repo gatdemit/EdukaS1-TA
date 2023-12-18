@@ -14,7 +14,6 @@
     @endif
 @endforeach
     <div style="height:400px; width: 900px; margin:auto;">
-        <h1 style="color: #0038CF;; font-weight: 700;">Laporan Pendapatan Bruto EdukaS1</h1>
         <form action="/adPanel/laporan" id="formTahun" method="post">
             @csrf
             <div class="form-floating mb-3">
@@ -37,11 +36,10 @@
         function Tahun(){
             document.getElementById('formTahun').submit();
         }
-        var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         var barCanvas = document.getElementById("barChart");
         new Chart(barCanvas,{
-            type: 'bar',
+            type: 'line',
             data:{
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets:[{

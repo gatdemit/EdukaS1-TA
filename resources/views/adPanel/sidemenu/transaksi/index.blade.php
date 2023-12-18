@@ -1,8 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="font-weight: 700; color: #0038CF;">Transaksi</h1>
         @if(session()->has('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -18,9 +16,9 @@
         <div class="d-flex justify-content-between">
             <div class="form-check form-switch">
                 <input type="radio" class="btn-check" name="options" id="option1" value="0" onchange="unvalidated()" checked>
-                <label class="btn btn-primary" for="option1" style="font-size: 12px; font-weight: 600;">Unvalidated</label>
+                <label class="btn btn-primary" for="option1" style="font-weight: 600;">Unvalidated</label>
                 <input type="radio" class="btn-check" name="options" id="option2" value="1" onchange="validated()">
-                <label class="btn btn-primary" for="option2" style="font-size: 12px; font-weight: 600;">Validated</label>
+                <label class="btn btn-primary" for="option2" style="font-weight: 600;">Validated</label>
             </div>
             <form class="row" action="/adPanel/transaksi" method="post">
                 @csrf
@@ -126,7 +124,6 @@
                 @endif
             </tbody>
         </table>
-    </div>
     <script>
         var tBody = document.getElementById('tbody');
         var vtBody = document.getElementById('vtbody');

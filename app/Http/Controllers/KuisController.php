@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class KuisController extends Controller
 {
@@ -19,6 +20,7 @@ class KuisController extends Controller
 
         return view('adPanel.sidemenu.kuis.index',[
             'title' => 'Admin Panel | Quiz',
+            'header' => "Quiz",
             'videos' => $db->getReference('videos')->getValue(),
             'search' => false
         ]);
@@ -31,6 +33,7 @@ class KuisController extends Controller
     {
         return view('adPanel.sidemenu.kuis.create',[
             'title' => 'Admin Panel | Quiz',
+            'header' => "Tambah Quiz",
             'video' => $request['video'],
             'jurusan' => $request['jurusan']
         ]);
@@ -94,6 +97,7 @@ class KuisController extends Controller
     {
         return view('adPanel.sidemenu.kuis.edit',[
             'title' => 'Admin Panel | Quiz',
+            'header' => "Ubah Quiz",
             'jurusan' => $request['jurusan']
         ]);
     }
@@ -147,38 +151,36 @@ class KuisController extends Controller
     }
 
     public function tampilKuis(Request $request){
+        if($request['pertanyaan']){
+            Cache::put('Pertanyaan_' . $request['pertanyaan'], $request['Pertanyaan_' . $request['pertanyaan']]);
+        }
         return view('course.kuis',[
             'title' => 'Our Course',
-            'jurusan' => $request['jurusan']
+            'jurusan' => $request['jur']
         ]);
     }
 
     public function jawabKuis(Request $request){
         $db = Firebase::database();
         $nilai = 0;
-        if($request['jur']){
-            return view('course.kuis',[
-                'title' => 'Our Course',
-                'jurusan' => $request['jur']
-            ]);
+        if($request['pertanyaan']){
+            Cache::put('Pertanyaan_' . $request['pertanyaan'], $request['Pertanyaan_' . $request['pertanyaan']]);
         }
-        else{
-            try{
-                for($i=1; $i <= $request['question_count']; $i++){
-                    if($request['Pertanyaan_' . $i] == $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'] . '/kuis')->getValue()['pertanyaan ' . $i]['jawaban']['kunci jawaban']){
-                        $nilai++;
-                    }
+        try{
+            for($i=1; $i <= $db->getReference('videos/' . $request['jur'] . '/' . $request['video'] . '/kuis')->getSnapshot()->numChildren(); $i++){
+                if(Cache::get('Pertanyaan_' . $i) == $db->getReference('videos/' . $request['jur'] . '/' . $request['video'] . '/kuis')->getValue()['pertanyaan ' . $i]['jawaban']['kunci jawaban']){
+                    $nilai++;
                 }
-        
-                $score = $nilai/count($db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'] . '/kuis')->getValue())*100;
-                $db->getReference('users/' . Session::get('email') . '/vids/' . $request['video'])->update([
-                    'nilai' => $score
-                ]);
-        
-                return redirect('/dashboard/quiz')->with('success', 'Kuis Berhasil Dikerjakan!');
-            } catch(\Exception $e){
-                return redirect()->back()->with('error', 'Terjadi Kesalahan Dalam Pengerjaan Kuis. Silakan Coba Lagi.');
             }
+    
+            $score = $nilai/count($db->getReference('videos/' . $request['jur'] . '/' . $request['video'] . '/kuis')->getValue())*100;
+            $db->getReference('users/' . Session::get('email') . '/vids/' . $request['video'])->update([
+                'nilai' => $score
+            ]);
+            Cache::flush();
+            return redirect('/dashboard/quiz')->with('success', 'Kuis Berhasil Dikerjakan!');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Dalam Pengerjaan Kuis. Silakan Coba Lagi.');
         }
     }
 }

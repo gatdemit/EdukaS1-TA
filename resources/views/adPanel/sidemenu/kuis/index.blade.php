@@ -1,9 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-@yield('container-header')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="color: #0038CF; font-weight: 700;">Quiz</h1>
         @if(session()->has('success'))
             <div class="alert alert-success  alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -104,5 +101,4 @@
                 @endif
             </tbody>
         </table>
-    </div>
 @endsection

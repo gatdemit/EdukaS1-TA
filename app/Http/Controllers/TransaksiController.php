@@ -17,6 +17,7 @@ class TransaksiController extends Controller
         if($request['search']){
             return view('adPanel.sidemenu.transaksi.index', [
                 'title' => 'Admin Panel | Transaksi',
+                'header' => "Transaksi",
                 'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
                 'validateds' => $db->getReference('transaksi/validated')->getValue(),
                 'search' => true,
@@ -25,6 +26,7 @@ class TransaksiController extends Controller
         } else{
             return view('adPanel.sidemenu.transaksi.index', [
                 'title' => 'Admin Panel | Transaksi',
+                'header' => "Transaksi",
                 'snapshots' => $db->getReference('transaksi/unvalidated')->getValue(),
                 'validateds' => $db->getReference('transaksi/validated')->getValue(),
                 'search' => false

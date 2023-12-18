@@ -1,11 +1,8 @@
 @extends('dashboard.layouts.main')
 
-@section('container-top')
-<div class="col-3">
-    @include('dashboard.layouts.sidebar3')
-</div>
-<div class="col-9 p-4 border border-1 shadow shadow-md rounded">
-    <div class="table-responsive">
+@section('container')
+<div class="card mb-4">
+    <div class="card-body">
         <h1 style="color: #0038CF; font-weight: 700;">My Quiz</h1>
         @if(session()->has('success'))
             <div class="alert alert-success  alert-dismissible fade show" role="alert">
@@ -34,7 +31,7 @@
                                 @if(array_key_exists('nilai', $vids))
                                     <td style="font-weight: 500;">{{ $vids['nilai'] }}</td>
                                     <td style="font-weight: 500;">
-                                        <form action="/dashboard/quiz/{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Video'] }}" method="post">
+                                        <form action="/dashboard/quiz/{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Video'] }}/1" method="post">
                                             @csrf
                                             <input type="hidden" name="jur" id="jur" value="{{ Str::replace(' ', '_', $vids['Jurusan']) }}">
                                             <button class="btn btn-warning rounded-pill">Kerjakan Ulang</button>
@@ -43,7 +40,7 @@
                                 @else
                                     <td style="font-weight: 500;">Kuis Belum Dikerjakan</td>
                                     <td style="font-weight: 500;">
-                                        <form action="/dashboard/quiz/{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Video'] }}" method="post">
+                                        <form action="/dashboard/quiz/{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Video'] }}/1" method="post">
                                             @csrf
                                             <input type="hidden" name="jur" id="jur" value="{{ Str::replace(' ', '_', $vids['Jurusan']) }}">
                                             <button class="btn btn-primary rounded-pill">Kerjakan</button>

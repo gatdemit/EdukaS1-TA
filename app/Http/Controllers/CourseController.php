@@ -37,8 +37,10 @@ class CourseController extends Controller
     }
 
     public function vidStream(){
+        $jurusan = Firebase::database()->getReference('faculties')->getValue();
         return view('course.vidStream', [
-            'title' => 'Our Course'
+            'title' => 'Our Course',
+            'fakultas' => $jurusan
         ]);
     }
 

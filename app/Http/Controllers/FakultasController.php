@@ -19,6 +19,7 @@ class FakultasController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.fakultas.index',[
             'title' => 'Admin Panel | Fakultas dan Jurusan',
+            'header' => "Fakultas dan Jurusan",
             'search' => false,
             'fakultas' => $db->getReference('faculties')->getValue()
         ]);
@@ -32,6 +33,7 @@ class FakultasController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.fakultas.create',[
             'title' => 'Admin Panel | Fakultas dan Jurusan',
+            'header' => "Tambah Fakultas dan Jurusan",
         ]);
     }
 
@@ -89,6 +91,7 @@ class FakultasController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.fakultas.show', [
             'title' => 'Admin Panel | Fakultas dan Jurusan',
+            'header' => "Jurusan",
             'search' => false
         ]);
     }
@@ -99,7 +102,8 @@ class FakultasController extends Controller
     public function edit(string $id)
     {
         return view('adPanel.sidemenu.fakultas.edit',[
-            'title' => 'Admin Panel | Fakultas dan Jurusan'
+            'title' => 'Admin Panel | Fakultas dan Jurusan',
+            'header' => "Tambah Jurusan",
         ]);
     }
 

@@ -1,46 +1,8 @@
-@extends('layouts.main')
+@extends('dashboard.layouts.main')
 
 @section('container')
-<style>
-    .fadedfx {
-        background-color: #fe5652;
-        visibility: hidden;
-    }
-
-    .fadeIn {
-        animation-name: fadeIn;
-        -webkit-animation-name: fadeIn;
-        animation-duration: 1.5s;
-        -webkit-animation-duration: 1.5s;
-        animation-timing-function: ease-in-out;
-        -webkit-animation-timing-function: ease-in-out;
-        visibility: visible !important;
-    }
-
-    @keyframes fadeIn {
-        0% {
-            opacity: 0.0;
-        }
-        100% {
-        o   pacity: 1;
-        }
-    }
-
-@-webkit-keyframes fadeIn {
-    0% {
-            opacity: 0.0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-</style>
-<div class="container  m-auto row">
-    <div class="col-3">
-        @include('dashboard.layouts.sidebar3')
-    </div>
-    <div class="col-9 p-3 border border-1 shadow shadow-md rounded">
+<div class="card mb-4">
+    <div class="card-body">
         <div class="table-responsive">
             @if(session()->has('success'))
                 <div class="alert alert-success  alert-dismissible fade show" role="alert">

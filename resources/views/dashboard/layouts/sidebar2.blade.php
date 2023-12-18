@@ -28,9 +28,9 @@
         </li>
         <li class="nav-item">
           <form action="/logout" method="post" class="nav-link ff-inter text-dark d-flex align-items-center gap-2">
-              @csrf
-              <button type="submit" class ="dropdown-item ff-inter ms-2" style="font-weight: 600;">Logout</button>
-            </form>
+            @csrf
+            <button type="submit" class ="dropdown-item ff-inter ms-2" style="font-weight: 600;">Logout</button>
+          </form>
         </li>
       </ul>
     </div>

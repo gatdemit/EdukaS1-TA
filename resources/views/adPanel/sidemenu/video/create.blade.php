@@ -1,8 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="color: #0038CF; font-weight: 700;">Upload Video</h1>
         @if(session()->has('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -71,7 +69,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary" style="font-weight: 500; font-family: Raleway;">Submit</button>
         </form>
-    </div>
     <script>
         var divJurusan = document.getElementById('divJur').getElementsByTagName('optgroup');
         

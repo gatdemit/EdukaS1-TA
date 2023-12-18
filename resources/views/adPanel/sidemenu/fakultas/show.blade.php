@@ -1,8 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="color: #0038CF; font-weight: 700;">Jurusan</h1>
         <h4 style="color: #0038CF; font-weight: 500;">Fakultas {{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}</h4>
         @if(session()->has('success'))
             <div class="alert alert-success  alert-dismissible fade show" role="alert">
@@ -86,5 +84,4 @@
                 @endif
             </tbody>
         </table>
-    </div>
 @endsection

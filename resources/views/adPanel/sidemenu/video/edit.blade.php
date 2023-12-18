@@ -1,9 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-    <div class="table-responsive border border-1 rounded shadow shadow-md p-5">
-        <h1 style="color: #0038CF; font-weight: 700;">Edit Data Video</h1>
-        <h3 style="color: #0038CF; font-weight: 500;">{{ Str::title(Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Judul_Video'])}}</h3>
         @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -45,5 +42,4 @@
             <input type="hidden" name="jurusan" id="jurusan" value="{{ Str::replace(' ', '_', Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Jurusan']) }}">
             <input type="hidden" name="video" id="video" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Video'] }}">
         </form>
-    </div>
 @endsection

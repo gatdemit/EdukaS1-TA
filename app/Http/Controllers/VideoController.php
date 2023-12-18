@@ -19,6 +19,7 @@ class VideoController extends Controller
         $db = Firebase::database();
         return view('adPanel.sidemenu.video.index', [
             'title' => 'Admin Panel | Video',
+            'header' => "Video",
             'jurusan' => $db->getReference('videos')->getValue(),
             'search' => false
         ]);
@@ -32,6 +33,7 @@ class VideoController extends Controller
         $jurusan = Firebase::database()->getReference('faculties')->getValue();
         return view('adPanel.sidemenu.video.create', [
             'title' => 'Admin Panel | Video',
+            'header' => "Upload Video",
             'faks' => $jurusan
         ]);
     }
@@ -95,9 +97,7 @@ class VideoController extends Controller
      */
     public function show(string $id)
     {
-        return view('adPanel.sidemenu.video.show', [
-            'title' => 'Admin Panel | Video'
-        ]);
+        //
     }
 
     /**
@@ -107,6 +107,7 @@ class VideoController extends Controller
     {
         return view('adPanel.sidemenu.video.edit', [
             'title' => 'Admin Panel | Video',
+            'header' => "Edit Data Video",
             'jurusan' => $request['jurusan']
         ]);
     }

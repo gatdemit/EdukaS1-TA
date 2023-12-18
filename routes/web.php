@@ -11,6 +11,7 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\FakultasController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,11 +88,18 @@ Route::post('/adPanel/transaksi/validate', [TransaksiController::class, 'validas
 Route::resource('/adPanel/quiz', KuisController::class)->middleware('admin');
 Route::post('adPanel/quiz/create', [KuisController::class, 'create']);
 Route::post('adPanel/quiz/{create}/edit', [KuisController::class, 'edit']);
-Route::get('/dashboard/quiz/{video}', [KuisController::class, 'tampilKuis'])->middleware('tamu');
-Route::post('/dashboard/quiz/{video}', [KuisController::class, 'tampilKuis'])->middleware('tamu');
+Route::get('/dashboard/quiz/{video}/{wildcard}', [KuisController::class, 'tampilKuis'])->middleware('tamu');
+Route::post('/dashboard/quiz/{video}/{wildcard}', [KuisController::class, 'tampilKuis'])->middleware('tamu');
 Route::post('/dashboard/quiz/{video}', [KuisController::class, 'jawabKuis'])->middleware('tamu');
 
 Route::resource('/adPanel/fakultas', FakultasController::class)->middleware('admin');
 Route::delete('/adPanel/fakultas', [FakultasController::class, 'destroyJur'])->middleware('admin');
 
 Route::get('/dataTest', [AdPanelController::class, 'dataTest']);
+Route::get('/playground', function(){
+    $jurusan = Firebase::database()->getReference('faculties')->getValue();
+    return view('playground', [
+        'title' => 'Playground',
+        'fakultas' => $jurusan
+    ]);
+});
