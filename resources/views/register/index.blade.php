@@ -2,15 +2,15 @@
 
 @section('container')
     <div class="row mt-5">
-        <div class="col-lg-5">
+        <div class="row col" style="background-image: url('{{ asset('storage/asset/registration.jpeg') }}'); height: 90vh;">
             @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            <main class="form-registration p-5 w-100 m-auto">
-                <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px;">
+            <main class="form-registration p-5 m-auto col-md-6 col-sm-12">
+                <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color:#fff;">
                     <h1 class="text-center" style="font-weight: 800;">Registration</h1>
                     <form action="/register" method="post">
                         @csrf
@@ -55,13 +55,6 @@
                     </form>
                 </div>
             </main>
-        </div>
-        <div class="col-md-7 text-center">
-            <img src="{{ asset('storage/asset/registration.jpeg') }}" alt="" class="mb-3">
-            <p class="text-start display-6" style="font-size: 24px;">Dengan Mendaftarkan Akun Di Edukas1, Anda Akan
-                Mendapatkan Akses Eksklusif Ke Beragam Kursus Berkualitas, Materi Pendukung, Dan Pengalaman Pembelajaran Yang
-                Disesuaikan Dengan Kebutuhan Anda.
-            </p>
         </div>
     </div>
     @endsection
