@@ -51,7 +51,7 @@
 
                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
                     @if($search)
-                        @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) )->getValue() as $snapshot)
+                        @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) )->getValue() as $key => $snapshot)
                             @if($snapshot['Jurusan']==Str::replace('_',' ', request()->segment(count(request()->segments()))))
                                 @if(Str::contains($snapshot['Judul_Video'], $query) || Str::contains($snapshot['Deskripsi'], $query))
                                     @if($snapshot['Active'])
@@ -69,18 +69,21 @@
                                                         <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Fakultas'] }}">
                                                         <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                                                        <h5 class="card-title text-primary" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Rating: 0</p>
-                                                        @endif
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Dibeli: 0 user</p>
-                                                        @endif
+                                                        <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem(<?= $key ?>)">extend</a>
+                                                        <div style="display: none" id="extended-info-{{$key}}">
+                                                            <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Rating: 0</p>
+                                                            @endif
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Dibeli: 0 user</p>
+                                                            @endif
+                                                        </div>
                                                         <div class="d-flex justify-content-between">
                                                             <div class="span">
                                                                 <p style="font-family: Raleway;">Rp {{ $snapshot['Harga'] }}</p>
@@ -98,18 +101,20 @@
                                                 <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="nav-link">
                                                     <div id="{{ $snapshot['Video'] }}"></div>
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-primary" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Rating: 0</p>
-                                                        @endif
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Dibeli: 0 user</p>
-                                                        @endif
+                                                        <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <div style="display: none" id="extended-info-{{$key}}">
+                                                            <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Rating: 0</p>
+                                                            @endif
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Dibeli: 0 user</p>
+                                                            @endif
+                                                        </div>
                                                         <div class="d-flex justify-content-between">
                                                             <div class="span">
                                                                 <p style="font-family: Raleway;">Rp {{ $snapshot['Harga'] }}</p>
@@ -169,7 +174,7 @@
                             </script>
                         @endforeach
                     @else
-                        @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) )->getValue() as $snapshot)
+                        @foreach(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) )->getValue() as $key =>$snapshot)
                             @if($snapshot['Jurusan']==Str::replace('_',' ', request()->segment(count(request()->segments()))))
                                 @if($snapshot['Active'])
                                     <div class="col-3 mb-4 mx-4">
@@ -186,18 +191,21 @@
                                                         <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Fakultas'] }}">
                                                         <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                                                        <h5 class="card-title text-primary" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Rating: 0</p>
-                                                        @endif
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Dibeli: 0 user</p>
-                                                        @endif
+                                                        <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <div style="display: none" id="extended-info-{{$key}}">
+                                                            <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Rating: 0</p>
+                                                            @endif
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Dibeli: 0 user</p>
+                                                            @endif
+                                                           
+                                                        </div>
                                                         <div class="d-flex justify-content-between">
                                                             <div class="span">
                                                                 <p style="font-family: Raleway;">Rp {{ $snapshot['Harga'] }}</p>
@@ -215,18 +223,21 @@
                                                 <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="nav-link">
                                                     <div id="{{ $snapshot['Video'] }}"></div>
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-primary" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Rating: 0</p>
-                                                        @endif
-                                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
-                                                            <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
-                                                        @else
-                                                            <p style="font-family: Raleway;">Dibeli: 0 user</p>
-                                                        @endif
+                                                        <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                                        <div style="display: none" id="extended-info-{{$key}}">
+                                                            <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Rating: 0</p>
+                                                            @endif
+                                                            @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
+                                                                <p style="font-family: Raleway;">Dibeli: {{ $snapshot['buy_count'] }} user</p>
+                                                            @else
+                                                                <p style="font-family: Raleway;">Dibeli: 0 user</p>
+                                                            @endif
+                                                        </div>
                                                         <div class="d-flex justify-content-between">
                                                             <div class="span">
                                                                 <p style="font-family: Raleway;">Rp {{ $snapshot['Harga'] }}</p>
@@ -291,6 +302,15 @@
             </div>
         </main>
     </div>
+    <script>
+        function toggleItem(id) {
+            var element = document.getElementById('extended-info-' + id);
+            element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+
+            element = document.getElementById('extended-title-' + id);
+            element.className = element.className === "card-title text-primary text-truncate" ? "card-title text-primary" : "card-title text-primary text-truncate"
+        }
+    </script>
 </div>
 
 @endsection
