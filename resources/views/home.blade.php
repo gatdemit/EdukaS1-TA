@@ -1,31 +1,30 @@
 @extends('layouts.main')
 
 @section('container')
-    <div class="row" style="margin-bottom: 200px;">
-        <div class="row my-5">
-            <div class="col bold" style="color: #101828; font-size: 62px;">
-                <p class="ff-inter">Bersiaplah untuk Sukses <br> Akademis</p>
+<div class="row">
+    <div class="row my-5">
+        <div class="col bold" style="color: #101828; font-size: 62px;">
+            <p class="ff-inter">Bersiaplah untuk Sukses <br> Akademis</p>
+            <div class="row mb-5 ms-1" style="color: #646464; size: 20px; font-size: 1rem; font-weight: normal;">
+                Selamat datang di Edukas1, sumber terpercaya <br> untuk belajar mata kuliah secara efektif.
             </div>
-            <div class="col-7">
-                <div style="width: 100%; height: 100%; position: relative">
-                    <div style="width: 504px; height: 504px; left: 205px; top: 179px; position: absolute; background: rgba(131.63, 162.73, 246.86, 0.72); border-radius: 9999px"></div>
-                    <div style="width: 504px; height: 504px; left: 260px; top: 15px; position: absolute; background: rgba(160.40, 185.94, 255, 0.67); border-radius: 9999px"></div>
-                    <div style="width: 588px; height: 588px; left: 54px; top: 38px; position: absolute; background: #0243F5; border-radius: 9999px"></div>
-                    <img style="width: 561px; height: 561px; left: 43px; top: 65px; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); border-radius: 9999px" src="{{ asset('storage/asset/Home_Main.jpeg') }}">
-                    <div style="width: 588px; height: 588px; left: 0px; top: 52px; position: absolute; border-radius: 9999px; border: 1px black solid"></div>
-                    <img style="width: 142px; height: 142px; left: 421px; top: 517px; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 9999px" src="{{ asset('storage/asset/Home_Bottom.png') }}">
-                    <img style="width: 142px; height: 142px; left: 517px; top: 65px; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 9999px" src="{{ asset('storage/asset/Home_Top.png') }}">
-                    <div style="width: 588px; height: 588px; left: 16px; top: 0px; position: absolute; border-radius: 9999px; border: 1px black solid"></div>
-                    <img style="width: 142px; height: 142px; left: 550px; top: 306px; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 9999px" src="{{ asset('storage/asset/Home_Middle.png') }}">
-                </div>
+            <button style="width: 143px; height: 60px;" class="btn btn-primary mb-5 "><a href="/register" class="nav-link text-light" style="font-size:18px; font-family: Inter; font-weight: 600;">Start Now</a></button>
+        </div>
+        <div class="col" style="font-size: 0.75px; position: relative;">
+            <div style=" height: 750em; position: relative">
+                <div style="width: 504em; height: 504em; left: 205em; top: 179em; position: absolute; background: rgba(131.63, 162.73, 246.86, 0.72); border-radius: 9999em"></div>
+                <div style="width: 504em; height: 504em; left: 260em; top: 15em; position: absolute; background: rgba(160.40, 185.94, 255, 0.67); border-radius: 9999em"></div>
+                <div style="width: 588em; height: 588em; left: 54em; top: 38em; position: absolute; background: #0243F5; border-radius: 9999em"></div>
+                <img style="width: 561em; height: 561em; left: 43em; top: 65em; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); border-radius: 9999em" src="{{ asset('storage/asset/Home_Main.jpeg') }}">
+                <div style="width: 588em; height: 588em; left: 0em; top: 52em; position: absolute; border-radius: 9999em; border: 1em black solid"></div>
+                <img style="width: 142em; height: 142em; left: 421em; top: 517em; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0em 4em 4em rgba(0, 0, 0, 0.25); border-radius: 9999em" src="{{ asset('storage/asset/Home_Bottom.png') }}">
+                <img style="width: 142em; height: 142em; left: 517em; top: 65em; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0em 4em 4em rgba(0, 0, 0, 0.25); border-radius: 9999em" src="{{ asset('storage/asset/Home_Top.png') }}">
+                <div style="width: 588em; height: 588em; left: 16em; top: 0em; position: absolute; border-radius: 9999em; border: 1em black solid"></div>
+                <img style="width: 142em; height: 142em; left: 550em; top: 306em; position: absolute; background: linear-gradient(0deg, #0243F5 0%, #0243F5 100%); box-shadow: 0em 4em 4em rgba(0, 0, 0, 0.25); border-radius: 9999em" src="{{ asset('storage/asset/Home_Middle.png') }}">
             </div>
         </div>
-        <div class="row mb-5 ms-1" style="color: #646464; size: 20px;">
-            Selamat datang di Edukas1, sumber terpercaya <br> untuk belajar mata kuliah secara efektif.
-        </div>
-        <button style="width: 143px; height: 60px;"class="btn btn-primary mb-5 ms-3"><a href="/register" class="nav-link text-light" style="font-size:18px; font-family: Inter; font-weight: 600;">Start Now</a></button>
     </div>
-    <div class="row" style="margin-top: 500px;">
+    <div class="row">
         <div class="row">
             <div class="col" style="color: #0038CF; font-size: 16px; text-align:center;">
                 <p class="ff-inter" style="font-weight: 600;">About Us</p>
@@ -46,8 +45,8 @@
         </div>
         <div class="row mt-5">
             <div class="col" style="text-align:center;">
-                <button style="width: 77px; height: 40px; text-align:center;"class="btn btn-primary mb-5 ms-3"><a href="/about" class="nav-link text-light" style="font-size:14px; font-weight: 600;">See All</a></button>
+                <button style="width: 77px; height: 40px; text-align:center;" class="btn btn-primary mb-5 ms-3"><a href="/about" class="nav-link text-light" style="font-size:14px; font-weight: 600;">See All</a></button>
             </div>
         </div>
     </div>
-@endsection
+    @endsection
