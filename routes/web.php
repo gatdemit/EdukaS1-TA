@@ -70,6 +70,7 @@ Route::put('/adPanel/video/{wildcard}/react', [VideoController::class, 'reactiva
 
 Route::get('/adReg', [AdPanelController::class, 'adReg'])->middleware('admin');
 Route::get('/adPanel', [AdPanelController::class, 'adPanel'])->middleware('admin');
+Route::post('/adPanel', [AdPanelController::class, 'adPanel'])->middleware('admin');
 Route::get('/adPanel/users', [AdPanelController::class, 'adUsers'])->middleware('admin');
 Route::post('/adPanel/users', [AdPanelController::class, 'adUsers'])->middleware('admin');
 Route::delete('/adPanel/users/del', [AdPanelController::class, 'delUser']);
@@ -103,3 +104,4 @@ Route::get('/playground', function(){
         'fakultas' => $jurusan
     ]);
 });
+Route::post('/playground', [VideoController::class, 'videoTest']);

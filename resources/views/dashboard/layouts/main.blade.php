@@ -13,29 +13,9 @@
     {{-- Booststrap Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    {{-- fonts --}}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Raleway:wght@400;500;700;800&display=swap&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
-
     {{-- My CSS --}}
     <link href="/css/style.css" rel="stylesheet">
-
-
-    <style>
-      * {
-          font-family: Inter;
-      }
-
-      table * {
-          font-family: Montserrat;
-      }
-
-      .ff-raleway {
-          font-family: Raleway;
-          font-weight: bold;
-      }
-
       
-    </style>
     <!-- Custom styles for this template -->
     <link href="/css/dashboard.css" rel="stylesheet">
   </head>

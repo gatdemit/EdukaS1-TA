@@ -108,8 +108,10 @@ class AdPanelController extends Controller
         // dump($db->getReference('faculties/Teknik/jurusan')->getValue());
         // dump(Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue()));
         // dump(Str::contains('Teknik', Str::replace(' ', '_', $db->getReference('faculties/Teknik/jurusan')->getValue())));
-        foreach($auth->listUsers() as $user){
-            dump($user->email);
+        foreach($db->getReference('faculties')->getValue() as $fakultas){
+            foreach($fakultas['jurusan'] as $jurusan){
+                dump($jurusan);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@
       <div class="col-3 my-4"  style='width: 375px;' id="div{{ $facs['Value'] }}">
         <div class="card shadow shadow-lg">
           <button type="button" data-bs-toggle="modal" data-bs-target="#{{ Str::replace(' ', '', $facs['Value']) }}" class="btn">
-            <img src="https://source.unsplash.com/300x300/?{{ $facs['Value'] }}" class="img-preview" style="max-height:300px; max-width:100%;" role="button" id="myfile" name="myfile">
+            <img src="{{ asset($facs['Value'] == 'Umum' ? 'storage/asset/' . Str::replace(' ', '_', $facs['Value']) . '.jpg' : 'storage/asset/Fakultas_' . Str::replace(' ', '_', $facs['Value']) . '.jpg') }}" class="img-preview" style="height:200px; max-width:100%;" role="button" id="myfile" name="myfile">
             <div role="button" class="card-body" style="text-align: left;">
               @if($facs['Value'] == 'Umum')
                 <p class="bold">Mata Kuliah {{ $facs['Value'] }}</p>
