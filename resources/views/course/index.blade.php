@@ -46,7 +46,7 @@
             @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan))->getSnapshot()->exists())
             <ul>
               <li>
-                <a style="text-decoration: none;" href="/course/{{ Str::replace(' ','_',$jurusan) }}">
+                <a style="text-decoration: none; color: gray;" href="/course/{{ Str::replace(' ','_',$jurusan) }}">
                   {{ $jurusan }} >
                 </a>
               </li>

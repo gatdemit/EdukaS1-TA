@@ -70,7 +70,7 @@
                                                         <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
                                                         <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem(<?= $key ?>)">extend</a>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
@@ -102,6 +102,7 @@
                                                     <div id="{{ $snapshot['Video'] }}"></div>
                                                     <div class="card-body">
                                                         <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
@@ -192,6 +193,7 @@
                                                         <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
                                                         <h5 class="card-title text-primary text-truncate" id="extended-title-{{$key}}" style="font-family: Raleway; font-weight: 800;">{{ Str::title($snapshot['Judul_Video']) }}</h5>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             <p class="card-text" style="font-family: Raleway;">{{ $snapshot['Deskripsi'] }}</p>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
