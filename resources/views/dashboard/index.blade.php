@@ -64,14 +64,17 @@
             <h3 style="color: #000C2E; font-weight: 700;">My Videos</h3>
             @if(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getSnapshot()->exists())
                 <div class="row">
-                    @foreach(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getValue() as $vids)
-                        <div class="col-4 mb-4 mx-5">
+                    @foreach(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getValue() as $key => $vids)
+                        <div class="col-4 mb-4">
                             <div class="card" style="width: 334px;">
                                 <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
                                 <div class="card-body">
-                                    <h5 class="card-title" style="color: #0038CF; font-weight: 800; font-family: Raleway;">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video'] }}</h5>
-                                    <p class="card-text">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
-                                    <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">Watch Video</a>
+                                    <h5 class="card-title text-truncate" id="extended-title-{{$key}}" style="color: #0038CF; font-weight: 800; font-family: Raleway;">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video'] }}</h5>
+                                    <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                    <p class="card-text" style="display: none" id="extended-info-{{$key}}">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
+                                    <div class="d-flex justify-content-end">
+                                        <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">Watch Video</a>
+                                    </div>
                                 </div>
                             </div>
                             <script>
@@ -125,5 +128,14 @@
             @endif
         </div>
     </div>
+    <script>
+        function toggleItem(id) {
+            var element = document.getElementById('extended-info-' + id);
+            element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
+
+            element = document.getElementById('extended-title-' + id);
+            element.className = element.className === "card-title text-truncate" ? "card-title text-primary" : "card-title text-truncate"
+        }
+    </script>
   </div>
 @endsection
