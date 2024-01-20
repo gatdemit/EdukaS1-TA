@@ -66,7 +66,7 @@
                 <div class="row">
                     @foreach(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getValue() as $key => $vids)
                         <div class="col-4 mb-4">
-                            <div class="card" style="width: 334px;">
+                            <div class="card">
                                 <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
                                 <div class="card-body">
                                     <h5 class="card-title text-truncate" id="extended-title-{{$key}}" style="color: #0038CF; font-weight: 800; font-family: Raleway;">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video'] }}</h5>
@@ -94,7 +94,7 @@
                                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                                         var img = new Image();
                                         img.src = canvas.toDataURL();
-                                        img.style = "height: 179px; width: 300px;";
+                                        img.style = "height: 179px; width: 100%; object-fit: cover";
                                         callback.call(me, img, this.currentTime, e);
                                     };
                                     video.onerror = function(e) {
