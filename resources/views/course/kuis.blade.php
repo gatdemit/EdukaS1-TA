@@ -39,46 +39,46 @@
                 
                     <form action="/dashboard/quiz{{ request()->segment(count(request()->segments())) == Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren() ? '/' . request()->segment(count(request()->segments())-1) : '/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) + 1 }}" method="post">
                         @csrf
-                        <p class="text-muted" style="font-family: Raleway;">Pertanyaan {{ request()->segment(count(request()->segments())) }}</p>
+                        <p class="text-muted" style="">Pertanyaan {{ request()->segment(count(request()->segments())) }}</p>
                         
-                        <h5 style="font-family: Raleway; font-weight: 800;">{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['pertanyaan'] }}</h5>
+                        <h5 style="font-weight: 800;">{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['pertanyaan'] }}</h5>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="Pertanyaan_{{ request()->segment(count(request()->segments())) }}" id="radio1" value ="jawaban 1" {{ Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) != null && Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) == 'jawaban 1' ? 'checked' : ''}}>
-                            <label class="form-check-label" for="radio1" style="font-family: Raleway; font-weight: 700;">
+                            <label class="form-check-label" for="radio1" style="font-weight: 700;">
                                 {{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['jawaban']['jawaban 1'] }}
                             </label>
                         </div>
                 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="Pertanyaan_{{ request()->segment(count(request()->segments())) }}" id="radio1" value="jawaban 2" {{ Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) != null && Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) == 'jawaban 2' ? 'checked' : ''}}>
-                            <label class="form-check-label" for="radio1" style="font-family: Raleway; font-weight: 700;">
+                            <label class="form-check-label" for="radio1" style="font-weight: 700;">
                                 {{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['jawaban']['jawaban 2'] }}
                             </label>
                         </div>
                 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="Pertanyaan_{{ request()->segment(count(request()->segments())) }}" id="radio1" value="jawaban 3" {{ Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) != null && Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) == 'jawaban 3' ? 'checked' : ''}}>
-                            <label class="form-check-label" for="radio1" style="font-family: Raleway; font-weight: 700;">
+                            <label class="form-check-label" for="radio1" style="font-weight: 700;">
                                 {{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['jawaban']['jawaban 3'] }}
                             </label>
                         </div>
                 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="Pertanyaan_{{ request()->segment(count(request()->segments())) }}" id="radio1" value="jawaban 4" {{ Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) != null && Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) == 'jawaban 4' ? 'checked' : ''}}>
-                            <label class="form-check-label" for="radio1" style="font-family: Raleway; font-weight: 700;">
+                            <label class="form-check-label" for="radio1" style="font-weight: 700;">
                                 {{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['jawaban']['jawaban 4'] }}
                             </label>
                         </div>
                 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="Pertanyaan_{{ request()->segment(count(request()->segments())) }}" id="radio1" value="jawaban 5" {{ Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) != null && Cache::get('Pertanyaan_' . request()->segment(count(request()->segments()))) == 'jawaban 5' ? 'checked' : ''}}>
-                            <label class="form-check-label" for="radio1" style="font-family: Raleway; font-weight: 700;">
+                            <label class="form-check-label" for="radio1" style="font-weight: 700;">
                                 {{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis/pertanyaan ' . request()->segment(count(request()->segments())))->getValue()['jawaban']['jawaban 5'] }}
                             </label>
                         </div>
                         <input type="hidden" name="jur" id="jur" value="{{ $jurusan }}">
                         <input type="hidden" name="pertanyaan" id="pertanyaan" value="{{ request()->segment(count(request()->segments())) }}">
-                        <button class="btn btn-primary m-auto d-block" style="font-family: Raleway; font-weight: 500;">{{ request()->segment(count(request()->segments())) == Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren() ? 'Submit' : 'Next' }}</button>
+                        <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">{{ request()->segment(count(request()->segments())) == Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren() ? 'Submit' : 'Next' }}</button>
                     </form>
                 @endif
             </div>

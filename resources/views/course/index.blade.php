@@ -11,7 +11,7 @@
 
 <div class="container">
   <div class="row my-5">
-    <div class="col-12 bold mb-5 text-dark" style="font-size: 36px; font-weight: 600; text-align:center; color: #101828">
+    <div class="col-12 bold mb-5" style="font-size: 36px; text-align: center; color: #0038CF;">
       Selamat Datang Di Pusat Kursus Edukas1!
     </div>
   </div>

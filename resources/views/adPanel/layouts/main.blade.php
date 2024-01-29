@@ -27,7 +27,7 @@
   <body>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <header class="navbar sticky-top flex-md-nowrap p-0 shadow" data-bs-theme="dark" style="background-color: #0038CF;">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#" style="font-weight: 600;">EdukaS1 Admin Panel</a>
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#" style="font-weight: 600;">Admin Panel</a>
     </header>
     <div class="container-fluid">
         <div class="row">

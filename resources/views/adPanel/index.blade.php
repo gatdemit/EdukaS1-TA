@@ -2,38 +2,30 @@
 
 @section('container')
 @php
-$angka = collect();
-foreach(Firebase::database()->getReference('videos/' . $jurusan)->getValue() as $i){
-if(array_key_exists('buy_count', $i)){
-$angka->put($i['Judul_Video'], $i['buy_count']);
-}
-}
-$key = array_keys($angka->sortDesc()->all());
-$value = $angka->sortDesc()->values()->all();
+    $angka = collect();
+    foreach(Firebase::database()->getReference('videos/' . $jurusan)->getValue() as $i){
+        if(array_key_exists('buy_count', $i)){
+            $angka->put($i['Judul_Video'], $i['buy_count']);
+        }
+    }
+    $key = array_keys($angka->sortDesc()->all());
+    $value = $angka->sortDesc()->values()->all();
 @endphp
 <form action="/adPanel" method="post" id="formJurusan">
     @csrf
     <div class="form-floating mb-3">
         <select class="form-select" name="jurusan" id="jurusan" onchange="Jurusan()">
             @foreach(array_keys($videos) as $i)
-            @if($jurusan == $i)
-            <option value="{{ $i }}" selected>{{ Str::replace('_', ' ', $i) }}</option>
-            @else
-            <option value="{{ $i }}">{{ Str::replace('_', ' ', $i) }}</option>
-            @endif
+                @if($jurusan == $i)
+                    <option value="{{ $i }}" selected>{{ Str::replace('_', ' ', $i) }}</option>
+                @else
+                    <option value="{{ $i }}">{{ Str::replace('_', ' ', $i) }}</option>
+                @endif
             @endforeach
         </select>
         <label for="tahun">Jurusan</label>
     </div>
 </form>
-
-<div class="row mb-4">
-    <div class="col">
-        <div class="card">
-            <canvas id="chart-penjualan-bruto"></canvas>
-        </div>
-    </div>
-</div>
 
 <div class="row mb-4">
     <div class="col mr-4">
@@ -52,6 +44,15 @@ $value = $angka->sortDesc()->values()->all();
         </div>
     </div>
 </div>
+
+<div class="row mb-4">
+    <div class="col">
+        <div class="card">
+            <canvas id="chart-penjualan-bruto"></canvas>
+        </div>
+    </div>
+</div>
+
 <h2 style="color: #0038CF; font-weight:700;">Top Sales {{ Str::replace('_', ' ', $jurusan) }}</h2>
 
 <div class="table-responsive small">

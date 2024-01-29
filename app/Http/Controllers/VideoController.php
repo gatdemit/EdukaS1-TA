@@ -17,10 +17,13 @@ class VideoController extends Controller
     public function index()
     {
         $db = Firebase::database();
+        $jur = Firebase::database()->getReference('faculties')->getValue();
         return view('adPanel.sidemenu.video.index', [
             'title' => 'Admin Panel | Video',
             'header' => "Video",
-            'jurusan' => $db->getReference('videos')->getValue(),
+            'jurusan' => $db->getReference('videos/' . array_keys($db->getReference('videos')->getValue())[0])->getValue(),
+            'faks' => $jur,
+            'choice' => array_keys($db->getReference('videos')->getValue())[0],
             'search' => false
         ]);
     }
@@ -43,13 +46,17 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        if($request['search']){
+        if($request['search'] || $request['choice']){
             $db = Firebase::database();
+            $jur = Firebase::database()->getReference('faculties')->getValue();
             return view('adPanel.sidemenu.video.index', [
                 'title' => 'Admin Panel | Video',
-                'jurusan' => $db->getReference('videos')->getValue(),
-                'search' => true,
-                'query' => $request['search']
+                'header' => "Video",
+                'jurusan' => $db->getReference('videos/' . Str::replace(' ', '_',$request['choice']))->getValue(),
+                'faks' => $jur,
+                'choice' => Str::replace(' ', '_',$request['choice']),
+                'search' => $request['search'] == null ? false : true,
+                'query' => $request['search'] == null ? $request['choice'] : $request['search'],
             ]);
         } else{
             $db = Firebase::database();

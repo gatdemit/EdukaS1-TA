@@ -46,9 +46,10 @@ class FakultasController extends Controller
             $db = Firebase::database();
             return view('adPanel.sidemenu.fakultas.index', [
                 'title' => 'Admin Panel | Fakultas dan Jurusan',
-                'videos' => $db->getReference('faculties')->getValue(),
                 'search' => true,
-                'query' => $request['search']
+                'query' => $request['search'],
+                'header' => "Fakultas dan Jurusan",
+                'fakultas' => $db->getReference('faculties')->getValue()
             ]);
         } else{
             $db = Firebase::database();

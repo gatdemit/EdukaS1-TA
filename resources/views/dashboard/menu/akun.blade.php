@@ -43,7 +43,7 @@
                         </div>
                         @enderror
                     </div>
-                    <button class="btn btn-primary" style="font-family: Raleway; font-weight: 700;">Submit</button>
+                    <button class="btn btn-primary" style="font-weight: 700;">Submit</button>
                 </form>
             </div>
         </div>
@@ -64,7 +64,7 @@
                     @method('delete')
                     @csrf
                     <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                    <button class="btn btn-outline-danger" onclick="return confirm('are you sure?')" style="font-family: Raleway; font-weight: 500;">Delete Account</button>
+                    <button class="btn btn-outline-danger" onclick="return confirm('are you sure?')" style="font-weight: 500;">Delete Account</button>
                 </form>
             </div>
         </div>

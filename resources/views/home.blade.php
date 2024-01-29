@@ -8,7 +8,7 @@
             <div class="row mb-5 ms-1" style="color: #646464; size: 20px; font-size: 1rem; font-weight: normal;">
                 Selamat datang di Edukas1, sumber terpercaya <br> untuk belajar mata kuliah secara efektif.
             </div>
-            <button style="width: 143px; height: 60px;" class="btn btn-primary mb-5 "><a href="/register" class="nav-link text-light" style="font-size:18px; font-family: Inter; font-weight: 600;">Start Now</a></button>
+            <button style="width: 143px; height: 60px;" class="btn btn-primary mb-5 "><a href="/register" class="nav-link text-light" style="font-size:18px; font-weight: 600;">Start Now</a></button>
         </div>
         <div class="col" style="font-size: 0.75px; position: relative;">
             <div style=" height: 750em; position: relative">

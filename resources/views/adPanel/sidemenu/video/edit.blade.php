@@ -37,7 +37,7 @@
                     </div>
                     @enderror
                 </div>
-                <button type="submit" class="btn btn-primary" style="font-weight: 500; font-family: Raleway;">Submit</button>
+                <button type="submit" class="btn btn-primary" style="font-weight: 500;">Submit</button>
             <input type="hidden" name="fakultas" id="fakultas" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Fakultas'] }}">
             <input type="hidden" name="jurusan" id="jurusan" value="{{ Str::replace(' ', '_', Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Jurusan']) }}">
             <input type="hidden" name="video" id="video" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Video'] }}">

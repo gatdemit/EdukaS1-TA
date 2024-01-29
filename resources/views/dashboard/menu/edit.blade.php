@@ -59,7 +59,7 @@
                     </div>
                     @enderror
                 </div>
-                <button type="submit" class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">Submit</button>
+                <button type="submit" class="btn btn-primary" style="font-weight: 500;">Submit</button>
             <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
         </form>
     </div>

@@ -45,9 +45,9 @@
                                     <option value="{{ $jurusan }}">{{ $jurusan }}</option>
                                 @endforeach
                             </optgroup>
-                            @endforeach
-                        </select>
-                        <label for="jurusan">Jurusan</label>
+                        @endforeach
+                    </select>
+                    <label for="jurusan">Jurusan</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" required autofocus>
@@ -67,7 +67,7 @@
                     </div>
                     @enderror
                 </div>
-                <button type="submit" class="btn btn-primary" style="font-weight: 500; font-family: Raleway;">Submit</button>
+                <button type="submit" class="btn btn-primary" style="font-weight: 500;">Submit</button>
         </form>
     <script>
         var divJurusan = document.getElementById('divJur').getElementsByTagName('optgroup');
@@ -83,14 +83,6 @@
                 divJurusan[$m].style.display = 'none';
             }
         }
-        // var jurusanSelect$m = document.getElementById("fakultas");
-        // console.log(jurusanSelect$m);
-        // if (userInput == $jurusanSelect){
-        // document.getElementById(array_keys($faks)[$m]).style.visibility = 'visible';
-        // } else{
-        // document.getElementById(array_keys($faks)[$m]).style.visibility = 'hidden';
-        // }
-        return true;
     }
     </script>
 @endsection

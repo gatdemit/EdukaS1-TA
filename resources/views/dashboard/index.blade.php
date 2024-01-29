@@ -69,11 +69,11 @@
                             <div class="card">
                                 <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
                                 <div class="card-body">
-                                    <h5 class="card-title text-truncate" id="extended-title-{{$key}}" style="color: #0038CF; font-weight: 800; font-family: Raleway;">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video'] }}</h5>
+                                    <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video']) }}</h5>
                                     <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
                                     <p class="card-text" style="display: none" id="extended-info-{{$key}}">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
                                     <div class="d-flex justify-content-end">
-                                        <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">Watch Video</a>
+                                        <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary">Watch Video</a>
                                     </div>
                                 </div>
                             </div>

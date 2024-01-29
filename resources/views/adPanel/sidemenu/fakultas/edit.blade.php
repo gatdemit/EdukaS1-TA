@@ -21,8 +21,8 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-family: Raleway; font-weight: 500;">Tambah</a>
-            <button type="submit" class="btn btn-primary mt-3" style="font-family: Raleway; font-weight: 500;">Submit</button>
+            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-weight: 500;">Tambah</a>
+            <button type="submit" class="btn btn-primary mt-3" style="font-weight: 500;">Submit</button>
         </form>
 
     <script>

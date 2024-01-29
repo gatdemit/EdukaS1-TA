@@ -38,10 +38,10 @@
                 </div>
                 <input type="hidden" name="count" id="count" value=0>
             </div>
-            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-family: Raleway; font-weight: 500;">Tambah</a>
+            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-weight: 500;">Tambah</a>
             <input type="hidden" name="video" id="video" value="{{ $video }}">
             <input type="hidden" name="jurusan" id="jurusan" value="{{ $jurusan }}">
-            <button type="submit" class="btn btn-primary mt-3" style="font-family: Raleway; font-weight: 500;">Submit</button>
+            <button type="submit" class="btn btn-primary mt-3" style="font-weight: 500;">Submit</button>
         </form>
 
     <script>

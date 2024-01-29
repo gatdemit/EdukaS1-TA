@@ -68,14 +68,14 @@
           <div class="card">
             <div class="card-body">
                 <div class="container m-auto w-100 rounded p-5 text-center">
-                    <h3 style="font-family: Raleway; font-weight: 800; color: #0038CF;">{{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video']) }}</h3>
+                    <h3 style="font-weight: 700; color: #0038CF;">{{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video']) }}</h3>
                     <div id="vidDiv" style="margin: 0 auto; width: 500px; padding: 20px;">
                         <button class="btn btn-success" id="replayBtn" style="display:none;" onclick="enable()">Putar Ulang</button>
                         <video width="400" height="300" controls id="video">
                             <source src="{{ asset('storage/'. Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Link']) }}" type="video/mp4">
                         </video>
                     </div>
-                    <p style="font-family: Raleway;">{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Deskripsi'] }}</p>
+                    <p>{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Deskripsi'] }}</p>
                         
                     @if(Session::get('user'))
                         @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
@@ -103,11 +103,11 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/rate_count')->getSnapshot()->exists())
-                                            <p style="font-family: Raleway; font-weight: 600; color: #230F0F;">
+                                            <p style="font-weight: 600; color: #230F0F;">
                                                 ({{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['rate_count'] }} Reviews)
                                             </p>
                                         @else
-                                            <p style="font-family: Raleway; font-weight: 600; color: #230F0F;">
+                                            <p style="font-weight: 600; color: #230F0F;">
                                                 (0 Reviews)
                                             </p>
                                         @endif
@@ -127,7 +127,7 @@
                                 @endif
                                 <div class="row justify-content-start">
                                     <div class="col-md-2">
-                                        <button class="btn btn-primary m-auto d-block mt-5" style="font-family: Raleway; font-weight: 500;">Rate us!</button>
+                                        <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">Rate us!</button>
                                     </div>
                                 </div>
                             </form>
@@ -135,10 +135,10 @@
                                 <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post">
                                     @csrf
                                     <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
-                                    <button class="btn btn-primary m-auto d-block mt-5" style="font-family: Raleway; font-weight: 500;">Kerjakan Quiz</button>
+                                    <button class="btn btn-primary m-auto d-block mt-5" style="font-weight: 500;">Kerjakan Quiz</button>
                                 </form>
                             @else
-                                <div style="font-family: Raleway; font-weight: 600;">
+                                <div style="font-weight: 600;">
                                     Kuis Belum Dibuat
                                 </div>
                             @endif
@@ -151,8 +151,8 @@
                                 <input type="hidden" name="fakultas" id="fakultas" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Fakultas'] }}">
                                 <input type="hidden" name="jurusan" id="jurusan" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Jurusan'] }}">
                                 <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                                <p style="font-family: Raleway;">Harga: Rp {{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}</p>
-                                <button class="btn btn-primary m-auto d-block mt-5" style="font-family: Raleway; font-weight: 500;">Beli Video</button>
+                                <p>Harga: Rp {{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}</p>
+                                <button class="btn btn-primary m-auto d-block mt-5" style="font-weight: 500;">Beli Video</button>
                             </form>
                         <script>
                             var vid = document.getElementById('video');
@@ -176,7 +176,7 @@
                         </script>
                         @endif
                     @else
-                    <a href="/login" class="btn btn-primary mt-5" style="font-family: Raleway; font-weight: 500;">Login untuk Beli</a>  
+                    <a href="/login" class="btn btn-primary mt-5" style="font-weight: 500;">Login untuk Beli</a>  
                     <script>
                         var vid = document.getElementById('video');
                         var replayBtn = document.getElementById('replayBtn');

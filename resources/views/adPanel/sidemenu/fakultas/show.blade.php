@@ -25,10 +25,10 @@
         </form>
         <table class="table table-striped table-sm table-hover">
             <thead>
-                <tr style="text-align: center;">
+                <tr>
                     <th scope="col">Fakultas</th>
                     <th scope="col">Jurusan</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col" style="text-align: center;">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,10 +59,10 @@
                         @endforeach
                     @else
                     @foreach (Firebase::database()->getReference('faculties/' . request()->segment(count(request()->segments())) . '/jurusan')->getValue() as $snapshot)
-                        <tr style="text-align: center;">
-                            <td style="font-weight: 500;">{{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}</td>
-                            <td style="font-weight: 500;">{{ $snapshot }}</td>
-                            <td>
+                        <tr>
+                            <td>{{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}</td>
+                            <td>{{ $snapshot }}</td>
+                            <td style="text-align: center;">
                                 <form action="/adPanel/fakultas" method="POST">
                                     @method('delete')
                                     @csrf
