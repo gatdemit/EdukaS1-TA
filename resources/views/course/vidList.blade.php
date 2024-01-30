@@ -35,8 +35,11 @@
         <main>
             <div class="row d-flex align-items-between">
                 <div class="row">
-                    <div class="col-12 bold mb-5" style="color: #0038CF; font-size: 36px; text-align:center;">
+                    <div class="col-12 bold" style="color: #0038CF; font-size: 36px; text-align:center;">
                         {{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}
+                    </div>
+                    <div class="mb-4 bold" style="text-align: center; font-size: 24px; padding-left: 50px; padding-right: 50px;">
+                        {{ $fakultas['Deskripsi'][request()->segment(count(request()->segments()))]['Value'] }}
                     </div>
                     <form action="/course/{{ request()->segment(count(request()->segments())) }}" method="post">
                         @csrf
