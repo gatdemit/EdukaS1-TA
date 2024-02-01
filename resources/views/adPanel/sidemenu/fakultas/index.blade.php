@@ -40,7 +40,29 @@
             @if($fakultas!=null)
                 @if($search)
                     @foreach($fakultas as $snapshot)
-                        @if(Str::contains(Str::upper($snapshot['Value']), Str::upper($query))) 
+                        @if(count($snapshot) <= 3)
+                            @if(Str::contains(Str::upper($snapshot['Value']), Str::upper($query)))
+                                <tr>
+                                    <td>{{ $snapshot['Value'] }}</td>
+                                    <td style="text-align: center;">
+                                        <a href="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}" class="btn btn-success rounded-pill" style="text-decoration: none; color: white;">Lihat Jurusan</a>
+                                    </td style="text-align: center;">
+                                    <td style="text-align: center;"><a href="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}/edit" class="btn btn-primary rounded-pill" style="text-decoration: none; color: white;">Tambah Jurusan</a></td>
+                                    <td style="text-align: center;">
+                                        <form action="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}" method="POST">
+                                            @method('delete')
+                                            @csrf
+                                            <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Value'] }}">
+                                            <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endif
+                    @endforeach
+                @else
+                    @foreach ($fakultas as $snapshot)
+                        @if(count($snapshot) < 3)
                             <tr>
                                 <td>{{ $snapshot['Value'] }}</td>
                                 <td style="text-align: center;">
@@ -57,24 +79,6 @@
                                 </td>
                             </tr>
                         @endif
-                    @endforeach
-                @else
-                    @foreach ($fakultas as $snapshot)
-                        <tr>
-                            <td>{{ $snapshot['Value'] }}</td>
-                            <td style="text-align: center;">
-                                <a href="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}" class="btn btn-success rounded-pill" style="text-decoration: none; color: white;">Lihat Jurusan</a>
-                            </td style="text-align: center;">
-                            <td style="text-align: center;"><a href="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}/edit" class="btn btn-primary rounded-pill" style="text-decoration: none; color: white;">Tambah Jurusan</a></td>
-                            <td style="text-align: center;">
-                                <form action="/adPanel/fakultas/{{ Str::replace(' ', '_', $snapshot['Value']) }}" method="POST">
-                                    @method('delete')
-                                    @csrf
-                                    <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Value'] }}">
-                                    <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
                     @endforeach
                 @endif
             @else

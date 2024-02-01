@@ -49,6 +49,7 @@ class KuisController extends Controller
 
             return view('adPanel.sidemenu.kuis.index',[
                 'title' => 'Admin Panel | Quiz',
+                'header' => "Quiz",
                 'videos' => $db->getReference('videos')->getValue(),
                 'search' => true,
                 'query' => $request['search']

@@ -15,8 +15,9 @@
                     <label for="pertanyaan" class="form-control-label">Fakultas</label>
                 </div>
                 <div id="parentbody">
-                    <div class="form-check my-1">
+                    <div class="form-check my-2">
                         <input type="text" name="jurusan1" id="jurusan1" placeholder="Jurusan" class="form-control" required>
+                        <input type="text" name="deskripsi1" id="deskripsi1" placeholder="Deskripsi" class="form-control" required>
                     </div>
                 </div>
             </div>
@@ -34,7 +35,7 @@
             count++
 
             var tr = 
-            `<div class='form-check my-1'><input type='text' name='jurusan${count+1}' id='jurusan${count+1}' placeholder='Jurusan' class='form-control' required></div>`+
+            `<div class='form-check my-2'><input type='text' name='jurusan${count+1}' id='jurusan${count+1}' placeholder='Jurusan' class='form-control' required><input type='text' name='deskripsi${count+1}' id='deskripsi${count+1}' placeholder='Deskripsi' class='form-control' required></div>`+
             `<input type="hidden" name="count" id="count" value=${count}>`;
             $(parBody).append(tr);
         }

@@ -43,15 +43,15 @@
           <div class="modal-body" id="modal{{ $facs['Value'] }}">
             <div class="text-normal mb-2">Pilih Jurusan: </div>
             @foreach($facs['jurusan'] as $jurusan)
-            @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
-            <ul>
-              <li>
-                <a style="text-decoration: none; color: gray;" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">
-                  {{ Str::replace('_', ' ', $jurusan['Value']) }} >
-                </a>
-              </li>
-            </ul>
-            @endif
+              @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
+              <ul>
+                <li>
+                  <a style="text-decoration: none; color: gray;" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">
+                    {{ Str::replace('_', ' ', $jurusan['Value']) }} >
+                  </a>
+                </li>
+              </ul>
+              @endif
             @endforeach
           </div>
         </div>

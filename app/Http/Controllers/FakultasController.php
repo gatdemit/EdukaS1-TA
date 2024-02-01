@@ -56,6 +56,7 @@ class FakultasController extends Controller
     
             $storFak = Str::title(Str::replace(' ', '_', $request['fakultas']));
             $jurusan = [];
+            $deskripsi = [];
 
             try{
                 if($db->getReference('faculties/' . $storFak)->getSnapshot()->exists()){
@@ -63,10 +64,17 @@ class FakultasController extends Controller
                 } else{
                     for($i=0; $i<=$request['count']; $i++){
                         $jurusan += [
-                            $i => Str::title($request['jurusan'. $i+1])
+                            Str::replace(' ', '_', Str::title($request['jurusan'. $i+1])) => [
+                                'Value' => Str::title($request['jurusan'. $i+1])
+                            ]
+                        ];
+
+                        $deskripsi += [
+                            Str::replace(' ', '_', Str::title($request['jurusan'. $i+1])) => [
+                                'Value' => $request['deskripsi' . $i+1]
+                            ]
                         ];
                     }
-    
                     $updates = [
                         $storFak => [
                             'Value' => Str::title($request['fakultas']),
@@ -75,6 +83,7 @@ class FakultasController extends Controller
                     ];
     
                     $db->getReference('faculties')->update($updates);
+                    $db->getReference('faculties/Deskripsi')->update($deskripsi);
                 }
             } catch(\Exception $e){
                 return redirect()->back()->with('error', 'Penambahan Fakultas Gagal. Silakan Coba Lagi.');
@@ -116,19 +125,30 @@ class FakultasController extends Controller
         $db = Firebase::database();
     
         $jurusan = [];
+        $deskripsi = [];
 
         try{
-            for($i=$request['childCount']; $i<=$request['count'] + $request['childCount']; $i++){
-                if(Str::contains(Str::title($request['jurusan'. ($i+1)-$request['childCount']]), $db->getReference('faculties/Teknik/jurusan')->getValue())){
+            for($i = $request['childCount']; $i <= $request['count'] + $request['childCount']; $i++){
+                if($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getSnapshot()->exists() ?  Str::contains(Str::title($request['jurusan'. ($i+1)-$request['childCount']]), Str::replace('_', ' ', array_keys($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getValue()))) : false){
                     return redirect()->back()->with('error', 'Jurusan sudah ada');
                 } else{
                     $jurusan += [
-                        $i => Str::title($request['jurusan'. ($i+1)-$request['childCount']])
+                        Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
+                            'Value' => Str::title($request['jurusan'. ($i+1)-$request['childCount']])
+                        ]
+                    ];
+
+                    $deskripsi += [
+                        Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
+                            'Value' => $request['deskripsi'. ($i+1)-$request['childCount']]
+                        ]
                     ];
                 }
             }
 
+
             $db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->update($jurusan);
+            $db->getReference('faculties/Deskripsi')->update($deskripsi);
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Penambahan Jurusan Gagal. Silakan Coba Lagi.');
         }
@@ -144,8 +164,16 @@ class FakultasController extends Controller
         $db = Firebase::database();
 
         try{
-            $db->getReference('faculties/' . $request['fakultas'])->remove();
-            return redirect('/adPanel/fakultas')->with('success', 'Fakultas Berhasil Dihapus!');
+            if($db->getReference('faculties/' . Str::replace(' ', '_', $request['fakultas']) . '/jurusan')->getSnapshot()->exists()){
+                foreach($db->getReference('faculties/' . Str::replace(' ', '_', $request['fakultas']) . '/jurusan')->getValue() as $snapshot){
+                    $db->getReference('faculties/Deskripsi/' . Str::replace(' ', '_', $snapshot['Value']))->remove();
+                }
+                $db->getReference('faculties/' . Str::replace(' ', '_', $request['fakultas']))->remove();
+                return redirect('/adPanel/fakultas')->with('success', 'Fakultas Berhasil Dihapus!');
+            } else{
+                $db->getReference('faculties/' . Str::replace(' ', '_', $request['fakultas']))->remove();
+                return redirect('/adPanel/fakultas')->with('success', 'Fakultas Berhasil Dihapus!');
+            }
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Gagal menghapus Fakultas. Silakan coba lagi.');
         }
@@ -157,6 +185,7 @@ class FakultasController extends Controller
 
         try{
             $db->getReference('faculties/' . $request['fakultas'] . '/jurusan/' . $request['jurusan'])->remove();
+            $db->getReference('faculties/Deskripsi/' . $request['jurusan'])->remove();
             return redirect('/adPanel/fakultas')->with('success', 'Jurusan Berhasil Dihapus!');
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Gagal menghapus Fakultas. Silakan coba lagi.');

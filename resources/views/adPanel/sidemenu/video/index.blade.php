@@ -35,15 +35,17 @@
             <select class="form-select" name="choice" id="choice" onchange="Choose()">
                 <option selected disabled>--Jurusan--</option>
                 @foreach($faks as $fakultas)
-                    <optgroup label ="{{ $fakultas['Value'] == 'Umum' ? $fakultas['Value'] : 'Fakultas ' . $fakultas['Value'] }}" id="{{ $fakultas['Value'] }}">
-                        @foreach($fakultas['jurusan'] as $jur)
-                            @if($choice == Str::replace(' ', '_', $jur))
-                                <option value="{{ $jur }}" selected>{{ $jur }}</option>
-                            @else
-                                <option value="{{ $jur }}">{{ $jur }}</option>
-                            @endif
-                        @endforeach
-                    </optgroup>
+                    @if(count($fakultas) <= 3)
+                        <optgroup label ="{{ $fakultas['Value'] == 'Umum' ? $fakultas['Value'] : 'Fakultas ' . $fakultas['Value'] }}" id="{{ $fakultas['Value'] }}">
+                            @foreach($fakultas['jurusan'] as $jur)
+                                @if($choice == Str::replace(' ', '_', $jur['Value']))
+                                    <option value="{{ $jur['Value'] }}" selected>{{ $jur['Value'] }}</option>
+                                @else
+                                    <option value="{{ $jur['Value'] }}">{{ $jur['Value'] }}</option>
+                                @endif
+                            @endforeach
+                        </optgroup>
+                    @endif
                 @endforeach
             </select>
             <label for="jurusan">Jurusan</label>

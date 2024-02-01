@@ -61,12 +61,12 @@
                     @foreach (Firebase::database()->getReference('faculties/' . request()->segment(count(request()->segments())) . '/jurusan')->getValue() as $snapshot)
                         <tr>
                             <td>{{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}</td>
-                            <td>{{ $snapshot }}</td>
+                            <td>{{ $snapshot['Value'] }}</td>
                             <td style="text-align: center;">
                                 <form action="/adPanel/fakultas" method="POST">
                                     @method('delete')
                                     @csrf
-                                    <input type="hidden" name="jurusan" id="jurusan" value="{{ $key }}">
+                                    <input type="hidden" name="jurusan" id="jurusan" value="{{ Str::replace(' ', '_', $snapshot['Value']) }}">
                                     <input type="hidden" name="fakultas" id="fakultas" value="{{ request()->segment(count(request()->segments())) }}">
                                     <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>

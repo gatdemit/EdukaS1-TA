@@ -19,9 +19,13 @@
                         <input type="text" name="jurusan1" id="jurusan1" class="form-control" required autofocus>
                         <label for="jurusan1" class="form-control-label">Jurusan</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="deskripsi1" id="deskripsi1" class="form-control" required autofocus>
+                        <label for="deskripsi1" class="form-control-label">Deskripsi</label>
+                    </div>
                 </div>
             </div>
-            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="font-weight: 500;">Tambah</a>
+            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="text-decoration:none; text-color:white; font-weight: 500;">Tambah</a>
             <button type="submit" class="btn btn-primary mt-3" style="font-weight: 500;">Submit</button>
         </form>
 
@@ -35,7 +39,7 @@
             count++
 
             var tr = 
-            `<div class='form-floating mb-3'><input type='text' name='jurusan${count+1}' id='jurusan${count+1}' class='form-control' required><label for="jurusan${count+1}" class="form-control-label">Jurusan</label></div>`+
+            `<div class='form-floating mb-3'><input type='text' name='jurusan${count+1}' id='jurusan${count+1}' class='form-control' required><label for="jurusan${count+1}" class="form-control-label">Jurusan</label></div><div class='form-floating mb-3'><input type='text' name='deskripsi${count+1}' id='deskripsi${count+1}' class='form-control' required><label for="deskripsi${count+1}" class="form-control-label">Deskripsi</label></div>`+
             `<input type="hidden" name="count" id="count" value=${count}>`;
             $(parBody).append(tr);
         }

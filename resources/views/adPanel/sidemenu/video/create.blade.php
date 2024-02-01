@@ -31,7 +31,9 @@
                     <select class="form-select" id="fakultas" name="fakultas" onchange="return showcategory();">
                         <option selected disabled>--Fakultas--</option>
                         @foreach($faks as $fakultas)
-                            <option value="{{ $fakultas['Value'] }}">{{ $fakultas['Value'] }}</option>
+                            @if(count($fakultas) <= 3)
+                                <option value="{{ $fakultas['Value'] }}">{{ $fakultas['Value'] }}</option>
+                            @endif
                         @endforeach
                     </select>
                     <label for="fakultas">Fakultas</label>
@@ -40,11 +42,13 @@
                     <select class="form-select" name="jurusan" id="jurusan">
                         <option selected disabled>--Jurusan--</option>
                         @foreach($faks as $fakultas)
-                            <optgroup label ="{{ $fakultas['Value'] }}" id="{{ $fakultas['Value'] }}" style="display:none;">
-                                @foreach($fakultas['jurusan'] as $jurusan)
-                                    <option value="{{ $jurusan }}">{{ $jurusan }}</option>
-                                @endforeach
-                            </optgroup>
+                            @if(count($fakultas) <= 3)
+                                <optgroup label ="{{ $fakultas['Value'] }}" id="{{ $fakultas['Value'] }}" style="display:none;">
+                                    @foreach($fakultas['jurusan'] as $jurusan)
+                                        <option value="{{ $jurusan['Value'] }}">{{ $jurusan['Value'] }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
                         @endforeach
                     </select>
                     <label for="jurusan">Jurusan</label>
