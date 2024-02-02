@@ -24,10 +24,10 @@
                         <p style="display:none;">{{ $total += $snapshot['Harga']; }}</p>
                             <div class="row border border-1 mb-4 rounded shadow shadow-md p-3">
                                 <div class="col-9 p-3">
-                                    <h4 class="ff-raleway" style="color: #0038CF; font-weight: 800;">{{ Str::title($snapshot['Judul Video']) }}</h4>
-                                    <h6 class="ff-raleway fw-bold">Fakultas: {{ Str::title($snapshot['Fakultas']) }}</h6>
-                                    <h6 class="ff-raleway fw-bold">Jurusan: {{ Str::title($snapshot['Jurusan']) }}</h6>
-                                    <h6 class="ff-raleway fw-bold">Harga: Rp {{ $snapshot['Harga'] }}</h6>
+                                    <h4  style="color: #0038CF; font-weight: 800;">{{ Str::title($snapshot['Judul Video']) }}</h4>
+                                    <h6 class="fw-bold">Fakultas: {{ Str::title($snapshot['Fakultas']) }}</h6>
+                                    <h6 class="fw-bold">Jurusan: {{ Str::title($snapshot['Jurusan']) }}</h6>
+                                    <h6 class="fw-bold">Harga: Rp {{ $snapshot['Harga'] }}</h6>
                                     <form action="/remove" method="POST">
                                         @csrf
                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
@@ -44,13 +44,13 @@
                     </div>
                 @endif
                 <div class="d-flex justify-content-between p-3 text-end border border-1 rounded shadow shadow-md mb-3">
-                    <h4 style="font-family: Raleway;">Subtotal</h4>
+                    <h4>Subtotal</h4>
                     <div>
-                        <p style="font-family: Raleway;">Rp {{ $total }}</p>
+                        <p>Rp {{ $total }}</p>
                         <form action="/checkout" method="POST">
                             @csrf
                             <input type="hidden" id="email" name="email" value="{{ Session::get('email') }}">
-                            <button class="btn btn-primary" style="font-family: Raleway; font-weight: 500;">
+                            <button class="btn btn-primary" style="font-weight: 500;">
                                 Check Out
                             </button>
                         </form>
