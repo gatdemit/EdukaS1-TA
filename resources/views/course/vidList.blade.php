@@ -34,23 +34,29 @@
     <div class="row">
         <main>
             <div class="row d-flex align-items-between">
-                <div class="row">
-                    <div class="col-12 bold" style="color: #0038CF; font-size: 36px; text-align:center;">
-                        {{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}
-                    </div>
-                    <div class="mb-4 bold" style="text-align: center; font-size: 24px; padding-left: 50px; padding-right: 50px;">
-                        {{ $fakultas['Deskripsi'][request()->segment(count(request()->segments()))]['Value'] }}
-                    </div>
-                    <form action="/course/{{ request()->segment(count(request()->segments())) }}" method="post">
-                        @csrf
-                        <div class="input-group col-12 m-auto mb-5 w-50">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                            <input id="search" name="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
-                            <button class="btn btn-primary">Cari</button>
+                <div class="row mb-5">
+                    <div class="col" style="font-size: 36px; text-align:center;">
+                        <div class="row bold" style="color: #0038CF;">
+                            {{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}
                         </div>
-                    </form>
-                    <a class="mb-5" href="/course/{{ request()->segment(count(request()->segments())) }}" style="text-align:center;">Clear Search</a>
+                        <div class="mb-4 row" style="text-align: left; font-size: 16px;">
+                            {{ $fakultas['Deskripsi'][request()->segment(count(request()->segments()))]['Value'] }}
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <form action="/course/{{ request()->segment(count(request()->segments())) }}" method="post">
+                            @csrf
+                            <div class="input-group col-12 m-auto mb-5 w-50">
+                                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                                <input id="search" name="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
+                                <button class="btn btn-primary">Cari</button>
+                                <a class="mb-5" href="/course/{{ request()->segment(count(request()->segments())) }}" style="text-align:center;">Clear Search</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                
 
                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
                     @if($search)

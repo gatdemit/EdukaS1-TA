@@ -42,25 +42,27 @@
                 </div>
                 <br>
                 @foreach($fakultas as $facs)
-                    <div class="card-body" id="heading{{ $facs['Value'] }}">
-                        <h5 class="mb-0">
-                            <button class="btn nav-link" data-bs-toggle="collapse" data-bs-target="#{{ Str::replace(' ', '_', $facs['Value']) }}" aria-expanded="true" aria-controls="{{ Str::replace(' ', '_', $facs['Value']) }}" style="font-size: 16px;">
-                            Fakultas {{ $facs['Value'] }}
-                            </button>
-                        </h5>
-                    </div>
-                
-                    <div id="{{ Str::replace(' ', '_', $facs['Value']) }}" class="collapse" aria-labelledby="heading{{ $facs['Value'] }}" data-parent="#accordion">
-                        <div class="mx-5">
-                            @foreach($facs['jurusan'] as $jurusan)
-                                @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan))->getSnapshot()->exists())
-                                    <a class="nav-link" href="/course/{{ Str::replace(' ','_',$jurusan) }}">{{ $jurusan }}</a>
-                                    <hr>
-                                @endif
-                            @endforeach
+                    @if(count($facs) <= 3)
+                        <div class="card-body" id="heading{{ $facs['Value'] }}">
+                            <h5 class="mb-0">
+                                <button class="btn nav-link" data-bs-toggle="collapse" data-bs-target="#{{ Str::replace(' ', '_', $facs['Value']) }}" aria-expanded="true" aria-controls="{{ Str::replace(' ', '_', $facs['Value']) }}" style="font-size: 16px;">
+                                Fakultas {{ $facs['Value'] }}
+                                </button>
+                            </h5>
                         </div>
-                    </div>
-                    <hr>
+                    
+                        <div id="{{ Str::replace(' ', '_', $facs['Value']) }}" class="collapse" aria-labelledby="heading{{ $facs['Value'] }}" data-parent="#accordion">
+                            <div class="mx-5">
+                                @foreach($facs['jurusan'] as $jurusan)
+                                    @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
+                                        <a class="nav-link" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">{{ $jurusan['Value'] }}</a>
+                                        <hr>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                        <hr>
+                    @endif
                 @endforeach
             </div>
         </div>

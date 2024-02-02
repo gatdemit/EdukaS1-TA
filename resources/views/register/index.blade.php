@@ -11,7 +11,7 @@
             @endif
             <main class="form-registration p-5 m-auto col-md-6 col-sm-12">
                 <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color:#fff;">
-                    <h1 class="text-center" style="font-weight: 800;">Registration</h1>
+                    <h1 class="text-center mb-5" style="font-weight: 800;">Registration</h1>
                     <form action="/register" method="post">
                         @csrf
                         <div class="form-floating mb-3">

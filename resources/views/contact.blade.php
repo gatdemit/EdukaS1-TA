@@ -2,12 +2,12 @@
 
 @section('container')
 <div class="row">
-    <div class="col bold" style="color: #0038CF; font-size: 16px; text-align:center;">
+    <div class="col bold mt-5" style="color: #0038CF; font-size: 16px; text-align:center;">
         <h1>Contact Us</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col mb-5" style="color: #101828; text-align:center; font-weight: 500;">
+    <div class="col" style="color: #101828; text-align:center; font-weight: 500;">
         Ada pertanyaan atau komentar? Kirimkan pesan kepada kami!
     </div>
   </div>
