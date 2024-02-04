@@ -134,7 +134,7 @@
             element.style.display = (element.style.display === 'none' || element.style.display === '') ? 'block' : 'none';
 
             element = document.getElementById('extended-title-' + id);
-            element.className = element.className === "card-title text-truncate" ? "card-title text-primary" : "card-title text-truncate"
+            element.className = element.className.includes('text-truncate') ? element.className.split(' text-truncate')[0] : element.className + ' text-truncate'
         }
     </script>
   </div>
