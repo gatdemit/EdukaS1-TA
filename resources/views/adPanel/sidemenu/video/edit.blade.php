@@ -1,6 +1,12 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
+<style>
+  .form-control:focus, .form-select:focus {
+    border-color: rgba(0,0,0,0);
+    box-shadow: unset;
+  }
+</style>
         @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
