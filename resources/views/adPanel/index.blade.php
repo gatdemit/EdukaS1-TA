@@ -48,7 +48,7 @@
 
 <div class="row mb-3">
     <div class="col">
-        <div class="card" style="text-align: center;">
+        <div class="card h-100" style="text-align: center;">
             <div class="card-body">
                 <h4 style="color: #0038CF; font-weight:700;">Jumlah video yang telah diunggah:</h4>
                 <div class="bold" style="font-size: 24px;">{{ $vidCount }}</div>
@@ -56,7 +56,7 @@
         </div>
     </div>
     <div class="col">
-        <div class="card" style="text-align: center;">
+        <div class="card h-100" style="text-align: center;">
             <div class="card-body">
                 <h4 style="color: #0038CF; font-weight:700;">Video paling banyak dibeli:</h4>
                 <div class="bold">{{ $mostBought }}</div>
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="col">
-        <div class="card" style="text-align: center;">
+        <div class="card h-100" style="text-align: center;">
             <div class="card-body">
                 <h4 style="color: #0038CF; font-weight:700;">Video dengan rating tertinggi:</h4>
                 <div class="bold">{{ $mostRated }}</div>
@@ -86,59 +86,80 @@
     </div>
 </div>
 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Top Selling</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Top Rated</button>
+  </li>
+</ul>
 
-<div class="table-responsive small row">
-    <div class="col">
-        <h2 style="color: #0038CF; font-weight:700;">Video Top Selling EdukaS1</h2>
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Judul</th>
-                    <th scope="col">Fakultas</th>
-                    <th scope="col">Jurusan</th>
-                    <th scope="col">Jumlah Penjualan</th>
-                </tr>
-            </thead>
-            <tbody>
-                    @for($index = 0; $index < count($angka->all()); $index++)
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <div class="table-responsive small row mt-3">
+            <div class="col">
+                <h2 style="color: #0038CF; font-weight:700;">Video Top Selling EdukaS1</h2>
+                <table class="table table-striped table-sm">
+                    <thead>
                         <tr>
-                            <td>{{ $index+1 }}</td>
-                            <td>{{ $angka->all()[array_keys($value)[$index]]['Judul'] }}</td>
-                            <td>{{ $angka->all()[array_keys($value)[$index]]['Fakultas'] }}</td>
-                            <td>{{ $angka->all()[array_keys($value)[$index]]['Jurusan'] }}</td>
-                            <td>{{ $angka->all()[array_keys($value)[$index]]['buy_count'] }}</td>
+                            <th scope="col">No</th>
+                            <th scope="col">Judul</th>
+                            <th scope="col">Fakultas</th>
+                            <th scope="col">Jurusan</th>
+                            <th scope="col">Jumlah Penjualan</th>
                         </tr>
-                    @endfor  
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                            @for($index = 0; $index < count($angka->all()); $index++)
+                                <tr>
+                                    <td>{{ $index+1 }}</td>
+                                    <td>{{ $angka->all()[array_keys($value)[$index]]['Judul'] }}</td>
+                                    <td>{{ $angka->all()[array_keys($value)[$index]]['Fakultas'] }}</td>
+                                    <td>{{ $angka->all()[array_keys($value)[$index]]['Jurusan'] }}</td>
+                                    <td>{{ $angka->all()[array_keys($value)[$index]]['buy_count'] }}</td>
+                                </tr>
+                            @endfor  
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="col">
-        <h2 style="color: #0038CF; font-weight:700;">Video Top Rated EdukaS1</h2>
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Judul</th>
-                    <th scope="col">Fakultas</th>
-                    <th scope="col">Jurusan</th>
-                    <th scope="col">Penilaian</th>
-                </tr>
-            </thead>
-            <tbody>
-                    @for($index = 0; $index < count($rating->all()); $index++)
-                        <tr>
-                            <td>{{ $index+1 }}</td>
-                            <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Judul'] }}</td>
-                            <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Fakultas'] }}</td>
-                            <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Jurusan'] }}</td>
-                            <td>{{ $rating->all()[array_keys($value_rate)[$index]]['rating'] }}</td>
-                        </tr>
-                    @endfor  
-            </tbody>
-        </table>
+  <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <div class="table-responsive small row mt-3">
+        <div class="col">
+            <h2 style="color: #0038CF; font-weight:700;">Video Top Rated EdukaS1</h2>
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Judul</th>
+                        <th scope="col">Fakultas</th>
+                        <th scope="col">Jurusan</th>
+                        <th scope="col">Penilaian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @for($index = 0; $index < count($rating->all()); $index++)
+                            <tr>
+                                <td>{{ $index+1 }}</td>
+                                <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Judul'] }}</td>
+                                <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Fakultas'] }}</td>
+                                <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Jurusan'] }}</td>
+                                <td>{{ $rating->all()[array_keys($value_rate)[$index]]['rating'] }}</td>
+                            </tr>
+                        @endfor  
+                </tbody>
+            </table>
+        </div>
     </div>
+  </div>
+  <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab" tabindex="0">...</div>
+  <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab" tabindex="0">...</div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     var key = {!! json_encode($key) !!};
