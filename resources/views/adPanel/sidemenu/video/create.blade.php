@@ -1,13 +1,20 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
+
+<style>
+  .form-control:focus, .form-select:focus {
+    border-color: rgba(0,0,0,0);
+    box-shadow: unset;
+  }
+</style>
         @if(session()->has('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form class="row" action="/adPanel/video" method="post" enctype="multipart/form-data">
+        <form action="/adPanel/video" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="form-floating mb-3 text-center">
                     <input class="form-control @error('video') is-invalid @enderror" accept="video/*" type="file" id="video" name="video">
