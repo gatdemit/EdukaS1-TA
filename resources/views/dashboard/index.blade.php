@@ -59,68 +59,70 @@
         </div>
       </div>
     </div>
-    <div class="card mb-4">
+    <div class="card overflow-auto h-25">
         <div class="card-body">
-            <h3 style="color: #000C2E; font-weight: 700;">My Videos</h3>
+            <h3 style="color: #0038CF; font-weight: 700;">Videoku</h3>
             @if(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getSnapshot()->exists())
                 <div class="row">
-                    @foreach(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getValue() as $key => $vids)
-                        <div class="col-4 mb-4">
-                            <div class="card">
-                                <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
-                                <div class="card-body">
-                                    <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video']) }}</h5>
-                                    <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
-                                    <p class="card-text" style="display: none" id="extended-info-{{$key}}">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
-                                    <div class="d-flex justify-content-end">
-                                        <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary">Watch Video</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                function getVideoImage(path, secs, callback) {
-                                    var me = this, video = document.createElement('video');
-                                    video.onloadedmetadata = function() {
-                                        if ('function' === typeof secs) {
-                                        secs = secs(this.duration);
-                                        }
-                                        this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
-                                    };
-                                    video.onseeked = function(e) {
-                                        var canvas = document.createElement('canvas');
-                                        canvas.height = video.videoHeight;
-                                        canvas.width = video.videoWidth;
-                                        var ctx = canvas.getContext('2d');
-                                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                                        var img = new Image();
-                                        img.src = canvas.toDataURL();
-                                        img.style = "height: 179px; width: 100%; object-fit: cover";
-                                        callback.call(me, img, this.currentTime, e);
-                                    };
-                                    video.onerror = function(e) {
-                                        callback.call(me, undefined, undefined, e);
-                                    };
-                                    video.src = path;
-                                    }
+                    @foreach(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getValue() as $snapshot)
+                      @foreach($snapshot as $key => $vids)
+                          <div class="col-4 mb-4">
+                              <div class="card">
+                                  <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
+                                  <div class="card-body">
+                                      <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video']) }}</h5>
+                                      <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
+                                      <p class="card-text" style="display: none" id="extended-info-{{$key}}">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
+                                      <div class="d-flex justify-content-end">
+                                          <a href="/course/{{ Str::replace(' ', '_', $vids['Jurusan']) }}/{{ $vids['Video']}}" class="btn btn-primary">Lihat Video</a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <script>
+                                  function getVideoImage(path, secs, callback) {
+                                      var me = this, video = document.createElement('video');
+                                      video.onloadedmetadata = function() {
+                                          if ('function' === typeof secs) {
+                                          secs = secs(this.duration);
+                                          }
+                                          this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
+                                      };
+                                      video.onseeked = function(e) {
+                                          var canvas = document.createElement('canvas');
+                                          canvas.height = video.videoHeight;
+                                          canvas.width = video.videoWidth;
+                                          var ctx = canvas.getContext('2d');
+                                          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                          var img = new Image();
+                                          img.src = canvas.toDataURL();
+                                          img.style = "height: 179px; width: 100%; object-fit: cover";
+                                          callback.call(me, img, this.currentTime, e);
+                                      };
+                                      video.onerror = function(e) {
+                                          callback.call(me, undefined, undefined, e);
+                                      };
+                                      video.src = path;
+                                      }
 
-                                    function showImageAt(secs) {
-                                        var duration;
-                                        getVideoImage(
-                                            "{{ asset('storage/' . Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Link']) }}",
-                                            0,
-                                            function(img, secs, event) {
-                                                if (event.type == 'seeked') {
-                                                    document.getElementById("{{ $vids['Video'] }}").appendChild(img);
-                                                    if (duration >= ++secs) {
-                                                        showImageAt(secs);
-                                                    };
-                                                }
-                                            }
-                                        );
-                                    }
-                                    showImageAt(0);
-                            </script>
-                        </div>
+                                      function showImageAt(secs) {
+                                          var duration;
+                                          getVideoImage(
+                                              "{{ asset('storage/' . Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Link']) }}",
+                                              0,
+                                              function(img, secs, event) {
+                                                  if (event.type == 'seeked') {
+                                                      document.getElementById("{{ $vids['Video'] }}").appendChild(img);
+                                                      if (duration >= ++secs) {
+                                                          showImageAt(secs);
+                                                      };
+                                                  }
+                                              }
+                                          );
+                                      }
+                                      showImageAt(0);
+                              </script>
+                          </div>
+                        @endforeach
                     @endforeach
                 </div>
             @else

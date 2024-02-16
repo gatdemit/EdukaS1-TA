@@ -4,11 +4,11 @@
 <div class="row">
     <div class="row my-5">
         <div class="col bold" style="color: #101828; font-size: 62px;">
-            <p class="ff-inter">Bersiaplah untuk <br> Sukses Akademis</p>
+            <p>Bersiaplah untuk <br> Sukses Akademis</p>
             <div class="row mb-5 ms-1" style="color: #646464; size: 20px; font-size: 1rem; font-weight: normal;">
                 Selamat datang di Edukas1, sumber terpercaya <br> untuk belajar mata kuliah secara efektif.
             </div>
-            <button style="width: 143px; height: 60px;" class="btn btn-primary mb-5 "><a href="/register" class="nav-link text-light" style="font-size:18px; font-weight: 600;">Start Now</a></button>
+            <button style="width: 200px; height: 60px;" class="btn btn-primary mb-5 "><a href="/register" class="nav-link text-light" style="font-size:18px; font-weight: 600;">Mulai Sekarang</a></button>
         </div>
         <div class="col" style="font-size: 0.75px; position: relative;">
             <div style=" height: 750em; position: relative; width: 800em">
@@ -27,25 +27,25 @@
     <div class="row">
         <div class="row">
             <div class="col" style="color: #0038CF; font-size: 16px; text-align:center;">
-                <p class="ff-inter" style="font-weight: 600;">About Us</p>
+                <p style="font-weight: 600;">Tentang Kami</p>
             </div>
         </div>
         <div class="row">
-            <div class="col mb-5" style="color: #101828; font-size: 36px; text-align:center; font-weight: 600;">
-                <p class="ff-inter">Pengalaman dengan Fleksibilitas Belajar!</p>
+            <div class="col" style="color: #101828; font-size: 36px; text-align:center; font-weight: 600;">
+                <p>Pengalaman dengan Fleksibilitas Belajar!</p>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row">
             <div class="col mx-2 text-end">
                 <img src="{{ asset('storage/asset/Home_About.jpeg') }}" alt="" style="width: 524px; height:372px;">
             </div>
             <div class="col mx-2" style="font-size: 30px; margin-top: 100px;">
-                <p class="ff-inter" style="font-size: 20px;">Di Edukas1, kami memahami bahwa pendidikan adalah fondasi untuk membangun masa depan yang sukses. Oleh karena itu, kami menawarkan berbagai kursus yang dirancang untuk memberikan pendidikan yang berkualitas dan akses mudah ke sumber daya pendidikan terkini.</p>
+                <p style="font-size: 20px;">Di Edukas1, kami memahami bahwa pendidikan adalah fondasi untuk membangun masa depan yang sukses. Oleh karena itu, kami menawarkan berbagai kursus yang dirancang untuk memberikan pendidikan yang berkualitas dan akses mudah ke sumber daya pendidikan terkini.</p>
             </div>
         </div>
         <div class="row mt-5">
             <div class="col" style="text-align:center;">
-                <button style="width: 143px; height: 60px; text-align:center;" class="btn btn-primary mb-5 ms-3"><a href="/about" class="nav-link text-light" style="font-size:18px; font-weight: 600;">See All</a></button>
+                <button style="width: 200px; height: 60px; text-align:center;" class="btn btn-primary mb-5 ms-3"><a href="/about" class="nav-link text-light" style="font-size:18px; font-weight: 600;">Lihat Selengkapnya</a></button>
             </div>
         </div>
     </div>

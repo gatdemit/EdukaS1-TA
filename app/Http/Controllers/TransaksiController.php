@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class TransaksiController extends Controller
 {
@@ -115,13 +116,25 @@ class TransaksiController extends Controller
         $videos = $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->getValue();
         try{
             foreach($videos as $video){
-                $updates += [
-                    $video['Video'] => [
-                        'Video' => $video['Video'],
-                        'Fakultas' => $video['Fakultas'],
-                        'Jurusan' => $video['Jurusan']
-                    ],
-                ];
+                if(array_key_exists(Str::replace(' ', '_', $video['Jurusan']), $updates)){
+                    $updates[Str::replace(' ', '_', $video['Jurusan'])] += [
+                        $video['Video'] => [
+                            'Video' => $video['Video'],
+                            'Fakultas' => $video['Fakultas'],
+                            'Jurusan' => $video['Jurusan']
+                        ],
+                    ];
+                } else{
+                    $updates += [
+                        Str::replace(' ', '_', $video['Jurusan']) => [
+                            $video['Video'] => [
+                                'Video' => $video['Video'],
+                                'Fakultas' => $video['Fakultas'],
+                                'Jurusan' => $video['Jurusan']
+                            ],
+                        ],
+                    ];
+                }
                 
                 if($db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video']. '/buy_count')->getSnapshot()->exists()){
                     $buy_count = $db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video'])->getValue()['buy_count'];
@@ -130,8 +143,9 @@ class TransaksiController extends Controller
                     $db->getReference('videos/' . Str::replace(' ', '_', $video['Jurusan']) . '/' . $video['Video'])->update(['buy_count' => 1]);
                 }
             }
-            $db->getReference('users/' . $request['email'] . '/vids')->update($updates);
-    
+            foreach(array_keys($updates) as $keys){
+                $db->getReference('users/' . $request['email'] . '/vids/' . $keys)->update($updates[$keys]);
+            }
             $db->getReference('transaksi/validated/' . $request['email'] . '_' . $date . '_' . $time)->update(['validation_date' => $date, 'total' => $request['total'], 'email' => $email ]);
             $db->getReference('transaksi/unvalidated/' . $request['email'])->remove();
     

@@ -8,12 +8,12 @@
         right: 0px;
         bottom: 0px;
         left: 0px;
-        opacity: 0.2;
+        opacity: 0.4;
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/Login.jpeg") }}');
-        background-size: contain;
-        background-repeat: no-repeat;
+        background-size: 100px 50px;
+        background-repeat: repeat;
         background-position: center center;
     }
 
@@ -42,7 +42,7 @@
         @endif
         <div class="form-signin p-5 m-auto col-md-6 col-sm-12">
             <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color: #fff">
-                <h1 class="text-center mb-5" style="font-weight: 800;">Login</h1>
+                <h1 class="text-center mb-5" style="font-weight: 800;">Masuk</h1>
                 <form action="/login" method="post">
                     @csrf
                     <div class="form-floating mb-3">
@@ -55,18 +55,18 @@
                         @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control" required>
-                        <label for="password" class="form-control-label @error('password') is-invalid @enderror">Password</label>
+                        <input type="password" name="password" id="password" placeholder="kata sandi" value="{{ old('password') }}" class="form-control" required>
+                        <label for="password" class="form-control-label @error('password') is-invalid @enderror">Kata Sandi</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                         @enderror
                     </div>
-                    <button class="btn btn-primary w-100 mb-5 bold" type="submit">Login</button>
+                    <button class="btn btn-primary w-100 mb-5 bold" type="submit">Masuk</button>
                 </form>
                 <div class="text-center">
-                    <p class="mb-3"><a href="/forgotpass">Forgot Password?</a><br></p>
+                    <p class="mb-3"><a href="/forgotpass">Lupa Kata Sandi?</a><br></p>
                     <P>Belum Punya Akun? Daftar <a href="/register">di sini!</a></p>
                 </div>
             </div>

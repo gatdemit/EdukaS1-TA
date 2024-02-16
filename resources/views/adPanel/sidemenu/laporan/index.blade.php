@@ -4,6 +4,31 @@
 @php
     $bulan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $minggu = [0, 0, 0, 0];
+    if($month == 1){
+        $textMonth = 'Januari';
+    } else if($month == 2){
+        $textMonth = 'Februari';
+    } else if($month == 3){
+        $textMonth = 'Maret';
+    } else if($month == 4){
+        $textMonth = 'April';
+    } else if($month == 5){
+        $textMonth = 'Mei';
+    } else if($month == 6){
+        $textMonth = 'Juni';
+    } else if($month == 7){
+        $textMonth = 'Juli';
+    } else if($month == 8){
+        $textMonth = 'Agustus';
+    } else if($month == 9){
+        $textMonth = 'September';
+    } else if($month == 10){
+        $textMonth = 'Oktober';
+    } else if($month == 11){
+        $textMonth = 'November';
+    } else if($month == 12){
+        $textMonth = 'Desember';
+    }
 @endphp
 @foreach($snapshots as $snapshot)
     @if(array_key_exists('validation_date', $snapshot))
@@ -47,18 +72,18 @@
             </div>
             <div class="form-floating mb-3">
                 <select class="form-select" name="bulan" id="bulan" onchange="Tahun()">
-                    <option value="1" selected="{{ $month == 1 ? true : false }}">Januari</option>
-                    <option value="2" selected="{{ $month == 2 ? true : false }}">Februari</option>
-                    <option value="3" selected="{{ $month == 3 ? true : false }}">Maret</option>
-                    <option value="4" selected="{{ $month == 4 ? true : false }}">April</option>
-                    <option value="5" selected="{{ $month == 5 ? true : false }}">Mei</option>
-                    <option value="6" selected="{{ $month == 6 ? true : false }}">Juni</option>
-                    <option value="7" selected="{{ $month == 7 ? true : false }}">Juli</option>
-                    <option value="8" selected="{{ $month == 8 ? true : false }}">Agustus</option>
-                    <option value="9" selected="{{ $month == 9 ? true : false }}">September</option>
-                    <option value="10" selected="{{ $month == 10 ? true : false }}">Oktober</option>
-                    <option value="11" selected="{{ $month == 11 ? true : false }}">November</option>
-                    <option value="12" selected="{{ $month == 12 ? true : false }}">Desember</option>
+                    <option value="1" {{ $month == 1 ? 'selected' : '' }}>Januari</option>
+                    <option value="2" {{ $month == 2 ? 'selected' : '' }}>Februari</option>
+                    <option value="3" {{ $month == 3 ? 'selected' : '' }}>Maret</option>
+                    <option value="4" {{ $month == 4 ? 'selected' : '' }}>April</option>
+                    <option value="5" {{ $month == 5 ? 'selected' : '' }}>Mei</option>
+                    <option value="6" {{ $month == 6 ? 'selected' : '' }}>Juni</option>
+                    <option value="7" {{ $month == 7 ? 'selected' : '' }}>Juli</option>
+                    <option value="8" {{ $month == 8 ? 'selected' : '' }}>Agustus</option>
+                    <option value="9" {{ $month == 9 ? 'selected' : '' }}>September</option>
+                    <option value="10" {{ $month == 10 ? 'selected' : '' }}>Oktober</option>
+                    <option value="11" {{ $month == 11 ? 'selected' : '' }}>November</option>
+                    <option value="12" {{ $month == 12 ? 'selected' : '' }}>Desember</option>
                 </select>
                 <label for="bulan">Bulan</label>
             </div>
@@ -99,7 +124,7 @@
             data:{
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets:[{
-                    label: 'Bruto Penjualan Video EdukaS1',
+                    label: 'Bruto Penjualan Video EdukaS1 Tahun {{ $year }}',
                     data: ["{{ $bulan[0] }}", "{{ $bulan[1] }}", "{{ $bulan[2] }}", "{{ $bulan[3] }}", "{{ $bulan[4] }}", "{{ $bulan[5] }}", "{{ $bulan[6] }}", "{{ $bulan[7] }}", "{{ $bulan[8] }}", "{{ $bulan[9] }}", "{{ $bulan[10] }}", "{{ $bulan[11] }}",],
                     backgroundColor: "rgba(0,0,255,0.2)",
                     borderColor: "black",
@@ -111,14 +136,22 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Bulan Penjualan'
+                            text: 'Bulan Penjualan',
+                            color: 'black'
+                        },
+                        ticks: {
+                            color: 'black'
                         }
                     }, 
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Bruto Penjualan Video EdukaS1'
+                            text: 'Bruto Penjualan Video EdukaS1',
+                            color: 'black'
+                        },
+                        ticks: {
+                            color: 'black'
                         }
                     }
                 }
@@ -131,7 +164,7 @@
             data:{
                 labels: ['Minggu ke-1', 'Minggu ke-2', 'Minggu ke-3', 'Minggu ke-4'],
                 datasets:[{
-                    label: 'Bruto Penjualan Video EdukaS1',
+                    label: 'Bruto Penjualan Video EdukaS1 {{ $textMonth }}',
                     data: ["{{ $minggu[0] }}", "{{ $minggu[1] }}", "{{ $minggu[2] }}", "{{ $minggu[3] }}"],
                     backgroundColor: "rgba(0,0,255,0.2)",
                     borderColor: "black",
@@ -143,14 +176,22 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Bulan Penjualan'
+                            text: 'Minggu Penjualan',
+                            color: 'black'
+                        },
+                        ticks: {
+                            color: 'black'
                         }
                     }, 
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Bruto Penjualan Video EdukaS1'
+                            text: 'Bruto Penjualan Video EdukaS1',
+                            color: 'black'
+                        },
+                        ticks: {
+                            color: 'black'
                         }
                     }
                 }

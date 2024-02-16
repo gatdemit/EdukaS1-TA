@@ -27,12 +27,18 @@
     </header>
 
     <main class="row px-5 pb-5">
+      @if(request()->segment(count(request()->segments())) != 'create')
       <div class="row">
         @include("dashboard.layouts.sidebar")
         <div class="col-lg-8">
           @yield("container")
         </div>
       </div>
+      @else
+      <div>
+        @yield("container")
+      </div>
+      @endif
     </main>
 
     <footer class="row mt-5 pt-5">

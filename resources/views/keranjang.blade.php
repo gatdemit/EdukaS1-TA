@@ -40,7 +40,7 @@
                     @endif
                 @else
                     <div class="col-9 p-3">
-                        Cart is Empty
+                        Keranjang Kosong
                     </div>
                 @endif
                 <div class="d-flex justify-content-between p-3 text-end border border-1 rounded shadow shadow-md mb-3">

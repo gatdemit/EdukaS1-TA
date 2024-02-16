@@ -27,7 +27,7 @@
     <header class="row px-5 pb-5 mt-2">
         <div class="d-flex justify-content-between">
             <div>
-                <a href="/" class="nav-link fw-bold ff-inter" style="font-size: 34px;">Edukas<span style="color: #0038CF">1</span></a>
+                <a href="/" class="nav-link fw-bold ff-inter" style="font-size: 34px;"><img src="{{ asset('storage/asset/EDUKAS1_1.png') }}" style="max-height:32px; max-width:64px;"></a>
             </div>
             <div>
                 @include("partials.navbar")
@@ -40,25 +40,25 @@
             <div class="col-lg-4 h-100">
                 <div class="card overflow-auto h-100">
                     <div class="card-header">
-                        <h5 style="font-weight: 700;">Categories</h5>
+                        <h5 style="font-weight: 700;">Kategori</h5>
                     </div>
                     <br>
                     @foreach($fakultas as $facs)
                     @if(count($facs) <= 3) <div class="card-body py-0" id="heading{{ $facs['Value'] }}">
                         <h5 class="mb-0">
                             <button class="btn nav-link" data-bs-toggle="collapse" data-bs-target="#{{ Str::replace(' ', '_', $facs['Value']) }}" aria-expanded="true" aria-controls="{{ Str::replace(' ', '_', $facs['Value']) }}" style="font-size: 16px;">
-                                Fakultas {{ $facs['Value'] }}
+                                {{ $facs['Value'] == 'Umum' ? 'Mata Kuliah ' . $facs['Value'] : 'Fakultas ' . $facs['Value'] }}
                             </button>
                         </h5>
                 </div>
 
                 <div id="{{ Str::replace(' ', '_', $facs['Value']) }}" class="collapse" aria-labelledby="heading{{ $facs['Value'] }}" data-parent="#accordion">
-                    <div class="mx-5">
+                    <div class="mt-2 mx-5">
                         @foreach($facs['jurusan'] as $jurusan)
-                        @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
-                        <a class="nav-link" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">{{ $jurusan['Value'] }}</a>
-                        <hr>
-                        @endif
+                            @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
+                            <a class="nav-link" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">{{ $jurusan['Value'] }}</a>
+                            <hr>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -75,16 +75,18 @@
                         <source src="{{ asset('storage/'. Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Link']) }}" type="video/mp4">
                     </video>
                 </div>
-                @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/kuis')->getSnapshot()->exists())
-                <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post">
-                    @csrf
-                    <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
-                    <button class="btn btn-primary m-auto d-block my-5" style="font-weight: 500;">Kerjakan Quiz</button>
-                </form>
-                @else
-                <div style="font-weight: 600;">
-                    Kuis Belum Dibuat
-                </div>
+                @if(Session::get('user') && Firebase::database()->getReference('users/' . Session::get('email') .'/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                    @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/kuis')->getSnapshot()->exists())
+                    <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post">
+                        @csrf
+                        <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
+                        <button class="btn btn-primary m-auto d-block my-5" style="font-weight: 500;">Kerjakan Kuis</button>
+                    </form>
+                    @else
+                        <div class="my-5" style="font-weight: 600; text-align:center;">
+                            Kuis Belum Dibuat
+                        </div>
+                    @endif
                 @endif
                 <div class="card-body">
                     <div class="container m-auto w-100">
@@ -92,7 +94,7 @@
                         <p>{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Deskripsi'] }}</p>
 
                         @if(Session::get('user'))
-                        @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                        @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
                         <form action="/rate" method="POST" class="text-warning">
                             @csrf
                             <input type="hidden" name="link" id="link" value="{{ request()->segment(count(request()->segments())) }}">
@@ -116,11 +118,11 @@
                                 <div>
                                     @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/rate_count')->getSnapshot()->exists())
                                     <p style="font-weight: 600; color: #230F0F;">
-                                        ({{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['rate_count'] }} Reviews)
+                                        ({{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['rate_count'] }} Penilaian)
                                     </p>
                                     @else
                                     <p style="font-weight: 600; color: #230F0F;">
-                                        (0 Reviews)
+                                        (0 Penilaian)
                                     </p>
                                     @endif
                                 </div>
@@ -137,11 +139,11 @@
                                 </div>
                                 @endif
                                 <div>
-                                    <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">Rate us!</button>
+                                    <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">Beri nilai!</button>
                                 </div>
                             </div>
                         </form>
-                        @elseif(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                        @elseif(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
                         <form action="/keranjang" method="POST" class="w-100">
                             @csrf
                             <input type="hidden" name="judul" id="judul" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video'] }}">

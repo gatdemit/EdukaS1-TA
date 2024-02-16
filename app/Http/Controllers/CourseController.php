@@ -13,7 +13,7 @@ class CourseController extends Controller
     public function index(){
         $db = Firebase::database();
         return view('course.index', [
-            'title' => "Our Course",
+            'title' => "Mata Kuliah Kami",
             'fakultas' => $db->getReference('faculties')->getValue()
         ]);
     }
@@ -22,14 +22,14 @@ class CourseController extends Controller
         $jurusan = Firebase::database()->getReference('faculties')->getValue();
         if($request['search']){
             return view('course.vidList', [
-                'title' => 'Our Course',
+                'title' => 'Mata Kuliah Kami',
                 'fakultas' => $jurusan, 
                 'search' => true,
                 'query' => $request['search']
             ]);
         } else{
             return view('course.vidList', [
-                'title' => 'Our Course',
+                'title' => 'Mata Kuliah Kami',
                 'fakultas' => $jurusan, 
                 'search' => false
             ]);
@@ -39,7 +39,7 @@ class CourseController extends Controller
     public function vidStream(){
         $jurusan = Firebase::database()->getReference('faculties')->getValue();
         return view('course.vidStream', [
-            'title' => 'Our Course',
+            'title' => 'Mata Kuliah Kami',
             'fakultas' => $jurusan
         ]);
     }
@@ -47,13 +47,13 @@ class CourseController extends Controller
     public function rate(Request $request){
         $db=Firebase::database();
         try{   
-            if($db->getReference('users/' . $request['email'] . '/vids/' . $request['link']. '/rated')->getSnapshot()->exists()){
-                $user_rate = $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->getValue()['user_rate'];
+            if($db->getReference('users/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['link'] . '/rated')->getSnapshot()->exists()){
+                $user_rate = $db->getReference('users/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['link'])->getValue()['user_rate'];
                 $rate = $db->getReference('videos/' . $request['jurusan'] . '/' . $request['link'])->getValue()['rating'];
                 $db->getReference('videos/' . $request['jurusan'] . '/' . $request['link'])->update([
                     'rating' => ($rate - $user_rate) + $request['rating'],
                 ]);
-                $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                $db->getReference('users/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['link'])->update([
                     'user_rate' => $request['rating']
                 ]);
                 return redirect()->back()->with('success', 'Rating Berhasil!');
@@ -65,7 +65,7 @@ class CourseController extends Controller
                         'rating' => $request['rating'] + $rate,
                         'rate_count' => $rate_count + 1
                     ]);
-                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['link'])->update([
                         'user_rate' => $request['rating'],
                         'rated' => true
                     ]);
@@ -76,7 +76,7 @@ class CourseController extends Controller
                         'rating' => $request['rating'],
                         'rate_count' => 1
                     ]);
-                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['link'])->update([
+                    $db->getReference('users/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['link'])->update([
                         'user_rate' => $request['rating'],
                         'rated' => true
                     ]);

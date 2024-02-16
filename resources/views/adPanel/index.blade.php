@@ -10,12 +10,13 @@
     foreach(Firebase::database()->getReference('videos')->getValue() as $j){
         $vidCount += count($j);
         foreach($j as $i){
+            
             if(array_key_exists('buy_count', $i)){
                 $angka->put($i['Judul_Video'], [
                     'Judul' => $i['Judul_Video'],
                     'buy_count' => $i['buy_count'],
                     'Fakultas' => $i['Fakultas'],
-                    'Jurusan' => $i['Jurusan']
+                    'Jurusan' => $i['Jurusan'],
                 ]);
             }
             if(array_key_exists('rating', $i)){
@@ -37,13 +38,12 @@
     foreach($rating->all() as $count){
         $tampil_rate->put($count['Judul'], $count['rating']);
     }
-    $key = array_keys(array_keys($tampil->sortDesc()->all()));
     $value = $tampil->sortDesc()->all();
-    $key_rate = array_keys($tampil_rate->sortDesc()->all());
+    $values = $tampil->sortDesc()->values()->all();
     $value_rate = $tampil_rate->sortDesc()->all();
+    $values_rate = $tampil_rate->sortDesc()->values()->all();
     $mostBought = array_keys($value)[0];
     $mostRated = array_keys($value_rate)[0];
-
 @endphp
 
 <div class="row mb-3">
@@ -73,19 +73,6 @@
     </div>
 </div>
 
-<div class="row mb-4">
-    <div class="col">
-        <div class="card">
-            <canvas id="chartMostBought"></canvas>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card">
-            <canvas id="chartMostRated"></canvas>
-        </div>
-    </div>
-</div>
-
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
@@ -99,6 +86,11 @@
 <!-- Tab panes -->
 <div class="tab-content">
     <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <div class="col mt-3">
+            <div class="card">
+                <canvas id="chartMostBought"></canvas>
+            </div>
+        </div>
         <div class="table-responsive small row mt-3">
             <div class="col">
                 <h2 style="color: #0038CF; font-weight:700;">Video Top Selling EdukaS1</h2>
@@ -113,7 +105,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                            @for($index = 0; $index < count($angka->all()); $index++)
+                            @for($index = 0; $index < 10 && $index < count($angka->all()); $index++)
                                 <tr>
                                     <td>{{ $index+1 }}</td>
                                     <td>{{ $angka->all()[array_keys($value)[$index]]['Judul'] }}</td>
@@ -128,6 +120,11 @@
         </div>
     </div>
   <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <div class="col mt-3">
+        <div class="card">
+            <canvas id="chartMostRated"></canvas>
+        </div>
+    </div>
     <div class="table-responsive small row mt-3">
         <div class="col">
             <h2 style="color: #0038CF; font-weight:700;">Video Top Rated EdukaS1</h2>
@@ -142,7 +139,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                        @for($index = 0; $index < count($rating->all()); $index++)
+                        @for($index = 0; $index < 10 && $index < count($rating->all()); $index++)
                             <tr>
                                 <td>{{ $index+1 }}</td>
                                 <td>{{ $rating->all()[array_keys($value_rate)[$index]]['Judul'] }}</td>
@@ -162,16 +159,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var key = {!! json_encode($key) !!};
-    var value = {!! json_encode($value) !!};
-
-    console.log(key);
+    var value = {!! json_encode($values) !!};
 
     var chartPenjualanBruto = document.getElementById("chartMostBought");
     new Chart(chartPenjualanBruto, {
         type: 'bar',
         data: {
-            labels: key,
+            labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             datasets: [{
                 label: 'Top Selling Video EdukaS1',
                 data: value,
@@ -186,28 +180,35 @@
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Judul Video'
+                        text: 'Nomor Entri pada Tabel',
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
                     }
                 },
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Jumlah Penjualan'
+                        text: 'Jumlah Penjualan',
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
                     }
                 }
             }
         }
     });
 
-    var key_rate = {!! json_encode($key_rate) !!};
-    var value_rate = {!! json_encode($value_rate) !!};
+    var value_rate = {!! json_encode($values_rate) !!};
 
     var chartMostRated = document.getElementById("chartMostRated");
     new Chart(chartMostRated, {
         type: 'bar',
         data: {
-            labels: key_rate,
+            labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             datasets: [{
                 label: 'Top Rated Video EdukaS1',
                 data: value_rate,
@@ -221,14 +222,22 @@
                 x: {
                     title: {
                         display: true,
-                        text: 'Judul Video'
+                        text: 'Nomor Entri pada Tabel',
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
                     }
                 },
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Jumlah Penjualan'
+                        text: 'Jumlah Penjualan',
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
                     }
                 }
             }

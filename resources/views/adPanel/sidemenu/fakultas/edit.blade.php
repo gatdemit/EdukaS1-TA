@@ -25,8 +25,12 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="btn btn-success mt-2" onclick=addRow() style="text-decoration:none; text-color:white; font-weight: 500;">Tambah</a>
-            <button type="submit" class="btn btn-primary mt-3" style="font-weight: 500;">Submit</button>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="btn btn-outline-success" onclick=addRow() style="text-decoration:none; text-color:white; font-weight: 500;">Tambah</a>
+                    <button type="submit" class="btn btn-primary" style="font-weight: 500;">Submit</button>
+                </div>
+            </div>
         </form>
 
     <script>

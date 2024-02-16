@@ -53,13 +53,13 @@
     </form>
     <table class="table table-striped table-sm table-hover">
         <thead>
-            <tr style="text-align: center;">
+            <tr>
                 <th scope="col">Judul Video</th>
                 <th scope="col">Fakultas</th>
                 <th scope="col">Jurusan</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
+                <th scope="col" style="text-align: center;">Edit</th>
+                <th scope="col" style="text-align: center;">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -69,9 +69,9 @@
                         @if(Str::contains($snapshot['Judul_Video'], $query) || Str::contains($snapshot['Deskripsi'], $query) || Str::contains($snapshot['Jurusan'], $query) || Str::contains($snapshot['Fakultas'], $query) || Str::contains($snapshot['Harga'], $query))
                             <tr>
                                 <td>{{ Str::title($snapshot['Judul_Video']) }}</td>
-                                <td style="text-align: center; font-weight: 500;">{{ $snapshot['Fakultas'] }}</td>
-                                <td style="text-align: center; font-weight: 500;">{{ $snapshot['Jurusan'] }}</td>
-                                <td style="text-align: center; font-weight: 500;">Rp {{ $snapshot['Harga'] }}</td>
+                                <td style="font-weight: 500;">{{ $snapshot['Fakultas'] }}</td>
+                                <td style="font-weight: 500;">{{ $snapshot['Jurusan'] }}</td>
+                                <td style="font-weight: 500;">Rp {{ $snapshot['Harga'] }}</td>
                                 <td style="text-align: center;">
                                     <form action="/adPanel/video/{{ $snapshot['Video'] }}/edit" method="post">
                                         @csrf
@@ -105,9 +105,9 @@
                     @foreach($jurusan as $snapshot)
                         <tr>
                             <td>{{ Str::title($snapshot['Judul_Video']) }}</td>
-                            <td style="text-align: center; font-weight: 500;">{{ $snapshot['Fakultas'] }}</td>
-                            <td style="text-align: center; font-weight: 500;">{{ $snapshot['Jurusan'] }}</td>
-                            <td style="text-align: center; font-weight: 500;">Rp {{ $snapshot['Harga'] }}</td>
+                            <td style="font-weight: 500;">{{ $snapshot['Fakultas'] }}</td>
+                            <td style="font-weight: 500;">{{ $snapshot['Jurusan'] }}</td>
+                            <td style="font-weight: 500;">Rp {{ $snapshot['Harga'] }}</td>
                             <td style="text-align: center;">
                                 <form action="/adPanel/video/{{ $snapshot['Video'] }}/edit" method="post">
                                     @csrf

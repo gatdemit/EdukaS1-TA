@@ -1,17 +1,17 @@
 @extends('layouts.main')
 
 @section('container')
-    
+
 <div class="container">
 
     <!-- Hero -->
-    <div class="p-5 mb-4 text-center bg-image rounded-3" style="
+    <div class="p-5 mb-4 text-center bg-image rounded-3 parent" style="
     background-image: url('{{ asset('storage/asset/header.jpeg') }}'); background-size: cover;
-    height: 300px;
+    height: 300px; box-shadow: 0px 4px 4px 0px #00000040, inset 0 0 0 1000px rgba(0,0,0, 0.6)
     ">
         <div class="row">
-            <h1 class="col bold" style="text-align: left; color: black;">
-                Enhance your skills <br> through videos <br> online offered by <br> Edukas<span style="color: #0038CF">1</span>
+            <h1 class="col bold" style="text-align: left; color: white;">
+                Asah kemampuanmu <br> melalui video <br> pembelajaran oleh <br> Edukas1
             </h1>
             <div class="col">
 
@@ -33,7 +33,7 @@
     @endif
     <div class="row">
         <main>
-            <div class="row d-flex align-items-between">
+            <div class="row d-flex align-items-center">
                 <div class="row mb-5">
                     <div class="col" style="font-size: 36px; text-align:center;">
                         <div class="row bold" style="color: #0038CF;">
@@ -45,14 +45,14 @@
                     </div>
                     
                     <div class="col">
-                        <form action="/course/{{ request()->segment(count(request()->segments())) }}" method="post">
+                        <form class="row mt-5" action="/course/{{ request()->segment(count(request()->segments())) }}" method="post">
                             @csrf
-                            <div class="input-group col-12 m-auto mb-5 w-50">
+                            <div class="input-group col-12 m-auto w-80">
                                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                                 <input id="search" name="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
                                 <button class="btn btn-primary">Cari</button>
-                                <a class="mb-5" href="/course/{{ request()->segment(count(request()->segments())) }}" style="text-align:center;">Clear Search</a>
                             </div>
+                            <a href="/course/{{ request()->segment(count(request()->segments())) }}" style="text-align:center;">Clear Search</a>
                         </form>
                     </div>
                 </div>
@@ -79,13 +79,13 @@
                                                             <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                             <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
                                                             <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                            <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                                            <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                             <div style="display: none" id="extended-info-{{$key}}">
                                                                 {{ $snapshot['Deskripsi'] }}<br><br>
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                                    Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
+                                                                    Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                                 @else
-                                                                    Rating: 0<br>
+                                                                    Nilai: 0<br>
                                                                 @endif
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
                                                                     Dibeli: {{ $snapshot['buy_count'] }} user<br>
@@ -97,10 +97,13 @@
                                                                 <div class="span">
                                                                     Rp {{ $snapshot['Harga'] }}
                                                                 </div>
-                                                                @if(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . $snapshot['Video'])->getSnapshot()->exists())
-                                                                    <button class="btn btn-primary h-100">Add to Cart</button>
+                                                                @if(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . Str::replace(' ', '_', $snapshot['Jurusan']) . '/' . $snapshot['Video'])->getSnapshot()->exists())
+                                                                    <button class="btn btn-primary h-100 d-flex align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                                                        <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"/>
+                                                                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                                      </svg> Tambahkan</button>
                                                                 @else
-                                                                    <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="btn btn-primary h-100">Watch</a>
+                                                                    <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="btn btn-primary h-100">Lihat Video</a>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -111,13 +114,13 @@
                                                     <div id="{{ $snapshot['Video'] }}"></div>
                                                     <div class="card-body">
                                                         <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             {{ $snapshot['Deskripsi'] }}<br><br>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                                Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
+                                                                Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                             @else
-                                                                Rating: 0<br>
+                                                                Nilai: 0<br>
                                                             @endif
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
                                                                 Dibeli: {{ $snapshot['buy_count'] }} user<br>
@@ -129,7 +132,7 @@
                                                             <div class="span">
                                                                 Rp {{ $snapshot['Harga'] }}
                                                             </div>
-                                                            <a href="/login" class="btn btn-primary h-100">Login untuk Beli</a>
+                                                            <a href="/login" class="btn btn-primary h-100">Masuk untuk Beli</a>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -202,13 +205,13 @@
                                                             <input type="hidden" name="jurusan" id="jurusan" value="{{ $snapshot['Jurusan'] }}">
                                                             <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
                                                             <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                            <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                                            <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                             <div style="display: none" id="extended-info-{{$key}}">
                                                                 {{ $snapshot['Deskripsi'] }}<br><br>
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                                    Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
+                                                                    Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                                 @else
-                                                                    Rating: 0<br>
+                                                                    Nilai: 0<br>
                                                                 @endif
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
                                                                     Dibeli: {{ $snapshot['buy_count'] }} user<br>
@@ -220,10 +223,13 @@
                                                                 <div class="span">
                                                                     Rp {{ $snapshot['Harga'] }}
                                                                 </div>
-                                                                @if(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . $snapshot['Video'])->getSnapshot()->exists())
-                                                                    <button class="btn btn-primary h-100">Add to Cart</button>
+                                                                @if(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . Str::replace(' ', '_', $snapshot['Jurusan']) . '/' . $snapshot['Video'])->getSnapshot()->exists())
+                                                                    <button class="btn btn-primary h-100 d-flex align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                                                        <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"/>
+                                                                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                                      </svg> Tambahkan</button>
                                                                 @else
-                                                                    <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="btn btn-primary h-100">Watch</a>
+                                                                    <a href="/course/{{ Str::replace(' ', '_', $snapshot['Jurusan']) }}/{{ $snapshot['Video']}}" class="btn btn-primary h-100">Lihat Video</a>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -234,13 +240,13 @@
                                                     <div id="{{ $snapshot['Video'] }}"></div>
                                                     <div class="card-body">
                                                         <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title($snapshot['Judul_Video']) }}</h5>
-                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">extend</a>
+                                                        <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             {{ $snapshot['Deskripsi'] }}<br><br>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
-                                                                Rating: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
+                                                                Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                             @else
-                                                                Rating: 0 <br>
+                                                                Nilai: 0 <br>
                                                             @endif
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/buy_count')->getSnapshot()->exists())
                                                                 Dibeli: {{ $snapshot['buy_count'] }} user <br>
@@ -252,7 +258,7 @@
                                                             <div class="span">
                                                                 Rp {{ $snapshot['Harga'] }}
                                                             </div>
-                                                            <a href="/login" class="btn btn-primary h-100">Login untuk Beli</a>
+                                                            <a href="/login" class="btn btn-primary h-100">Masuk untuk Beli</a>
                                                         </div>
                                                     </div>
                                                 </a>

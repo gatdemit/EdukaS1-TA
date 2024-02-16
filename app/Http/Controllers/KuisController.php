@@ -19,8 +19,8 @@ class KuisController extends Controller
         $db=Firebase::database();
 
         return view('adPanel.sidemenu.kuis.index',[
-            'title' => 'Admin Panel | Quiz',
-            'header' => "Quiz",
+            'title' => 'Admin Panel | Kuis',
+            'header' => "Kuis",
             'videos' => $db->getReference('videos')->getValue(),
             'search' => false
         ]);
@@ -32,8 +32,8 @@ class KuisController extends Controller
     public function create(Request $request)
     {
         return view('adPanel.sidemenu.kuis.create',[
-            'title' => 'Admin Panel | Quiz',
-            'header' => "Tambah Quiz",
+            'title' => 'Admin Panel | Kuis',
+            'header' => "Tambah Kuis",
             'video' => $request['video'],
             'jurusan' => $request['jurusan']
         ]);
@@ -48,8 +48,8 @@ class KuisController extends Controller
             $db=Firebase::database();
 
             return view('adPanel.sidemenu.kuis.index',[
-                'title' => 'Admin Panel | Quiz',
-                'header' => "Quiz",
+                'title' => 'Admin Panel | Kuis',
+                'header' => "Kuis",
                 'videos' => $db->getReference('videos')->getValue(),
                 'search' => true,
                 'query' => $request['search']
@@ -97,8 +97,8 @@ class KuisController extends Controller
     public function edit(Request $request)
     {
         return view('adPanel.sidemenu.kuis.edit',[
-            'title' => 'Admin Panel | Quiz',
-            'header' => "Ubah Quiz",
+            'title' => 'Admin Panel | Kuis',
+            'header' => "Ubah Kuis",
             'jurusan' => $request['jurusan']
         ]);
     }
@@ -175,7 +175,7 @@ class KuisController extends Controller
             }
     
             $score = $nilai/count($db->getReference('videos/' . $request['jur'] . '/' . $request['video'] . '/kuis')->getValue())*100;
-            $db->getReference('users/' . Session::get('email') . '/vids/' . $request['video'])->update([
+            $db->getReference('users/' . Session::get('email') . '/vids/' . $request['jur'] . '/' . $request['video'])->update([
                 'nilai' => $score
             ]);
             Cache::flush();

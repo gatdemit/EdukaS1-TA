@@ -12,8 +12,8 @@
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/forgot_pass.jpeg") }}');
-        background-size: contain;
-        background-repeat: no-repeat;
+        background-size: 100px 50px;
+        background-repeat: repeat;
         background-position: center center;
     }
 
@@ -35,9 +35,8 @@
         @endif
         <div class="form-signin m-auto">
             <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color: #fff">
-                <h1 class="text-center mb-5">Edukas<span class="text-primary">1</span></h1>
-                <h1>Forgot Password?</h1>
-                <p>Enter your email to reset your password.</p>
+                <h1 class="text-center mb-5" style="font-weight: 800">Lupa Kata Sandi?</h1>
+                <p>Masukkan emailmu untuk mengatur ulang kata sandi.</p>
                 <form action="/forgotpass" method="post">
                     @csrf
                     <div class="form-floating mb-3">
@@ -50,7 +49,7 @@
                         @enderror
                     </div>
                     <button class="btn btn-primary mb-3 w-100">Submit</button>
-                    <a href="/login" class="text-decoration-none text-center d-block">Back To Login</a>
+                    <a href="/login" class="text-decoration-none text-center d-block">Masuk ke akunmu</a>
                 </form>
             </div>
         </div>

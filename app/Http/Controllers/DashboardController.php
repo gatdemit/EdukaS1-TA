@@ -16,7 +16,7 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard.index', [
-            'title' => "dashboard"
+            'title' => "Dashboard"
         ]);
     }
 
@@ -26,7 +26,7 @@ class DashboardController extends Controller
     public function create()
     {
         return view('dashboard.menu.fill', [
-            'title' => "dashboard"
+            'title' => "Dashboard"
         ]);
     }
 
@@ -73,7 +73,7 @@ class DashboardController extends Controller
     public function edit()
     {
         return view('dashboard.menu.edit', [
-            'title' => "dashboard"
+            'title' => "Dashboard"
         ]);
     }
 
@@ -110,7 +110,7 @@ class DashboardController extends Controller
 
     public function manageAccount(){
         return view('dashboard.menu.akun', [
-            'title' => 'dashboard'
+            'title' => 'Dashboard'
         ]);
     }
 
@@ -154,7 +154,7 @@ class DashboardController extends Controller
 
     public function kuis(){
         return view('dashboard.menu.kuis',[
-            'title' => 'dashboard | quiz'
+            'title' => 'Dashboard | Kuis'
         ]);
     }
 }

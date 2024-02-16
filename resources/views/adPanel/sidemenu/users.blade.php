@@ -24,11 +24,11 @@
         </form>
         <table class="table table-striped table-sm table-hover">
             <thead>
-                <tr style="text-align: center;">
+                <tr>
                     <th scope="col">Email</th>
                     <th scope="col">Username</th>
                     <th scope="col">Role</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" style="text-align: center;">Hapus</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,13 +39,13 @@
                                 <td style="font-weight: 500;">{{ $user->email }}</td>
                                 <td style="font-weight: 500;">{{ $user->displayName }}</td>
                                 <td style="font-weight: 500;">{{ $user->customClaims['role'] }}</td>
-                                <td>
+                                <td style="text-align: center;">
                                     <form action="/adPanel/users/del" method="POST">
                                         @method('delete')
                                         @csrf
                                         <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
                                         <input type="hidden" name="email" id="email" value="{{ $user->email }}">
-                                        <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
@@ -57,13 +57,13 @@
                             <td style="font-weight: 500;">{{ $user->email }}</td>
                             <td style="font-weight: 500;">{{ $user->displayName }}</td>
                             <td style="font-weight: 500;">{{ $user->customClaims['role'] }}</td>
-                            <td>
+                            <td style="text-align: center;">
                                 <form action="/adPanel/users/del" method="POST">
                                     @method('delete')
                                     @csrf
                                     <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
                                     <input type="hidden" name="email" id="email" value="{{ $user->email }}">
-                                    <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
+                                    <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
                                 </form>
                             </td>
                         </tr>

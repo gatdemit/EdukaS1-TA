@@ -127,33 +127,42 @@ class FakultasController extends Controller
         $jurusan = [];
         $deskripsi = [];
 
-        try{
-            for($i = $request['childCount']; $i <= $request['count'] + $request['childCount']; $i++){
-                if($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getSnapshot()->exists() ?  Str::contains(Str::title($request['jurusan'. ($i+1)-$request['childCount']]), Str::replace('_', ' ', array_keys($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getValue()))) : false){
-                    return redirect()->back()->with('error', 'Jurusan sudah ada');
-                } else{
-                    $jurusan += [
-                        Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
-                            'Value' => Str::title($request['jurusan'. ($i+1)-$request['childCount']])
-                        ]
-                    ];
-
-                    $deskripsi += [
-                        Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
-                            'Value' => $request['deskripsi'. ($i+1)-$request['childCount']]
-                        ]
-                    ];
+        if($request['search']){
+            return view('adPanel.sidemenu.fakultas.show', [
+                'title' => 'Admin Panel | Fakultas dan Jurusan',
+                'header' => "Jurusan",
+                'search' => true,
+                'query' => $request['search']
+            ]);
+        } else{
+            try{
+                for($i = $request['childCount']; $i <= $request['count'] + $request['childCount']; $i++){
+                    if($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getSnapshot()->exists() ?  Str::contains(Str::title($request['jurusan'. ($i+1)-$request['childCount']]), Str::replace('_', ' ', array_keys($db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->getValue()))) : false){
+                        return redirect()->back()->with('error', 'Jurusan sudah ada');
+                    } else{
+                        $jurusan += [
+                            Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
+                                'Value' => Str::title($request['jurusan'. ($i+1)-$request['childCount']])
+                            ]
+                        ];
+    
+                        $deskripsi += [
+                            Str::replace(' ', '_', Str::title($request['jurusan'. ($i+1)-$request['childCount']])) => [
+                                'Value' => $request['deskripsi'. ($i+1)-$request['childCount']]
+                            ]
+                        ];
+                    }
                 }
+    
+    
+                $db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->update($jurusan);
+                $db->getReference('faculties/Deskripsi')->update($deskripsi);
+            } catch(\Exception $e){
+                return redirect()->back()->with('error', 'Penambahan Jurusan Gagal. Silakan Coba Lagi.');
             }
-
-
-            $db->getReference('faculties/' . $request['fakultas'] . '/jurusan')->update($jurusan);
-            $db->getReference('faculties/Deskripsi')->update($deskripsi);
-        } catch(\Exception $e){
-            return redirect()->back()->with('error', 'Penambahan Jurusan Gagal. Silakan Coba Lagi.');
+    
+            return redirect('/adPanel/fakultas')->with('success', 'Penambahan Jurusan Berhasil!');
         }
-
-        return redirect('/adPanel/fakultas')->with('success', 'Penambahan Jurusan Berhasil!');
     }
 
     /**

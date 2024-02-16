@@ -12,8 +12,8 @@
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/registration.jpeg") }}');
-        background-size: contain;
-        background-repeat: no-repeat;
+        background-size: 100px 50px;
+        background-repeat: repeat;
         background-position: center center;
     }
 
@@ -36,7 +36,7 @@
         @endif
         <main class="form-registration p-5 m-auto col-md-6 col-sm-12">
             <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color:#fff;">
-                <h1 class="text-center mb-5" style="font-weight: 800;">Registration</h1>
+                <h1 class="text-center mb-5" style="font-weight: 800;">Pendaftaran</h1>
                 <form action="/register" method="post">
                     @csrf
                     <div class="form-floating mb-3">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Password</label>
+                        <label for="password" class="form-control-label">Kata Sandi</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -68,15 +68,15 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password_confirmation" id="password" placeholder="passcon" value="{{ old('passcon') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Ulangi Password</label>
+                        <label for="password" class="form-control-label">Ulangi Kata Sandi</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                         @enderror
                     </div>
-                    <button class="btn btn-primary w-100 mb-3 bold" type="submit">Sign Up</button>
-                    <p class="text-center">Already have an account? <a href="/login" class="text-decoration-none">Login</a></p>
+                    <button class="btn btn-primary w-100 mb-3 bold" type="submit">Daftar</button>
+                    <p class="text-center">Sudah punya akun? <a href="/login" class="text-decoration-none">Masuk</a></p>
                 </form>
             </div>
         </main>

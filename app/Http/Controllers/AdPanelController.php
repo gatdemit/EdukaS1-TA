@@ -13,7 +13,7 @@ class AdPanelController extends Controller
 {
     public function adReg(){
         return view('adReg.index', [
-            'title' => 'Admin Register'
+            'title' => 'Pendaftaran Admin'
         ]);
     }
 
@@ -21,7 +21,7 @@ class AdPanelController extends Controller
         $video = Firebase::database()->getReference('videos')->getValue();
         return view('adPanel.index', [
             'title' => 'Admin Panel',
-            'header' => "Welcome to Admin Panel",
+            'header' => "Selamat Datang di Admin Panel",
             'videos' => $video,
         ]);
     }
@@ -30,16 +30,16 @@ class AdPanelController extends Controller
         $auth=Firebase::auth();
         if($request['search']){
             return view('adPanel.sidemenu.users',[
-                'title' => 'Admin Panel | Users',
-                'header' => "Users",
+                'title' => 'Admin Panel | Pengguna',
+                'header' => "Pengguna",
                 'users' => $auth->listUsers(),
                 'search' => true,
                 'query' => $request['search']
             ]);
         } else{
             return view('adPanel.sidemenu.users',[
-                'title' => 'Admin Panel | Users',
-                'header' => "Users",
+                'title' => 'Admin Panel | Pengguna',
+                'header' => "Pengguna",
                 'users' => $auth->listUsers(),
                 'search' => false
             ]);
@@ -65,7 +65,7 @@ class AdPanelController extends Controller
         if($request['tahun']){
             return view('adPanel.sidemenu.laporan.index', [
                 'title' => 'Admin Panel | Laporan',
-                'header' => "Laporan",
+                'header' => "Laporan Pendapatan Bruto EdukaS1",
                 'snapshots' => $db->getReference('transaksi/validated')->getValue(),
                 'year' => $request['tahun'],
                 'month' => $request['bulan']
@@ -528,8 +528,8 @@ class AdPanelController extends Controller
 
         $auth=Firebase::Auth();
 
-        for($i = 0; $i <= 10; $i++){
-            $db->getReference('videos/' . array_keys($data)[$i] . '/yeWRfqElhtjOEupAmfCGjmtix0bsusOAWy5G5i2F_mp4')->update(['rating' => ($i+1)*rand(1,5)]);
+        for($i = 0; $i < count($data); $i++){
+            $db->getReference('videos/' . array_keys($data)[$i] . '/yeWRfqElhtjOEupAmfCGjmtix0bsusOAWy5G5i2F_mp4')->remove();
         }
 
         // foreach($db->getReference('faculties')->getValue() as $snapshot){

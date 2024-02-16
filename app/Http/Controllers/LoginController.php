@@ -12,7 +12,7 @@ class LoginController extends Controller
     protected $auth;
     public function index(){
         return view('login.index', [
-            'title' => "Login"
+            'title' => "Masuk"
         ]);
     }
 
@@ -54,7 +54,7 @@ class LoginController extends Controller
 
     public function forgotPass(){
         return view('login.forgotpass', [
-            'title' => 'login'
+            'title' => 'Lupa Kata Sandi'
         ]);
     }
 

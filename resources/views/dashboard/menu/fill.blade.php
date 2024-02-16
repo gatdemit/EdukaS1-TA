@@ -6,6 +6,7 @@
     @section('container')
         <div class="card mb-4">
             <div class="card-body">
+                <h1 style="color: #0038CF; font-weight: 600;">Buat Profilmu!</h1>
                 <form action="/dashboard" method="post" enctype="multipart/form-data">
                     @csrf
                         <div class="form-floating mb-3 t d-flex justify-content-between thumbnail">

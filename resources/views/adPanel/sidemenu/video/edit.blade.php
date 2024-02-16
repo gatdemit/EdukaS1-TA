@@ -1,12 +1,6 @@
 @extends('adPanel.layouts.main')
 
 @section('container')
-<style>
-  .form-control:focus, .form-select:focus {
-    border-color: rgba(0,0,0,0);
-    box-shadow: unset;
-  }
-</style>
         @if(session()->has('error'))
             <div class="alert alert-danger  alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -34,9 +28,9 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-floating mb-3">
+                <label for="deskripsi" class="form-control-label">Deskripsi Video</label>
+                <div class="form-group mb-3">
                     <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required autofocus>{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Deskripsi'] }}</textarea>
-                    <label for="deskripsi" class="form-control-label">Deskripsi Video</label>
                     @error('deskripsi')
                     <div class="invalid-feedback">
                         {{ $message }}

@@ -32,8 +32,8 @@
             <tr>
                 <th scope="col">Fakultas</th>
                 <th scope="col" style="text-align: center;">Jurusan</th>
-                <th scope="col" style="text-align: center;">Action</th>
-                <th scope="col" style="text-align: center;">Delete</th>
+                <th scope="col" style="text-align: center;">Tambah Jurusan</th>
+                <th scope="col" style="text-align: center;">Hapus</th>
             </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@
                                             @method('delete')
                                             @csrf
                                             <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Value'] }}">
-                                            <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
+                                            <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -74,7 +74,7 @@
                                         @method('delete')
                                         @csrf
                                         <input type="hidden" name="fakultas" id="fakultas" value="{{ $snapshot['Value'] }}">
-                                        <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
                                     </form>
                                 </td>
                             </tr>

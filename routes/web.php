@@ -26,20 +26,19 @@ use Kreait\Laravel\Firebase\Facades\Firebase;
 
 Route::get('/', function () {
     return view('home', [
-        'title' => 'Home',
-        'user' => 'Guest'
+        'title' => 'Beranda',
     ]);
 });
 
 Route::get('/about', function () {
     return view('about', [
-        'title' => "About Us"
+        'title' => "Tentang Kami"
     ]);
 });
 
 Route::get('/contact', function () {
     return view('contact', [
-        'title' => "Contact Person"
+        'title' => "Hubungi Kami"
     ]);
 });
 
