@@ -32,7 +32,7 @@
                                         @csrf
                                         <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
                                         <input type="hidden" name="video" id="video" value="{{ $snapshot['Video'] }}">
-                                        <button class="btn btn-outline-danger" style="font-weight: 500;">Remove</button>
+                                        <button class="btn btn-outline-danger" style="font-weight: 500;">Hapus</button>
                                     </form>
                                 </div>
                             </div>

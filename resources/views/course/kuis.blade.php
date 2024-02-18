@@ -6,7 +6,7 @@
                 @if($jurusan == null || request()->segment(count(request()->segments())) > Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren())
                     Tidak ada lagi pertanyaan
                 @else
-                <h3 class="text-center" style="color: #000C2E; font-weight: 700;">Quiz <span class="text-primary"> - {{ Str::title(Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Judul_Video']) }}</span></h3>
+                <h3 class="text-center" style="color: #000C2E; font-weight: 700;">Kuis <span class="text-primary"> - {{ Str::title(Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Judul_Video']) }}</span></h3>
                 <h5 class="text-center mb-3" style="color: #000C2E; font-weight: 700;">Pertanyaan</h5>
                 <div class="row justify-content-between">
                     @for($i = 1; $i <= Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren(); $i++)
@@ -78,7 +78,7 @@
                         </div>
                         <input type="hidden" name="jur" id="jur" value="{{ $jurusan }}">
                         <input type="hidden" name="pertanyaan" id="pertanyaan" value="{{ request()->segment(count(request()->segments())) }}">
-                        <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">{{ request()->segment(count(request()->segments())) == Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren() ? 'Submit' : 'Next' }}</button>
+                        <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">{{ request()->segment(count(request()->segments())) == Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren() ? 'Submit' : 'Berikutnya' }}</button>
                     </form>
                 @endif
             </div>

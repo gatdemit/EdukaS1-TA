@@ -3,6 +3,7 @@
 @section('container')
 <div class="card mb-4">
     <div class="card-body">
+        <h1 style="color: #0038CF; font-weight: 600;">Sunting Profilmu!</h1>
         <form action="/dashboard/{{ Firebase::database()->getReference('users/' . Session::get('email'))->getValue()['username'] }}" method="post" enctype="multipart/form-data">
             @method('put')
             @csrf
@@ -12,7 +13,7 @@
                             <img src="{{ asset('storage/'. Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['profpic']) }}" class="img-preview" style="border-radius: 50%; height:120px; width:120px; max-height:120px; max-width:120px;" role="button" id="myfile" name="myfile">
                             <div role="button" class="caption" id="other" name="other">
                                 <i class="bi bi-camera-fill"></i>
-                                <p style="margin-top:-8px;">Add Photo</p>
+                                <p style="margin-top:-8px;">Tambah Foto</p>
                             </div>
                             <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage();" style="display:none;" accept="image/*">
                             @error('image') 
@@ -22,15 +23,15 @@
                             @enderror
                         </span>
                         <span class="d-inline-block">
-                            <h3 style="color: #0038CF; font-weight: 600;">Your Avatar</h3>
+                            <h3 style="color: #0038CF; font-weight: 600;">Avatarmu</h3>
                         </span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="form-floating mb-3">
-                            <input type="text" name="name" id="name" placeholder="name" value="{{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['name'] }}" class="form-control @error('name') is-invalid @enderror" required autofocus>
-                            <label for="name" class="form-control-label">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Nama" value="{{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['name'] }}" class="form-control @error('name') is-invalid @enderror" required autofocus>
+                            <label for="name" class="form-control-label">Nama</label>
                             @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -40,8 +41,8 @@
                     </div>
                     <div class="col-6">
                         <div class="form-floating mb-3">
-                            <input type="text" name="phone-number" id="phone-number" placeholder="phone-number" value="{{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['nomor_telp'] }}" class="form-control @error('phone-number') is-invalid @enderror" required>
-                            <label for="phone-number" class="form-control-label">Phone Number</label>
+                            <input type="text" name="phone-number" id="phone-number" placeholder="Nomor Telepon" value="{{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['nomor_telp'] }}" class="form-control @error('phone-number') is-invalid @enderror" required>
+                            <label for="phone-number" class="form-control-label">Nomor Telepon</label>
                             @error('phone-number')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -52,7 +53,7 @@
                 </div>
                 <div class="form-floating mb-3">
                     <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror" required>{{ Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['alamat'] }}</textarea>
-                    <label for="address" class="form-control-label">Address</label>
+                    <label for="address" class="form-control-label">Alamat</label>
                     @error('address')
                     <div class="invalid-feedback">
                         {{ $message }}

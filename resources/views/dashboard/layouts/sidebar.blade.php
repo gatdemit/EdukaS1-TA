@@ -8,7 +8,7 @@
           <p class="mb-1" style="color: white;">{{ Firebase::database()->getReference('users/' . Session::get('email'))->getValue()['username'] }}</p>
           <p class="mb-4" style="color: white;">{{ Firebase::Auth()->getUser(Session::get('firebaseUserId'))->email }}</p>
           <div class="d-flex justify-content-center mb-2">
-            <a href="/dashboard/{{ Firebase::database()->getReference("users/" . Session::get('email'))->getValue()['username'] }}/edit" class="btn btn-light">Edit Profile</a>
+            <a href="/dashboard/{{ Firebase::database()->getReference("users/" . Session::get('email'))->getValue()['username'] }}/edit" class="btn btn-light">Sunting Profil</a>
           </div>
         </div>
       </div>

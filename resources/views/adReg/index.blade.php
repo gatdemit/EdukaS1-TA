@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Password</label>
+                        <label for="password" class="form-control-label">Kata Sandi</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -58,15 +58,15 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password_confirmation" id="password" placeholder="passcon" value="{{ old('passcon') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Ulangi Password</label>
+                        <label for="password" class="form-control-label">Ulangi Kata Sandi</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                         @enderror
                     </div>
-                    <button class="btn btn-primary w-100 mb-3" type="submit">Create</button>
-                    <a href="/adPanel">Back to Admin Panel</a>
+                    <button class="btn btn-primary w-100 mb-3" type="submit">Buat</button>
+                    <a href="/adPanel">Kembali ke Admin Panel</a>
                 </form>
             </main>
         </div>
