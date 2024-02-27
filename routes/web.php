@@ -93,13 +93,3 @@ Route::post('/dashboard/quiz/{video}', [KuisController::class, 'jawabKuis'])->mi
 
 Route::resource('/adPanel/fakultas', FakultasController::class)->middleware('admin');
 Route::delete('/adPanel/fakultas', [FakultasController::class, 'destroyJur'])->middleware('admin');
-
-Route::get('/dataTest', [AdPanelController::class, 'dataTest']);
-Route::get('/playground', function(){
-    $jurusan = Firebase::database()->getReference('faculties')->getValue();
-    return view('playground', [
-        'title' => 'Playground',
-        'fakultas' => $jurusan
-    ]);
-});
-Route::post('/playground', [VideoController::class, 'videoTest']);

@@ -21,7 +21,7 @@
             @csrf
             <div class="input-group mb-3 w-50 ms-auto">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
+                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
                 <input type="hidden" name="choice" id="choice" value="{{ $choice }}">
                 <button class="btn btn-primary" style="font-weight: 600;">Cari</button>
             </div>

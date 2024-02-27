@@ -73,17 +73,17 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <select class="form-select" id="floatingSelectGrid" name="gender">
-                                        <option disabled selected>--Jenis Kelamin--</option>
-                                        <option value="pria">Pria</option>
-                                        <option value="wanita">Wanita</option>
+                                        <select class="form-select" id="floatingSelectGrid" name="gender" required>
+                                            <option disabled>--Jenis Kelamin--</option>
+                                            <option value="pria">Pria</option>
+                                            <option value="wanita">Wanita</option>
                                         </select>
                                         <label for="floatingSelectGrid">Jenis Kelamin</label>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" placeholder="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="form-control @error('tanggal_lahir') is-invalid @enderror" required autofocus>
+                                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" placeholder="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="form-control @error('tanggal_lahir') is-invalid @enderror" required>
                                         <label for="tanggal_lahir" class="form-control-label">Tanggal Lahir</label>
                                         @error('tanggal_lahir')
                                         <div class="invalid-feedback">
@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="phone-number" id="phone-number" placeholder="Nomor Telepon" value="{{ old('phone-number') }}" class="form-control @error('phone-number') is-invalid @enderror" required autofocus>
+                                        <input type="text" name="phone-number" id="phone-number" placeholder="Nomor Telepon" value="{{ old('phone-number') }}" class="form-control @error('phone-number') is-invalid @enderror" required>
                                         <label for="phone-number" class="form-control-label">Nomor Telepon</label>
                                         @error('phone-number')
                                         <div class="invalid-feedback">
@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <textarea name="address" id="address" placeholder="Alamat" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" required autofocus></textarea>
+                                    <textarea name="address" id="address" placeholder="Alamat" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" required></textarea>
                                     <label for="address" class="form-control-label">Alamat</label>
                                     @error('address')
                                     <div class="invalid-feedback">

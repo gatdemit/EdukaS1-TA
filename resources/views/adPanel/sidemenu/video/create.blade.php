@@ -12,7 +12,7 @@
             @csrf
                 <label for="video">Upload Video (max: 5 MB)</label>
                 <div class="input-group mb-3">
-                    <input class="form-control @error('video') is-invalid @enderror" accept="video/*" type="file" id="video" name="video">
+                    <input class="form-control @error('video') is-invalid @enderror" accept="video/*" type="file" id="video" name="video" required>
                     @error('video') 
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -29,7 +29,7 @@
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="fakultas" name="fakultas" onchange="return showcategory();">
+                    <select class="form-select" id="fakultas" name="fakultas" onchange="return showcategory();" required>
                         <option selected disabled>--Fakultas--</option>
                         @foreach($faks as $fakultas)
                             @if(count($fakultas) <= 3)
@@ -40,7 +40,7 @@
                     <label for="fakultas">Fakultas</label>
                 </div>
                 <div class="form-floating mb-3" id="divJur">
-                    <select class="form-select" name="jurusan" id="jurusan">
+                    <select class="form-select" name="jurusan" id="jurusan" required>
                         <option selected disabled>--Jurusan--</option>
                         @foreach($faks as $fakultas)
                             @if(count($fakultas) <= 3)
@@ -55,7 +55,7 @@
                     <label for="jurusan">Jurusan</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" required autofocus>
+                    <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga') }}" class="form-control @error('harga') is-invalid @enderror" required>
                     <label for="harga" class="form-control-label">Harga</label>
                     @error('harga')
                     <div class="invalid-feedback">
@@ -64,7 +64,7 @@
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required autofocus></textarea>
+                    <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required></textarea>
                     <label for="deskripsi" class="form-control-label">Deskripsi Video</label>
                     @error('deskripsi')
                     <div class="invalid-feedback">

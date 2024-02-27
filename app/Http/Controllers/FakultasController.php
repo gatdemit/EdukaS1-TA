@@ -161,7 +161,7 @@ class FakultasController extends Controller
                 return redirect()->back()->with('error', 'Penambahan Jurusan Gagal. Silakan Coba Lagi.');
             }
     
-            return redirect('/adPanel/fakultas')->with('success', 'Penambahan Jurusan Berhasil!');
+            return redirect('/adPanel/fakultas/' . Str::replace(' ', '_', $request['fakultas']))->with('success', 'Penambahan Jurusan Berhasil!');
         }
     }
 

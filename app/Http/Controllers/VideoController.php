@@ -63,7 +63,7 @@ class VideoController extends Controller
             $inVid = Str::replace('video/','', $request->file('video')->store('video'));
             $storVid = Str::replace('.','_',$inVid);
             $storeJur = Str::replace(' ', '_', $request['jurusan']);
-            $size = 50;
+            $size = 5;
             $request->validate([
                 'video' => [
                     'required',
@@ -92,43 +92,6 @@ class VideoController extends Controller
     
             return redirect('/adPanel/video')->with('success', 'Upload Video Berhasil!');
         }
-    }
-
-    public function videoTest(Request $request){
-        $db = Firebase::database();
-        $inVid = Str::replace('video/','', $request->file('video')->store('video'));
-        $storVid = Str::replace('.','_',$inVid);
-        $size = 50;
-        $request->validate([
-            'video' => [
-                'required',
-                File::default()->max($size . 'mb')
-            ]
-        ], [
-            'video.max' => 'The video field must not be greater than ' . $size . ' MB.'
-        ]);
-        foreach($db->getReference('faculties')->getValue() as $fakultas){
-            foreach($fakultas['jurusan'] as $jurusan){
-                $updates = [
-                    'Judul_Video' => $request['judul'],
-                    'Fakultas' => $fakultas['Value'],
-                    'Jurusan' => $jurusan,
-                    'Harga' => $request['harga'],
-                    'Deskripsi' => $request['deskripsi'],
-                    'Link' => $request['video']->store('video'),
-                    'Video' => $storVid,
-                    'Active' => true
-                ];
-        
-                try{
-                    $db->getReference('videos/' . Str::replace(' ', '_', $jurusan) . '/'. $storVid)->update($updates);
-                } catch(\Exception $e){
-                    return redirect('/')->with('error', 'Upload Video Gagal. Silakan Coba Lagi.');
-                }
-            }
-        }
-
-        return redirect()->back();
     }
 
     /**

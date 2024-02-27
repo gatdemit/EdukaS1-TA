@@ -21,7 +21,7 @@
             @csrf
             <div class="input-group mb-3 w-50 ms-auto">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Fakultas disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
+                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Fakultas disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
                 <button class="btn btn-primary" style="font-weight: 600;">Cari</button>
             </div>
             <a class="mb-3" href="/adPanel/fakultas" style="text-align: right;">Clear Search</a>

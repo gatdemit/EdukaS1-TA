@@ -12,7 +12,7 @@
             <div class="col" id="parentbody">
                 <label class="mb-2" for="pertanyaan1">Pertanyaan 1</label>
                 <div class="form-group mb-3">
-                    <textarea name="pertanyaan1" id="pertanyaan1" class="form-control" autofocus required></textarea>
+                    <textarea name="pertanyaan1" id="pertanyaan1" class="form-control" required></textarea>
                 </div>
                 <div>
                     <div class="form-check my-1">

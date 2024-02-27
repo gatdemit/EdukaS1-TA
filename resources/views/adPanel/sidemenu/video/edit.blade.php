@@ -20,7 +20,7 @@
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga', Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Harga']) }}" class="form-control @error('harga') is-invalid @enderror" required autofocus>
+                    <input type="text" name="harga" id="harga" placeholder="harga" value="{{ old('harga', Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Harga']) }}" class="form-control @error('harga') is-invalid @enderror" required>
                     <label for="harga" class="form-control-label">Harga</label>
                     @error('harga')
                     <div class="invalid-feedback">
@@ -30,7 +30,7 @@
                 </div>
                 <label for="deskripsi" class="form-control-label">Deskripsi Video</label>
                 <div class="form-group mb-3">
-                    <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required autofocus>{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Deskripsi'] }}</textarea>
+                    <textarea name="deskripsi" id="deskripsi" placeholder="deskripsi" value="{{ old('deskripsi') }}" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Deskripsi'] }}</textarea>
                     @error('deskripsi')
                     <div class="invalid-feedback">
                         {{ $message }}

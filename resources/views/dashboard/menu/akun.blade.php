@@ -26,7 +26,7 @@
                         @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required autofocus>
+                        <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
                         <label for="password" class="form-control-label">Kata Sandi Baru</label>
                         @error('password')
                         <div class="invalid-feedback">
@@ -35,7 +35,7 @@
                         @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" name="password_confirmation" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required autofocus>
+                        <input type="password" name="password_confirmation" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
                         <label for="password" class="form-control-label">Konfirmasi Kata Sandi Baru</label>
                         @error('password')
                         <div class="invalid-feedback">

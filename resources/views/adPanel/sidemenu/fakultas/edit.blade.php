@@ -20,7 +20,7 @@
                         <label for="jurusan1" class="form-control-label">Jurusan</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="deskripsi1" id="deskripsi1" class="form-control" required autofocus>
+                        <input type="text" name="deskripsi1" id="deskripsi1" class="form-control" required>
                         <label for="deskripsi1" class="form-control-label">Deskripsi</label>
                     </div>
                 </div>

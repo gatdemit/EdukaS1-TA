@@ -17,7 +17,7 @@
             @csrf
             <div class="input-group mb-3 w-50 ms-auto">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Quiz disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
+                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Quiz disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
                 <button class="btn btn-primary" style="font-weight: 600;">Cari</button>
             </div>
             <a class="mb-5" href="/adPanel/quiz" style="text-align: right;">Clear Search</a>
@@ -98,7 +98,8 @@
                                             </button>
                                         </form>
                                     @else
-                                        <form action="/adPanel/quiz/{{ $video['Video'] }}/edit">
+                                        <form action="/adPanel/quiz/{{ $video['Video'] }}/edit" method="post">
+                                            @csrf
                                             <input type="hidden" name="jurusan" id="jurusan" value="{{ Str::replace(' ', '_', $video['Jurusan']) }}">
                                             <button class="btn btn-warning d-flex align-items-center mx-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-vector-pen" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.828zm-1.8 2.908-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z"/>

@@ -49,7 +49,7 @@
                             @csrf
                             <div class="input-group col-12 m-auto w-80">
                                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                                <input id="search" name="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}">
+                                <input id="search" name="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
                                 <button class="btn btn-primary">Cari</button>
                             </div>
                             <a href="/course/{{ request()->segment(count(request()->segments())) }}" style="text-align:center;">Clear Search</a>
