@@ -93,25 +93,25 @@
                         </video>
                     </div>
                     @if(Session::get('user') && Firebase::database()->getReference('users/' . Session::get('email') .'/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                    <div class="row mx-3">
                         @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/kuis')->getSnapshot()->exists())
-                        <div class="row mx-3">
-                            <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post" class="col">
-                                @csrf
-                                <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
-                                <button class="btn btn-primary my-2" style="font-weight: 500;">Kerjakan Kuis</button>
-                            </form>
-                            @else
-                                <div class="my-5 col" style="font-weight: 600;">
-                                    Kuis Belum Dibuat
-                                </div>
-                            @endif
+                                <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post" class="col">
+                                    @csrf
+                                    <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
+                                    <button class="btn btn-primary my-2" style="font-weight: 500;">Kerjakan Kuis</button>
+                                </form>
+                        @else
+                            <div class="mb-2 mt-3 col" style="font-weight: 600;">
+                                Kuis Belum Dibuat
+                            </div>
+                        @endif
                             <form action="/dashboard/pesan" method="post" class="col" style="text-align: end;">
                                 @csrf
                                 <input type="hidden" name="dosen" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Email_Dosen'] }}">
                                 <button class="btn btn-success my-2" style="font-weight: 500;">Kirim pesan ke dosen</button>
                             </form>
+                            @endif
                         </div>
-                    @endif
                     <div class="card-body">
                         <div class="container m-auto w-100">
                             <h3 style="font-weight: 700; color: #0038CF;">{{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video']) }}</h3>

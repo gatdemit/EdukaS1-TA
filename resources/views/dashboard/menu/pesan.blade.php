@@ -153,8 +153,8 @@
                             </div>
                             <div class="flex-grow-0 py-3 px-4 border-top">
                                 <div class="input-group">
-                                        <input type="text" id="message{{ Str::replace('@', '', $snapshot['to']) }}" class="form-control" placeholder="Type your message">
-                                        <button class="btn btn-primary" id="button{{ Str::replace('@', '', $snapshot['to']) }}">Send</button>
+                                    <input onkeydown="if(event.code == 'Enter'){document.getElementById('button{!! Str::replace('@', '', $snapshot['to']) !!}').click()}" type="text" id="message{{ Str::replace('@', '', $snapshot['to']) }}" class="form-control" placeholder="Type your message">
+                                    <button class="btn btn-primary" id="button{{ Str::replace('@', '', $snapshot['to']) }}">Send</button>
                                 </div>
                             </div>
                         </div>

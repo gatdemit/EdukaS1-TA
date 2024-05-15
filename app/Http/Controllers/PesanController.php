@@ -29,14 +29,17 @@ class PesanController extends Controller
 
         $pesan = 'Salam sejahtera, Profesor ' . $db->getReference('dosen/' . $request['dosen'])->getValue()['nama'] . '! Saya ingin berdiskusi dengan Anda.';
 
+        $count = $db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'] . '/message')->getSnapshot()->numChildren() + 1;
+        
         try{
             if($db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'] . '/message')->getSnapshot()->exists()){
                 $db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'] . '/message')->update([
-                    'm' . count($db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'] . '/message')->getValue()) => [
+                    'm' . $count => [
                         'message' => $pesan,
                         'timestamp' => Carbon::now()->toDateTimeString()
                     ],
                 ]);
+                
             } else{
                 $db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'] . '/message')->update([
                     'm1' => [
@@ -44,7 +47,7 @@ class PesanController extends Controller
                         'timestamp' => Carbon::now()->toDateTimeString()
                     ],
                 ]);
-        
+
                 $db->getReference('message/sent/' . Session::get('email') . '/' . $request['dosen'])->update([
                     'to' => $request['dosen']
                 ]);
@@ -52,7 +55,7 @@ class PesanController extends Controller
     
             if($db->getReference('message/received/' . $request['dosen'] . '/' . Session::get('email') . '/message')->getSnapshot()->exists()){
                 $db->getReference('message/received/' . $request['dosen'] . '/' . Session::get('email') . '/message')->update([
-                    'm' . count($db->getReference('message/received/' . $request['dosen'] . '/' . Session::get('email') . '/message')->getValue()) => [
+                    'm' . $count => [
                         'message' => $pesan,
                         'timestamp' => Carbon::now()->toDateTimeString()
                     ],
