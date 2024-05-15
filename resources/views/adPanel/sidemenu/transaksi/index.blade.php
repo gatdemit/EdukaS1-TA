@@ -49,7 +49,7 @@
                                 @if($search)
                                     @foreach($snapshots as $snapshot)
                                         @if($snapshot['checkout'] && !array_key_exists('validation_date', $snapshot))
-                                            @if(Str::contains($snapshot['email'], $query))
+                                            @if(Str::contains(Str::upper($snapshot['email']), Str::upper($query)))
                                                 <tr>
                                                     <p style="display:none;">{{ $tagihan = 0 }}</p>
                                                     <td style="font-weight: 500;">{{ $snapshot['email'] }}</td>

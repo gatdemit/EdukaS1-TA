@@ -33,7 +33,7 @@ class LoginController extends Controller
             
             return redirect('/dashboard')->with('success', 'Login Berhasil!');
         } catch(\Exception $e){
-            return redirect()->back()->with('belumLogin', 'Login failed. Please try again.');
+            return redirect()->back()->with('belumLogin', $firebaseAuth->getUserByEmail($request['email'])->disabled ? 'Akun Anda diblokir oleh Admin. Silakan hubungi Admin untuk membuka blokir' : 'Masuk ke akun gagal. Silakan periksa kembali email dan kata sandi Anda.');
         }
     }
 
@@ -65,7 +65,7 @@ class LoginController extends Controller
             $auth->sendPasswordResetLink($request['email']);
             return redirect('/login')->with('success', 'Reset Password Berhasil! Silakan Login dengan Password yang Baru!');
         } catch(\Exception $e){
-            return redirect()->back()->with('error', 'Reset Password Gagal. Silakan Coba Lagi');
+            return redirect()->back()->with('error', 'Email tidak terdaftar. Silakan buat akun terlebih dahulu');
         }
     }
 }

@@ -1,6 +1,24 @@
 @extends('dashboard.layouts.main')
 
 @section('container')
+<style>
+    .hover-primary{
+        color: black;
+    }
+    .hover-primary:hover{
+        background-color: blue;
+        color:white;
+    }
+    .hover-success{
+        background-color: white;
+        border-color: green;
+        color: green;
+    }
+    .hover-success:hover{
+        background-color: green;
+        color: white;
+    }
+</style>
         <div class="card mb-4">
             <div class="card-body">
                 @if($jurusan == null || request()->segment(count(request()->segments())) > Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren())
@@ -10,12 +28,12 @@
                 <h5 class="text-center mb-3" style="color: #000C2E; font-weight: 700;">Pertanyaan</h5>
                 <div class="row justify-content-between">
                     @for($i = 1; $i <= Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1) . '/kuis')->getSnapshot()->numChildren(); $i++)
-                        <div class="col-2" style="text-align: center">
+                        <div class="col-2" style="text-align: center;">
                             <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())-1) }}/{{ $i }}" method="post">
                                 @csrf
                                 <input type="hidden" name="jur" id="jur" value="{{ $jurusan }}">
-                                <button class="card m-4">
-                                    <div class="card-body">
+                                <button class="{{ Cache::get('Pertanyaan_'. $i) ? 'hover-success' : 'hover-primary' }} card m-4">
+                                    <div class="card-body" style="font-size: 24px;">
                                         {{ $i }}
                                     </div>
                                 </button>

@@ -12,7 +12,7 @@
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/registration.jpeg") }}');
-        background-size: 100px 50px;
+        background-size: 600px 300px;
         background-repeat: repeat;
         background-position: center center;
     }
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Kata Sandi</label>
+                        <label for="password" class="form-control-label">Kata Sandi (minimal 6 karakter)</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}

@@ -3,10 +3,16 @@
 @section('container')
 
   @if(session()->has('success'))
-  <div class="alert alert-success  alert-dismissible fade show" role="alert">
-      {{ session('success') }}
+    <div class="alert alert-success  alert-dismissible fade show" style="color:black;" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+  @if(session()->has('error'))
+    <div class="alert alert-danger  alert-dismissible fade show" style="color:black;" role="alert">
+      {{ session('error') }}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
+    </div>
   @endif
   <div class="card mb-4">
       <div class="card-body">
@@ -65,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="card overflow-auto h-25">
+    <div class="card overflow-auto h-50">
         <div class="card-body">
             <h3 style="color: #0038CF; font-weight: 700;">Videoku</h3>
             @if(Firebase::database()->getReference('users/' . Session::get('email') . '/vids')->getSnapshot()->exists())
@@ -77,6 +83,7 @@
                                   <div id="{{ $vids['Video'] }}" style="text-align: center;"></div>
                                   <div class="card-body">
                                       <h5 class="card-title bold text-primary text-truncate" id="extended-title-{{$key}}">{{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Judul_Video']) }}</h5>
+                                      <h6 class="card-title text-primary text-truncate" id="extended-title-{{$key}}">Oleh: {{ Str::title(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Dosen']) }}</h6>
                                       <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                       <p class="card-text" style="display: none" id="extended-info-{{$key}}">{{ Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $vids['Jurusan']) . '/' . $vids['Video'])->getValue()['Deskripsi'] }}</p>
                                       <div class="d-flex justify-content-end">

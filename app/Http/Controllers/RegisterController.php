@@ -52,6 +52,7 @@ class RegisterController extends Controller
             ];
             $this->firebaseAuth->setCustomUserClaims($createdUser->uid, $customClaims);
             $this->firebaseAuth->updateUser($createdUser->uid, ['displayName' => $request['username']]);
+            $this->firebaseAuth->sendEmailVerificationLink($email);
 
             $this->database->getReference($ref_tablename)->set($postData);
         } catch(\Exception $e){
@@ -97,13 +98,42 @@ class RegisterController extends Controller
             Session::flash('error', 'Registration failed.  Please try again');
             return redirect('/register');
         }
-        $signInResult = $this->firebaseAuth->signInWithEmailAndPassword($email, $password);
-        Session::put('firebaseUserId', $signInResult->firebaseUserId());
-        Session::put('email', $inputEmail);
-        Session::put('user', true);
-        Session::save();
         
-        Session::flash('success', 'Registration Succesful!');
-        return redirect('/adPanel');
+        return redirect('/adPanel/users')->with('success', 'Pembuatan akun admin berhasil!');
+    }
+
+    protected function dosReg(Request $request){
+        $validator = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'required|confirmed|string|min:6'
+        ]);
+
+
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $inputEmail = Str::replace('.', '', $email);
+        $ref_tablename = "dosen/".$inputEmail;
+        $postData = [
+            'username' => $request->input('username'),
+            'nama' => $request['nama'],
+            'email' => $email
+        ];
+
+        try {
+            $createdUser = $this->firebaseAuth->createUserWithEmailAndPassword($email, $password)   ;
+
+            $customClaims = [
+                'role' => 'dosen'
+            ];
+            $this->firebaseAuth->setCustomUserClaims($createdUser->uid, $customClaims);
+
+            $this->database->getReference($ref_tablename)->set($postData);
+        } catch(\Exception $e){
+            Session::flash('error', 'Pendaftaran gagal. Silakan coba lagi');
+            return redirect('/register');
+        }
+        
+        return redirect('/adPanel/users')->with('success', 'Pembuatan akun dosen berhasil!');
     }
 }

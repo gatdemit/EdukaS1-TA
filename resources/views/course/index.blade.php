@@ -3,6 +3,9 @@
 @section('container')
 
 <style>
+  .hover-primary{
+    color: gray;
+  }
   .hover-primary:hover {
     background-color: #3B71CA;
     color: white;
@@ -47,7 +50,7 @@
                 @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
                 <ul>
                   <li>
-                    <a style="text-decoration: none; color: gray;" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">
+                    <a class="hover-primary" style="text-decoration: none;" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">
                       {{ Str::replace('_', ' ', $jurusan['Value']) }} >
                     </a>
                   </li>

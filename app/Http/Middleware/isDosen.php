@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Illuminate\Support\Facades\Session;
 
-class isAdmin
+class isDosen
 {
     /**
      * Handle an incoming request.
@@ -17,9 +17,9 @@ class isAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::has('user') && Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role'] != 'admin'){
-            if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role'] == 'dosen'){
-                return redirect('/dosPanel');
+        if(Session::has('user') && Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role'] != 'dosen'){
+            if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role'] == 'admin'){
+                return redirect('/adPanel');
             } else{
                 return redirect('/dashboard');
             }

@@ -17,11 +17,10 @@ class KuisController extends Controller
     public function index()
     {
         $db=Firebase::database();
-
-        return view('adPanel.sidemenu.kuis.index',[
-            'title' => 'Admin Panel | Kuis',
+        return view('dosPanel.sidemenu.kuis.index',[
+            'title' => 'Dosen Panel | Kuis',
             'header' => "Kuis",
-            'videos' => $db->getReference('videos')->getValue(),
+            'jurusan' => $db->getReference('dosen/' . Session::get('email') . '/vids')->getValue(),
             'search' => false
         ]);
     }
@@ -31,8 +30,8 @@ class KuisController extends Controller
      */
     public function create(Request $request)
     {
-        return view('adPanel.sidemenu.kuis.create',[
-            'title' => 'Admin Panel | Kuis',
+        return view('dosPanel.sidemenu.kuis.create',[
+            'title' => 'Dosen Panel | Kuis',
             'header' => "Tambah Kuis",
             'video' => $request['video'],
             'jurusan' => $request['jurusan']
@@ -47,10 +46,10 @@ class KuisController extends Controller
         if($request['search']){
             $db=Firebase::database();
 
-            return view('adPanel.sidemenu.kuis.index',[
-                'title' => 'Admin Panel | Kuis',
+            return view('dosPanel.sidemenu.kuis.index',[
+                'title' => 'Dosen Panel | Kuis',
                 'header' => "Kuis",
-                'videos' => $db->getReference('videos')->getValue(),
+                'jurusan' => $db->getReference('dosen/' . Session::get('email') . '/vids')->getValue(),
                 'search' => true,
                 'query' => $request['search']
             ]);
@@ -76,7 +75,7 @@ class KuisController extends Controller
         
                 $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'] . '/kuis')->update($updates);
         
-                return redirect('adPanel/quiz')->with('success', 'Kuis Berhasil Ditambahkan!');
+                return redirect('dosPanel/kuis')->with('success', 'Kuis Berhasil Ditambahkan!');
             } catch(\Exception $e){
                 return redirect()->back()->with('error', 'Penambahan Kuis Gagal. Silakan Coba Lagi.');
             }
@@ -96,8 +95,8 @@ class KuisController extends Controller
      */
     public function edit(Request $request)
     {
-        return view('adPanel.sidemenu.kuis.edit',[
-            'title' => 'Admin Panel | Kuis',
+        return view('dosPanel.sidemenu.kuis.edit',[
+            'title' => 'Dosen Panel | Kuis',
             'header' => "Ubah Kuis",
             'jurusan' => $request['jurusan']
         ]);
@@ -129,7 +128,7 @@ class KuisController extends Controller
     
             $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video']. '/kuis')->update($updates);
     
-            return redirect('adPanel/quiz')->with('success', 'Kuis Berhasil Diperbarui!');
+            return redirect('dosPanel/kuis')->with('success', 'Kuis Berhasil Diperbarui!');
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Pembaruan Kuis Gagal. Silakan Coba Lagi.');
         }
@@ -145,7 +144,7 @@ class KuisController extends Controller
         try{
             $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'] . '/kuis')->remove();
     
-            return redirect('adPanel/quiz')->with('success', 'Penghapusan Kuis Berhasil!');
+            return redirect('dosPanel/kuis')->with('success', 'Penghapusan Kuis Berhasil!');
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Penghapusan Kuis Gagal.');
         }

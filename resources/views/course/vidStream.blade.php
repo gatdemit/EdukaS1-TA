@@ -44,165 +44,190 @@
                     </div>
                     <br>
                     @foreach($fakultas as $facs)
-                    @if(count($facs) <= 3) <div class="card-body py-0" id="heading{{ $facs['Value'] }}">
-                        <h5 class="mb-0">
-                            <button class="btn nav-link" data-bs-toggle="collapse" data-bs-target="#{{ Str::replace(' ', '_', $facs['Value']) }}" aria-expanded="true" aria-controls="{{ Str::replace(' ', '_', $facs['Value']) }}" style="font-size: 16px;">
-                                {{ $facs['Value'] == 'Umum' ? 'Mata Kuliah ' . $facs['Value'] : 'Fakultas ' . $facs['Value'] }}
-                            </button>
-                        </h5>
-                </div>
+                        @if(count($facs) <= 3)
+                            <div class="card-body py-0" id="heading{{ $facs['Value'] }}">
+                                <h5>
+                                    <button class="btn nav-link" data-bs-toggle="collapse" data-bs-target="#{{ Str::replace(' ', '_', $facs['Value']) }}" aria-expanded="true" aria-controls="{{ Str::replace(' ', '_', $facs['Value']) }}" style="font-size: 16px;">
+                                        {{ $facs['Value'] == 'Umum' ? 'Mata Kuliah ' . $facs['Value'] : 'Fakultas ' . $facs['Value'] }}
+                                    </button>
+                                </h5>
+                            </div>
 
-                <div id="{{ Str::replace(' ', '_', $facs['Value']) }}" class="collapse" aria-labelledby="heading{{ $facs['Value'] }}" data-parent="#accordion">
-                    <div class="mt-2 mx-5">
-                        @foreach($facs['jurusan'] as $jurusan)
-                            @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
-                            <a class="nav-link" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">{{ $jurusan['Value'] }}</a>
-                            <hr>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-                <hr>
-                @endif
-                @endforeach
-            </div>
-        </div>
-        <div class="col-lg-8 h-100">
-            <div class="card overflow-auto h-100">
-                <div id="vidDiv" class="bg-dark">
-                    <button class="btn btn-success" id="replayBtn" style="display:none;" onclick="enable()">Putar Ulang</button>
-                    <video width="100%" height="300" controls id="video">
-                        <source src="{{ asset('storage/'. Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Link']) }}" type="video/mp4">
-                    </video>
-                </div>
-                @if(Session::get('user') && Firebase::database()->getReference('users/' . Session::get('email') .'/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
-                    @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/kuis')->getSnapshot()->exists())
-                    <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post">
-                        @csrf
-                        <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
-                        <button class="btn btn-primary m-auto d-block my-5" style="font-weight: 500;">Kerjakan Kuis</button>
-                    </form>
-                    @else
-                        <div class="my-5" style="font-weight: 600; text-align:center;">
-                            Kuis Belum Dibuat
-                        </div>
-                    @endif
-                @endif
-                <div class="card-body">
-                    <div class="container m-auto w-100">
-                        <h3 style="font-weight: 700; color: #0038CF;">{{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video']) }}</h3>
-                        <p>{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Deskripsi'] }}</p>
-
-                        @if(Session::get('user'))
-                        @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
-                        <form action="/rate" method="POST" class="text-warning">
-                            @csrf
-                            <input type="hidden" name="link" id="link" value="{{ request()->segment(count(request()->segments())) }}">
-                            <input type="hidden" name="jurusan" id="jurusan" value="{{ request()->segment(count(request()->segments())-1) }}">
-                            <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                            <div class="d-flex flex-column align-items-center">
-                                <div>
-                                    <div class="rate">
-                                        <input type="radio" id="star5" class="rate" name="rating" value="5" checked />
-                                        <label for="star5" title="text">5 stars</label>
-                                        <input type="radio" id="star4" class="rate" name="rating" value="4" />
-                                        <label for="star4" title="text">4 stars</label>
-                                        <input type="radio" id="star3" class="rate" name="rating" value="3" />
-                                        <label for="star3" title="text">3 stars</label>
-                                        <input type="radio" id="star2" class="rate" name="rating" value="2">
-                                        <label for="star2" title="text">2 stars</label>
-                                        <input type="radio" id="star1" class="rate" name="rating" value="1" />
-                                        <label for="star1" title="text">1 star</label>
-                                    </div>
-                                </div>
-                                <div>
-                                    @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/rate_count')->getSnapshot()->exists())
-                                    <p style="font-weight: 600; color: #230F0F;">
-                                        ({{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['rate_count'] }} Penilaian)
-                                    </p>
-                                    @else
-                                    <p style="font-weight: 600; color: #230F0F;">
-                                        (0 Penilaian)
-                                    </p>
-                                    @endif
-                                </div>
-                                @if(session()->has('success'))
-                                <div class="alert alert-success  alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                @endif
-                                @if(session()->has('error'))
-                                <div class="alert alert-danger  alert-dismissible fade show" role="alert">
-                                    {{ session('error') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                @endif
-                                <div>
-                                    <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">Beri nilai!</button>
+                            <div id="{{ Str::replace(' ', '_', $facs['Value']) }}" class="collapse" aria-labelledby="heading{{ $facs['Value'] }}" data-parent="#accordion">
+                                <div class="mt-2 mx-5" id="child{{ Str::replace(' ', '_', $facs['Value']) }}">
+                                    @foreach($facs['jurusan'] as $jurusan)
+                                        @if(Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $jurusan['Value']))->getSnapshot()->exists())
+                                        <a class="nav-link" href="/course/{{ Str::replace(' ', '_', $jurusan['Value']) }}">{{ $jurusan['Value'] }}</a>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
-                        </form>
-                        @elseif(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
-                        <form action="/keranjang" method="POST" class="w-100">
-                            @csrf
-                            <input type="hidden" name="judul" id="judul" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video'] }}">
-                            <input type="hidden" name="harga" id="harga" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}">
-                            <input type="hidden" name="video" id="video" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Video'] }}">
-                            <input type="hidden" name="fakultas" id="fakultas" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Fakultas'] }}">
-                            <input type="hidden" name="jurusan" id="jurusan" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Jurusan'] }}">
-                            <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
-                            <p>Harga: Rp {{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}</p>
-                            <button class="btn btn-primary m-auto d-block mt-5" style="font-weight: 500;">Beli Video</button>
-                        </form>
-                        <script>
-                            var vid = document.getElementById('video');
-                            var replayBtn = document.getElementById('replayBtn');
-                            var vidDiv = document.getElementById('vidDiv');
-                            vid.addEventListener('timeupdate', function() {
-                                if (this.currentTime >= 5) {
-                                    vidDiv.classList.add("layar");
-                                    replayBtn.style.display = "block";
-                                    this.pause();
-                                    this.controls = false;
-                                }
-                            });
+                            <hr id="hr{{ Str::replace(' ', '_', $facs['Value']) }}">
+                            <script>
+                                let parDiv{!! Str::replace(' ', '_', $facs['Value']) !!} = document.getElementById("child{!! Str::replace(' ', '_', $facs['Value']) !!}");
 
-                            function enable() {
-                                replayBtn.style.display = 'none';
-                                vidDiv.classList.remove('layar');
-                                vid.controls = true;
-                                vid.currentTime = 0;
-                            };
-                        </script>
-                        @endif
-                        @else
-                        <a href="/login" class="btn btn-primary mt-5" style="font-weight: 500;">Login untuk Beli</a>
-                        <script>
-                            var vid = document.getElementById('video');
-                            var replayBtn = document.getElementById('replayBtn');
-                            var vidDiv = document.getElementById('vidDiv');
-                            vid.addEventListener('timeupdate', function() {
-                                if (this.currentTime >= 5) {
-                                    vidDiv.classList.add("layar");
-                                    replayBtn.style.display = "block";
-                                    this.pause();
-                                    this.controls = false;
-                                }
-                            });
+                                let grandparDiv{!! Str::replace(' ', '_', $facs['Value']) !!} = document.getElementById('{!! Str::replace(' ', '_', $facs['Value']) !!}');
 
-                            function enable() {
-                                replayBtn.style.display = 'none';
-                                vidDiv.classList.remove('layar');
-                                vid.controls = true;
-                                vid.currentTime = 0;
-                            };
-                        </script>
+                                let headDiv{!! Str::replace(' ', '_', $facs['Value']) !!} = document.getElementById("heading{!! $facs['Value'] !!}");
+                                
+                                let hrDiv{!! Str::replace(' ', '_', $facs['Value']) !!} = document.getElementById("hr{!! Str::replace(' ', '_', $facs['Value']) !!}");
+                                
+                                console.log(parDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.childElementCount);
+                                if(parDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.childElementCount < 1){
+                                    parDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.style.display = 'none';
+                                    grandparDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.style.display = 'none';
+                                    headDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.style.display = 'none';
+                                    hrDiv{!! Str::replace(' ', '_', $facs['Value']) !!}.style.display = 'none';
+                                }
+                            </script>
                         @endif
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-lg-8 h-100">
+                <div class="card overflow-auto h-100">
+                    <div id="vidDiv" class="bg-dark">
+                        <button class="btn btn-success" id="replayBtn" style="display:none;" onclick="enable()">Putar Ulang</button>
+                        <video width="100%" height="300" controls id="video">
+                            <source src="{{ asset('storage/'. Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Link']) }}" type="video/mp4">
+                        </video>
+                    </div>
+                    @if(Session::get('user') && Firebase::database()->getReference('users/' . Session::get('email') .'/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/kuis')->getSnapshot()->exists())
+                        <div class="row mx-3">
+                            <form action="/dashboard/quiz/{{ request()->segment(count(request()->segments())) }}/1" method="post" class="col">
+                                @csrf
+                                <input type="hidden" name="jur" id="jur" value={{ request()->segment(count(request()->segments())-1) }}>
+                                <button class="btn btn-primary my-2" style="font-weight: 500;">Kerjakan Kuis</button>
+                            </form>
+                            @else
+                                <div class="my-5 col" style="font-weight: 600;">
+                                    Kuis Belum Dibuat
+                                </div>
+                            @endif
+                            <form action="/dashboard/pesan" method="post" class="col" style="text-align: end;">
+                                @csrf
+                                <input type="hidden" name="dosen" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Email_Dosen'] }}">
+                                <button class="btn btn-success my-2" style="font-weight: 500;">Kirim pesan ke dosen</button>
+                            </form>
+                        </div>
+                    @endif
+                    <div class="card-body">
+                        <div class="container m-auto w-100">
+                            <h3 style="font-weight: 700; color: #0038CF;">{{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video']) }}</h3>
+                            <h5 style="color: #0038CF;">Oleh: {{ Str::title(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Dosen']) }}</h5>
+                            <p>{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Deskripsi'] }}</p>
+
+                            @if(Session::get('user'))
+                            @if(Firebase::database()->getReference('users/'. Session::get('email') . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                            <form action="/rate" method="POST" class="text-warning">
+                                @csrf
+                                <input type="hidden" name="link" id="link" value="{{ request()->segment(count(request()->segments())) }}">
+                                <input type="hidden" name="jurusan" id="jurusan" value="{{ request()->segment(count(request()->segments())-1) }}">
+                                <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div>
+                                        <div class="rate">
+                                            <input type="radio" id="star5" class="rate" name="rating" value="5" checked />
+                                            <label for="star5" title="text">5 stars</label>
+                                            <input type="radio" id="star4" class="rate" name="rating" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                            <input type="radio" id="star3" class="rate" name="rating" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                            <input type="radio" id="star2" class="rate" name="rating" value="2">
+                                            <label for="star2" title="text">2 stars</label>
+                                            <input type="radio" id="star1" class="rate" name="rating" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())) . '/rate_count')->getSnapshot()->exists())
+                                        <p style="font-weight: 600; color: #230F0F;">
+                                            ({{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['rate_count'] }} Penilaian)
+                                        </p>
+                                        @else
+                                        <p style="font-weight: 600; color: #230F0F;">
+                                            (0 Penilaian)
+                                        </p>
+                                        @endif
+                                    </div>
+                                    @if(session()->has('success'))
+                                    <div class="alert alert-success  alert-dismissible fade show" role="alert">
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @endif
+                                    @if(session()->has('error'))
+                                    <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                                        {{ session('error') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <button class="btn btn-primary m-auto d-block" style="font-weight: 500;">Beri nilai!</button>
+                                    </div>
+                                </div>
+                            </form>
+                            @elseif(!Firebase::database()->getReference('users/' . Session::get('email') . '/vids/' . '/vids/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getSnapshot()->exists())
+                            <form action="/keranjang" method="POST" class="w-100">
+                                @csrf
+                                <input type="hidden" name="judul" id="judul" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Judul_Video'] }}">
+                                <input type="hidden" name="harga" id="harga" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}">
+                                <input type="hidden" name="video" id="video" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Video'] }}">
+                                <input type="hidden" name="fakultas" id="fakultas" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Fakultas'] }}">
+                                <input type="hidden" name="jurusan" id="jurusan" value="{{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Jurusan'] }}">
+                                <input type="hidden" name="email" id="email" value="{{ Session::get('email') }}">
+                                <p>Harga: Rp {{ Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())-1) . '/' . request()->segment(count(request()->segments())))->getValue()['Harga'] }}</p>
+                                <button class="btn btn-primary m-auto d-block mt-5" style="font-weight: 500;">Beli Video</button>
+                            </form>
+                            <script>
+                                var vid = document.getElementById('video');
+                                var replayBtn = document.getElementById('replayBtn');
+                                var vidDiv = document.getElementById('vidDiv');
+                                vid.addEventListener('timeupdate', function() {
+                                    if (this.currentTime >= 5) {
+                                        vidDiv.classList.add("layar");
+                                        replayBtn.style.display = "block";
+                                        this.pause();
+                                        this.controls = false;
+                                    }
+                                });
+
+                                function enable() {
+                                    replayBtn.style.display = 'none';
+                                    vidDiv.classList.remove('layar');
+                                    vid.controls = true;
+                                    vid.currentTime = 0;
+                                };
+                            </script>
+                            @endif
+                            @else
+                            <a href="/login" class="btn btn-primary mt-5" style="font-weight: 500;">Login untuk Beli</a>
+                            <script>
+                                var vid = document.getElementById('video');
+                                var replayBtn = document.getElementById('replayBtn');
+                                var vidDiv = document.getElementById('vidDiv');
+                                vid.addEventListener('timeupdate', function() {
+                                    if (this.currentTime >= 5) {
+                                        vidDiv.classList.add("layar");
+                                        replayBtn.style.display = "block";
+                                        this.pause();
+                                        this.controls = false;
+                                    }
+                                });
+
+                                function enable() {
+                                    replayBtn.style.display = 'none';
+                                    vidDiv.classList.remove('layar');
+                                    vid.controls = true;
+                                    vid.currentTime = 0;
+                                };
+                            </script>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </main>
 

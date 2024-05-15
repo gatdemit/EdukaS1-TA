@@ -39,7 +39,7 @@
                 @if(Firebase::database()->getReference('faculties/' . request()->segment(count(request()->segments())) . '/jurusan')->getSnapshot()->exists())
                     @if($search)
                         @foreach(Firebase::database()->getReference('faculties/' . request()->segment(count(request()->segments())) . '/jurusan')->getValue() as $snapshot)
-                             @if(Str::contains($snapshot['Value'], $query)) 
+                             @if(Str::contains(Str::upper($snapshot['Value']), Str::upper($query))) 
                              <tr>
                                 <td>{{ Str::replace('_', ' ', request()->segment(count(request()->segments()))) }}</td>
                                 <td>{{ $snapshot['Value'] }}</td>
@@ -80,7 +80,7 @@
                     @endif
                 @else
                 <tr>
-                    <td>Fakultas don't exist</td>
+                    <td>Jurusan don't exist</td>
                 </tr>
                 @endif
             </tbody>

@@ -18,7 +18,7 @@
             @endif
             <div class="container">
                 <p style="display:none;">{{ $total = 0; }}</p>
-                @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue() != null) 
+                @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getSnapshot()->exists()) 
                     @if(!Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['checkout'])
                         @foreach(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['Keranjang'] as $snapshot)
                         <p style="display:none;">{{ $total += $snapshot['Harga']; }}</p>

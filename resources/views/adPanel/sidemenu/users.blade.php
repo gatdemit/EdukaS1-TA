@@ -28,25 +28,30 @@
                     <th scope="col">Email</th>
                     <th scope="col">Username</th>
                     <th scope="col">Role</th>
-                    <th scope="col" style="text-align: center;">Hapus</th>
+                    <th scope="col">Verifikasi</th>
+                    <th scope="col" style="text-align: center;">Block</th>
                 </tr>
             </thead>
             <tbody>
                 @if($search)
                     @foreach($users as $user)
-                        @if(Str::contains($user->email, $query) || Str::contains($user->displayName, $query))
+                        @if(Str::contains(Str::upper($user->email), Str::upper($query)) || Str::contains(Str::upper($user->displayName), Str::upper($query)))
                             <tr>
                                 <td style="font-weight: 500;">{{ $user->email }}</td>
                                 <td style="font-weight: 500;">{{ $user->displayName }}</td>
                                 <td style="font-weight: 500;">{{ $user->customClaims['role'] }}</td>
+                                <td style="font-weight: 500;">{{ $user->emailVerified ? 'verified' : 'unverified' }}</td>
                                 <td style="text-align: center;">
-                                    <form action="/adPanel/users/del" method="POST">
-                                        @method('delete')
-                                        @csrf
-                                        <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
-                                        <input type="hidden" name="email" id="email" value="{{ $user->email }}">
-                                        <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
-                                    </form>
+                                    @if(Session::get('email') != Str::replace('.', '', $user->email))
+                                        <form action="/adPanel/users/del" method="POST">
+                                            @method('delete')
+                                            @csrf
+                                            <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
+                                            <input type="hidden" name="email" id="email" value="{{ $user->email }}">
+                                            <input type="hidden" name="role" id="role" value="{{ $user->customClaims['role'] }}">
+                                            <button class="btn btn-{{ $user->disabled ? 'primary' : 'danger' }} rounded-pill" onclick="return confirm('Are you sure?')">{{ $user->disabled ? 'Unblock' : 'Block' }}</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endif
@@ -57,14 +62,18 @@
                             <td style="font-weight: 500;">{{ $user->email }}</td>
                             <td style="font-weight: 500;">{{ $user->displayName }}</td>
                             <td style="font-weight: 500;">{{ $user->customClaims['role'] }}</td>
+                            <td style="font-weight: 500;">{{ $user->emailVerified ? 'verified' : 'unverified' }}</td>
                             <td style="text-align: center;">
-                                <form action="/adPanel/users/del" method="POST">
-                                    @method('delete')
-                                    @csrf
-                                    <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
-                                    <input type="hidden" name="email" id="email" value="{{ $user->email }}">
-                                    <button class="btn btn-danger rounded-pill" onclick="return confirm('Are you sure?')">Hapus</button>
-                                </form>
+                                @if(Session::get('email') != Str::replace('.', '', $user->email))
+                                    <form action="/adPanel/users/del" method="POST">
+                                        @method('delete')
+                                        @csrf
+                                        <input type="hidden" name="uid" id="uid" value="{{ $user->uid }}">
+                                        <input type="hidden" name="email" id="email" value="{{ $user->email }}">
+                                        <input type="hidden" name="role" id="role" value="{{ $user->customClaims['role'] }}">
+                                        <button class="btn btn-{{ $user->disabled ? 'primary' : 'danger' }} rounded-pill" onclick="return confirm('Are you sure?')">{{ $user->disabled ? 'Unblock' : 'Block' }}</button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

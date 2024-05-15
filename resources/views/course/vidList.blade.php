@@ -82,6 +82,7 @@
                                                             <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                             <div style="display: none" id="extended-info-{{$key}}">
                                                                 {{ $snapshot['Deskripsi'] }}<br><br>
+                                                                Oleh: {{ $snapshot['Dosen'] }} <br>
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
                                                                     Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                                 @else
@@ -117,6 +118,7 @@
                                                         <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             {{ $snapshot['Deskripsi'] }}<br><br>
+                                                            Oleh: {{ $snapshot['Dosen'] }} <br>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
                                                                 Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                             @else
@@ -208,6 +210,7 @@
                                                             <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                             <div style="display: none" id="extended-info-{{$key}}">
                                                                 {{ $snapshot['Deskripsi'] }}<br><br>
+                                                                Oleh: {{ $snapshot['Dosen'] }} <br>
                                                                 @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
                                                                     Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                                 @else
@@ -243,6 +246,7 @@
                                                         <a class="link-opacity-50 text-small text-muted" style="font-size: 0.875rem" href="javascript:void(0)" onclick="toggleItem('<?= $key ?>')">Selanjutnya</a>
                                                         <div style="display: none" id="extended-info-{{$key}}">
                                                             {{ $snapshot['Deskripsi'] }}<br><br>
+                                                            Oleh: {{ $snapshot['Dosen'] }} <br>
                                                             @if(Firebase::database()->getReference('videos/' . request()->segment(count(request()->segments())) . '/' . $snapshot['Video'] . '/rating')->getSnapshot()->exists())
                                                                 Nilai: {{ $snapshot['rating']/$snapshot['rate_count'] }} ({{ $snapshot['rate_count'] }} Users)<br>
                                                             @else

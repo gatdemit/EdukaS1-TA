@@ -15,7 +15,7 @@
                 content: "";
                 z-index: -1;
                 background-image: url('{{ asset("storage/asset/Login.jpeg") }}');
-                background-size: 100px 50px;
+                background-size: 600px 300px;
                 background-repeat: repeat;
                 background-position: center center;
             }
@@ -31,18 +31,17 @@
         <div class="parent">
             <div class="form-signin p-5 m-auto col-md-6 col-sm-12">
                 <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color: #fff">
+                    @if(session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <h1 style="color: #0038CF; font-weight: 600;">Buat Profilmu!</h1>
                     <h3 style="color: #0038CF; font-weight: 600;">Avatarmu</h3>
-                    <form action="/dashboard" method="post" enctype="multipart/form-data">
+                    <form action="/dashboard/create" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-floating mb-3 t d-flex justify-content-between thumbnail">
-                                @if(session()->has('success'))
-                                    <div class="alert alert-success  alert-dismissible fade show" role="alert">
-                                        {{ session('success') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                @endif
-                                
                                 <div class="row align-items-center">
                                     <span class="col me-3">
                                         <img src="{{ asset('storage/'. Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['profpic']) }}" class="img-preview" style="border-radius: 50%; height:120px; width:120px; max-height:120px; max-width:120px;" role="button" id="myfile" name="myfile">

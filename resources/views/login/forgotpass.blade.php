@@ -12,7 +12,7 @@
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/forgot_pass.jpeg") }}');
-        background-size: 100px 50px;
+        background-size: 600px 300px;
         background-repeat: repeat;
         background-position: center center;
     }
@@ -27,14 +27,14 @@
 </style>
 <div class="row mt-5 d-flex justify-content-center parent">
     <div class="col-md-5 col-sm-12" style="margin-top: 100px;">
-        @if(session()->has('error'))
-        <div class="alert alert-danger  alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
         <div class="form-signin m-auto">
             <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color: #fff">
+                @if(session()->has('error'))
+                <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <h1 class="text-center mb-5" style="font-weight: 800">Lupa Kata Sandi?</h1>
                 <p>Masukkan emailmu untuk mengatur ulang kata sandi.</p>
                 <form action="/forgotpass" method="post">

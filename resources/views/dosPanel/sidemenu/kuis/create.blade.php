@@ -1,4 +1,4 @@
-@extends('adPanel.layouts.main')
+@extends('dosPanel.layouts.main')
 
 @section('container')
         @if(session()->has('error'))
@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form class= "row" action="/adPanel/quiz" method="post">
+        <form class= "row" action="/dosPanel/kuis" method="post">
             @csrf
             <div class="col" id="parentbody">
                 <label class="mb-2" for="pertanyaan1">Pertanyaan 1</label>

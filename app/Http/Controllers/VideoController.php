@@ -28,14 +28,25 @@ class VideoController extends Controller
         ]);
     }
 
+    public function indexDos()
+    {
+        $db = Firebase::database();
+        return view('dosPanel.sidemenu.video.index', [
+            'title' => 'Dosen Panel | Video',
+            'header' => "Video",
+            'jurusan' => $db->getReference('dosen/' . Session::get('email') . '/vids')->getValue(),
+            'search' => false
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $jurusan = Firebase::database()->getReference('faculties')->getValue();
-        return view('adPanel.sidemenu.video.create', [
-            'title' => 'Admin Panel | Video',
+        return view('dosPanel.sidemenu.video.create', [
+            'title' => 'Dosen Panel | Video',
             'header' => "Upload Video",
             'faks' => $jurusan
         ]);
@@ -52,11 +63,25 @@ class VideoController extends Controller
             return view('adPanel.sidemenu.video.index', [
                 'title' => 'Admin Panel | Video',
                 'header' => "Video",
-                'jurusan' => $db->getReference('videos/' . Str::replace(' ', '_',$request['choice']))->getValue(),
+                'jurusan' => $db->getReference('videos/' . Str::replace(' ', '_', $request['choice']))->getValue(),
                 'faks' => $jur,
                 'choice' => Str::replace(' ', '_',$request['choice']),
                 'search' => $request['search'] == null ? false : true,
                 'query' => $request['search'] == null ? $request['choice'] : $request['search'],
+            ]);
+        } 
+    }
+
+    public function storeDos(Request $request)
+    {
+        if($request['search']){
+            $db = Firebase::database();
+            return view('dosPanel.sidemenu.video.index', [
+                'title' => 'Dosen Panel | Video',
+                'header' => "Video",
+                'jurusan' => $db->getReference('dosen/' . Session::get('email') . '/vids')->getValue(),
+                'search' => true,
+                'query' => $request['search']
             ]);
         } else{
             $db = Firebase::database();
@@ -81,16 +106,27 @@ class VideoController extends Controller
                 'Deskripsi' => $request['deskripsi'],
                 'Link' => $request['video']->store('video'),
                 'Video' => $storVid,
+                'Dosen' => $db->getReference('dosen/' . Session::get('email'))->getValue()['nama'],
+                'Email_Dosen' => Session::get('email'),
                 'Active' => true
+            ];
+
+            $updatesDos = [
+                'Judul_Video' => $request['judul'],
+                'Fakultas' => $request['fakultas'],
+                'Jurusan' => $request['jurusan'],
+                'Harga' => $request['harga'],
+                'Video' => $storVid
             ];
     
             try{
                 $db->getReference('videos/' . $storeJur . '/'. $storVid)->update($updates);
+                $db->getReference('dosen/' . Session::get('email') . '/vids/'. Str::replace(' ', '_', $request['jurusan']) . '/' . $storVid)->update($updatesDos);
             } catch(\Exception $e){
                 return redirect()->back()->with('error', 'Upload Video Gagal. Silakan Coba Lagi.');
             }
     
-            return redirect('/adPanel/video')->with('success', 'Upload Video Berhasil!');
+            return redirect('/dosPanel/video')->with('success', 'Upload Video Berhasil!');
         }
     }
 
@@ -113,6 +149,14 @@ class VideoController extends Controller
             'jurusan' => $request['jurusan']
         ]);
     }
+    public function editDos(Request $request)
+    {
+        return view('dosPanel.sidemenu.video.edit', [
+            'title' => 'Dosen Panel | Video',
+            'header' => "Edit Data Video",
+            'jurusan' => $request['jurusan']
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -127,13 +171,44 @@ class VideoController extends Controller
             'Deskripsi' => $request['deskripsi'],
         ];
 
+        $updatesDos = [
+            'Judul_Video' => $request['judul'],
+            'Harga' => $request['harga']
+        ];
+
         try{
             $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'])->update($updates);
+            $db->getReference('dosen/' . $request['email'] . '/vids/' . $request['jurusan'] . '/' . $request['video'])->update($updatesDos);
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Pembaruan Video Gagal. Silakan Coba Lagi');
         }
 
         return redirect('/adPanel/video')->with('success', 'Pembaruan Video Berhasil!');
+    }
+
+    public function updateDos(Request $request, string $id)
+    {
+        $db = Firebase::database();
+
+        $updates = [
+            'Judul_Video' => $request['judul'],
+            'Harga' => $request['harga'],
+            'Deskripsi' => $request['deskripsi'],
+        ];
+
+        $updatesDos = [
+            'Judul_Video' => $request['judul'],
+            'Harga' => $request['harga']
+        ];
+
+        try{
+            $db->getReference('videos/' . $request['jurusan'] . '/' . $request['video'])->update($updates);
+            $db->getReference('dosen/' . Session::get('email') . '/vids/' . $request['jurusan'] . '/' . $request['video'])->update($updatesDos);
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', 'Pembaruan Video Gagal. Silakan Coba Lagi');
+        }
+
+        return redirect('/dosPanel/video')->with('success', 'Pembaruan Video Berhasil!');
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('adPanel.layouts.main')
+@extends('dosPanel.layouts.main')
 
 @section('container-header')
 @endsection
@@ -10,7 +10,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form class= "row" action="/adPanel/quiz/{{ request()->segment(count(request()->segments())-1) }}" method="post">
+        <form class= "row" action="/dosPanel/kuis/{{ request()->segment(count(request()->segments())-1) }}" method="post">
             @method('put')
             @csrf
             <div class="col" id="parentbody">

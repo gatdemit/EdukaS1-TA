@@ -195,7 +195,7 @@ class FakultasController extends Controller
         try{
             $db->getReference('faculties/' . $request['fakultas'] . '/jurusan/' . $request['jurusan'])->remove();
             $db->getReference('faculties/Deskripsi/' . $request['jurusan'])->remove();
-            return redirect('/adPanel/fakultas')->with('success', 'Jurusan Berhasil Dihapus!');
+            return redirect('/adPanel/fakultas/' . Str::replace(' ', '_', $request['fakultas']))->with('success', 'Jurusan Berhasil Dihapus!');
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Gagal menghapus Fakultas. Silakan coba lagi.');
         }

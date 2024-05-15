@@ -56,7 +56,7 @@ class DashboardController extends Controller
         } catch(\Exception $e){
             Session::flash('error', 'Pengisian Data Gagal. Silakan Coba Lagi.');
         }
-        return redirect('/dashboard')->with('success', 'Profile Dibuat dengan Sukses!');
+        return redirect('/dashboard')->with('success', 'Profile Dibuat dengan Sukses! Silakan verifikasi email Anda untuk membeli video!');
     }
 
     /**
@@ -130,7 +130,7 @@ class DashboardController extends Controller
                 return redirect('/dashboard')->with('success', 'Password Berhasil Diubah!');
             }
         } catch(\Exception $e){
-            return redirect()->back()->with('error', 'Perubahan Password Gagal. Silakan Coba Lagi');
+            return redirect()->back()->with('error', 'Kata sandi lama salah. Silakan Coba Lagi');
         }
     }
     

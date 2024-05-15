@@ -27,11 +27,6 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="/adPanel/quiz" style="color: black; font-weight: 600;">
-            Kuis
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link d-flex align-items-center gap-2" href="/adPanel/transaksi" style="color: black; font-weight: 600;">
             Transaksi
           </a>

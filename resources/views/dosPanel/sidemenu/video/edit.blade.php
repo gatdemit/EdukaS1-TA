@@ -1,4 +1,4 @@
-@extends('adPanel.layouts.main')
+@extends('dosPanel.layouts.main')
 
 @section('container')
         @if(session()->has('error'))
@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form action="/adPanel/video/{{ request()->segment(count(request()->segments())-1) }}" method="post" enctype="multipart/form-data">
+        <form action="/dosPanel/video/{{ request()->segment(count(request()->segments())-1) }}" method="post" enctype="multipart/form-data">
             @method('put')
             @csrf
                 <div class="form-floating mb-3">
@@ -41,6 +41,5 @@
             <input type="hidden" name="fakultas" id="fakultas" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Fakultas'] }}">
             <input type="hidden" name="jurusan" id="jurusan" value="{{ Str::replace(' ', '_', Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Jurusan']) }}">
             <input type="hidden" name="video" id="video" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Video'] }}">
-            <input type="hidden" name="email" id="email" value="{{ Firebase::database()->getReference('videos/' . $jurusan . '/' . request()->segment(count(request()->segments())-1))->getValue()['Email_Dosen'] }}">
         </form>
 @endsection

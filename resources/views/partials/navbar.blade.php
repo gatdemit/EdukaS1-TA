@@ -17,9 +17,13 @@
           @if(Session::get('user'))
             @if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']=='user')
               <li class="nav-item dropdown-center show" style="margin-right: 60px;">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a data-mdb-ripple-init class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <img src="{{ asset('storage/'. Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['profpic']) }}" style="height: 30px; width:30px; max-height:86px; max-width:86px; border-radius:50%">
+                  @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->exists() && !Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['checkout'])
+                    <span class="badge rounded-pill badge-notification bg-danger">{{ Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->numChildren() }}</span>
+                  @endif
                 </a>
+                
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="/dashboard" style="font-weight:800;"><i class="bi bi-person-fill"></i> Profilku</a></li>
                   <li><hr class="dropdown-divider"></li>
@@ -27,7 +31,19 @@
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="/dashboard/account" style="font-weight:800;"><i class="bi bi-person-fill-gear"></i> Kelola Akun</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="/keranjang" style="font-weight:800;"><i class="bi bi-cart-fill"></i> Keranjangku</a></li>
+                  <li><a class="dropdown-item" href="/keranjang" style="font-weight:800;"><i class="bi bi-cart-fill"></i> 
+                  Keranjangku
+                  @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->exists() && !Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['checkout'])
+                    <span class="badge rounded-pill badge-notification bg-danger">{{ Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->numChildren() }}</span>
+                  @endif
+                </a>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="/dashboard/pesan" style="font-weight: 800;">
+                    <i class="bi bi-envelope-fill"></i> Pesan
+                  </a>
+                </li>  
+                </li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
                     <form action="/logout" method="post">

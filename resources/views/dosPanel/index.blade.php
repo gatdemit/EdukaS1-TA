@@ -1,4 +1,4 @@
-@extends('adPanel.layouts.main')
+@extends('dosPanel.layouts.main')
 
 @section('container')
 @php
@@ -7,9 +7,11 @@
     $rating = collect();
     $tampil = collect();
     $tampil_rate = collect();
-    foreach(Firebase::database()->getReference('videos')->getValue() as $j){
+    
+    foreach(Firebase::database()->getReference('dosen/' . Session::get('email') .'/vids/')->getValue() as $j){
         $vidCount += count($j);
-        foreach($j as $i){
+        foreach($j as $k){
+            $i = Firebase::database()->getReference('videos/' . Str::replace(' ', '_', $k['Jurusan']) . '/' . $k['Video'])->getValue();
             if(array_key_exists('buy_count', $i)){
                 $angka->put($i['Judul_Video'], [
                     'Judul' => $i['Judul_Video'],
@@ -30,7 +32,6 @@
             }
         }
     }
-
     foreach($angka->all() as $count){
         $tampil->put($count['Judul'], $count['buy_count']);
     }
@@ -92,7 +93,7 @@
         </div>
         <div class="table-responsive small row mt-3">
             <div class="col">
-                <h2 style="color: #0038CF; font-weight:700;">Video Top Selling EdukaS1</h2>
+                <h2 style="color: #0038CF; font-weight:700;">Video Top Selling Anda</h2>
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
@@ -126,7 +127,7 @@
     </div>
     <div class="table-responsive small row mt-3">
         <div class="col">
-            <h2 style="color: #0038CF; font-weight:700;">Video Top Rated EdukaS1</h2>
+            <h2 style="color: #0038CF; font-weight:700;">Video Top Rated Anda</h2>
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>

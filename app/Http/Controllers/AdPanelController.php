@@ -18,11 +18,9 @@ class AdPanelController extends Controller
     }
 
     public function adPanel(){
-        $video = Firebase::database()->getReference('videos')->getValue();
         return view('adPanel.index', [
             'title' => 'Admin Panel',
             'header' => "Selamat Datang di Admin Panel",
-            'videos' => $video,
         ]);
     }
 
@@ -48,13 +46,14 @@ class AdPanelController extends Controller
 
     public function delUser(Request $request){
         $auth = Firebase::auth();
-        $db = Firebase::database();
-        $email = Str::replace('.', '', $request['email']);
         try{
-            $auth->deleteUser($request['uid']);
-            $db->getReference('users/' . $email)->remove();
-    
-            return redirect('/adPanel/users')->with('success', 'User Berhasil Dihapus!');
+            if($auth->getUser($request['uid'])->disabled){
+                $auth->enableUser($request['uid']);
+                return redirect('/adPanel/users')->with('success', 'Akun Berhasil Diaktifkan!');
+            } else{
+                $auth->disableUser($request['uid']);
+                return redirect('/adPanel/users')->with('success', 'Akun Berhasil Dinonaktifkan!');
+            }
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'User Gagal Dihapus. Silakan Coba Lagi.');
         }
@@ -79,5 +78,36 @@ class AdPanelController extends Controller
                 'month' => date('m', strtotime(Carbon::now()))
             ]);
         }
+    }
+
+    public function dataTest(){
+        $auth = Firebase::Auth();
+        $db = Firebase::database();
+        $msg = 'm3';
+        $email = 'yahyariz14@gmailcom';
+        $ref = Firebase::database()->getReference('message/sent/dosen3@gmailcom/ananda@gmailcom/message')->getValue();
+
+        dump(Carbon::now()->toDateTimeString());
+
+        // $db->getReference('message/received/' . Session::get('email') . '/' . $email . '/message')->update([
+        //     $msg => [
+        //         'message' => 'child ke-3',
+        //         'timestamp' => Carbon::now()
+        //     ],
+        // ]);
+        
+        // $db->getReference('message/received/' . Session::get('email') . '/' . $email)->update([
+        //     'sender' => $email
+        // ]);
+        // $db->getReference('message/sent/' . $email . '/' . Session::get('email') . '/message')->update([
+        //     $msg => [
+        //         'message' => 'child ke-3',
+        //         'timestamp' => Carbon::now()
+        //     ],
+        // ]);
+
+        // $db->getReference('message/sent/' . $email . '/' . Session::get('email'))->update([
+        //     'to' => Session::get('email')
+        // ]);
     }
 }

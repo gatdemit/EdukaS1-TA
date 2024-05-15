@@ -12,7 +12,7 @@
         content: "";
         z-index: -1;
         background-image: url('{{ asset("storage/asset/Login.jpeg") }}');
-        background-size: 100px 50px;
+        background-size: 600px 300px;
         background-repeat: repeat;
         background-position: center center;
     }
@@ -28,21 +28,21 @@
 
 <div class="row mt-5">
     <div class="col row parent">
-        @if(session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
-        @if(session()->has('belumLogin'))
-        <div class="alert alert-danger  alert-dismissible fade show" role="alert">
-            {{ session('belumLogin') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
         <div class="form-signin p-5 m-auto col-md-6 col-sm-12">
             <div class="container p-5 border border-1" style="box-shadow: 10px 10px 25px; background-color: #fff">
                 <h1 class="text-center mb-5" style="font-weight: 800;">Masuk</h1>
+                @if(session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+                @if(session()->has('belumLogin'))
+                    <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                        {{ session('belumLogin') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <form action="/login" method="post">
                     @csrf
                     <div class="form-floating mb-3">

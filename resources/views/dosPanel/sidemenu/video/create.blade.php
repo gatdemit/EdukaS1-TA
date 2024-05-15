@@ -1,4 +1,4 @@
-@extends('adPanel.layouts.main')
+@extends('dosPanel.layouts.main')
 
 @section('container')
 
@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form action="/adPanel/video" method="post" enctype="multipart/form-data">
+        <form action="/dosPanel/video" method="post" enctype="multipart/form-data">
             @csrf
                 <label for="video">Upload Video (max: 5 MB)</label>
                 <div class="input-group mb-3">

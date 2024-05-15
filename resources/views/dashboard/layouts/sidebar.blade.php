@@ -29,11 +29,19 @@
           <li class="list-group-item d-flex justify-content-between align-items-center p-3">
             <a class="nav-link text-dark align-items-center gap-2" aria-current="page" href="/keranjang" style="font-weight: 600;">
               <i class="bi bi-cart-fill"></i> Keranjangku
+              @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->exists() && !Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['checkout'])
+                <span class="badge rounded-pill badge-notification bg-danger">{{ Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->numChildren() }}</span>
+              @endif
             </a>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center p-3">
             <a class="nav-link text-dark align-items-center gap-2" aria-current="page" href="/dashboard/account" style="font-weight: 600;">
               <i class="bi bi-person-fill-gear"></i> Kelola Akun
+            </a>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+            <a class="nav-link text-dark align-items-center gap-2" aria-current="page" href="/dashboard/pesan" style="font-weight: 600;">
+              <i class="bi bi-envelope-fill"></i> Pesan
             </a>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center p-3">

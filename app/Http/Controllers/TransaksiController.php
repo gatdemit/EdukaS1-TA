@@ -43,6 +43,7 @@ class TransaksiController extends Controller
     
     public function keranjang(Request $request){
         $db = Firebase::database();
+        $auth = Firebase::Auth();
        
         $email = Str::replace('com', '.com', $request['email']);
 
@@ -57,10 +58,14 @@ class TransaksiController extends Controller
         ];
 
         try{
-            $db->getReference('transaksi/unvalidated/' . $request['email'])->update(["email" => $email, "checkout" => false]);
-            $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->update($updates);
-    
-            return redirect()->back()->with('success', 'Video Berhasil Ditambahkan ke Keranjang!');
+            if($auth->getUser(Session::get('firebaseUserId'))->emailVerified){
+                $db->getReference('transaksi/unvalidated/' . $request['email'])->update(["email" => $email, "checkout" => false]);
+                $db->getReference('transaksi/unvalidated/' . $request['email'] . '/Keranjang')->update($updates);
+        
+                return redirect()->back()->with('success', 'Video Berhasil Ditambahkan ke Keranjang!');
+            } else{
+                return redirect('/dashboard')->with('error', 'Anda belum memverifikasi email. Silakan verifikasi email untuk membeli video!');
+            }
         } catch(\Exception $e){
             return redirect()->back()->with('error', 'Video Gagal Ditambahkan ke Keranjang. Silakan Coba Lagi.');
         }
@@ -82,7 +87,11 @@ class TransaksiController extends Controller
         $db=Firebase::database();
 
         try{
-            $db->getReference('transaksi/unvalidated/' . $request['email'] . "/Keranjang/" . $request['video'])->remove();
+            if($db->getReference('transaksi/unvalidated/' . $request['email'] . "/Keranjang/")->getSnapshot()->numChildren() > 1){
+                $db->getReference('transaksi/unvalidated/' . $request['email'] . "/Keranjang/" . $request['video'])->remove();
+            } else{
+                $db->getReference('transaksi/unvalidated/' . $request['email'])->remove();
+            }
     
             return redirect()->back()->with('success', 'Video Berhasil Dihapus dari Keranjang!');
         } catch(\Exception $e){

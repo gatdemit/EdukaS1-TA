@@ -21,6 +21,8 @@ class isGuest
             return redirect('/login');
         } else if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']=='admin'){
             return redirect('/adPanel');
+        } else if(Firebase::Auth()->getUser(Session::get('firebaseUserId'))->customClaims['role']=='dosen'){
+            return redirect('/dosPanel');
         }
         return $next($request);
     }

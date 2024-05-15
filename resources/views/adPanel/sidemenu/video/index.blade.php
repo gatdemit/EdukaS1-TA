@@ -13,21 +13,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="d-flex justify-content-between">
-        <a href="/adPanel/video/create">
-            <button class="btn btn-primary" style="font-weight: 600;">Upload Video</button>
-        </a>
-        <form class="row" action="/adPanel/video" method="post">
-            @csrf
-            <div class="input-group mb-3 w-50 ms-auto">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input name="search" id="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
-                <input type="hidden" name="choice" id="choice" value="{{ $choice }}">
-                <button class="btn btn-primary" style="font-weight: 600;">Cari</button>
-            </div>
-            <a class="mb-3" href="/adPanel/video" style="text-align: right;">Clear Search</a>
-        </form>
-    </div>
+    <form class="row" action="/adPanel/video" method="post">
+        @csrf
+        <div class="input-group mb-3 w-50 ms-auto">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+            <input name="search" id="search" type="text" class="form-control" placeholder="Cari Video disini" aria-label="Username" aria-describedby="basic-addon1" value="{{ $search ? $query : '' }}" required>
+            <input type="hidden" name="choice" id="choice" value="{{ $choice }}">
+            <button class="btn btn-primary" style="font-weight: 600;">Cari</button>
+        </div>
+        <a class="mb-3" href="/adPanel/video" style="text-align: right;">Clear Search</a>
+    </form>
     <form action="/adPanel/video" method="POST" id="formJurusan">
         @csrf
         <input type="hidden" value="{{ $search ? $query : '' }}" name="search" id="search">
@@ -66,7 +61,7 @@
             @if($jurusan!=null)
                 @if($search)
                     @foreach($jurusan as $snapshot)
-                        @if(Str::contains($snapshot['Judul_Video'], $query) || Str::contains($snapshot['Deskripsi'], $query) || Str::contains($snapshot['Jurusan'], $query) || Str::contains($snapshot['Fakultas'], $query) || Str::contains($snapshot['Harga'], $query))
+                        @if(Str::contains(Str::upper($snapshot['Judul_Video']), Str::upper($query)) || Str::contains(Str::upper($snapshot['Deskripsi']), Str::upper($query)) || Str::contains(Str::upper($snapshot['Jurusan']), Str::upper($query)) || Str::contains(Str::upper($snapshot['Fakultas']), Str::upper($query)) || Str::contains(Str::upper($snapshot['Harga']),Str::upper($query)))
                             <tr>
                                 <td>{{ Str::title($snapshot['Judul_Video']) }}</td>
                                 <td style="font-weight: 500;">{{ $snapshot['Fakultas'] }}</td>

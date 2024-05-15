@@ -26,11 +26,20 @@
             @endif
             <main class="form-registration p-5 w-100 m-auto">
                 <div class="container p-5 border border-1">
-                    <h1 class="text-center">Pembuatan Akun Admin</h1>
-                <form action="/adReg" method="post">
+                    <h1 class="text-center">Pembuatan Akun Dosen</h1>
+                <form action="/dosReg" method="post">
                     @csrf
                     <div class="form-floating mb-3">
-                        <input type="text" name="username" id="username" placeholder="username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" required autofocus>
+                        <input type="text" name="nama" id="nama" placeholder="Nama Lengkap" value="{{ old('nama') }}" class="form-control @error('nama') is-invalid @enderror" required autofocus>
+                        <label for="nama" class="form-control-label">Nama Lengkap</label>
+                        @error('nama')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="username" id="username" placeholder="Username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" required autofocus>
                         <label for="username" class="form-control-label">Username</label>
                         @error('username')
                         <div class="invalid-feedback">
@@ -49,7 +58,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" name="password" id="password" placeholder="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" required>
-                        <label for="password" class="form-control-label">Kata Sandi (minimal 6 karakter)</label>
+                        <label for="password" class="form-control-label">Kata Sandi (minmal 6 karakter)</label>
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
