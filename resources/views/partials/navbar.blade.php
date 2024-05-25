@@ -20,7 +20,22 @@
                 <a data-mdb-ripple-init class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <img src="{{ asset('storage/'. Firebase::database()->getReference('users/'.Session::get('email'))->getValue()['profpic']) }}" style="height: 30px; width:30px; max-height:86px; max-width:86px; border-radius:50%">
                   @if(Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->exists() && !Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email'))->getValue()['checkout'])
-                    <span class="badge rounded-pill badge-notification bg-danger">{{ Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->numChildren() }}</span>
+                    <span class="badge rounded-pill badge-notification bg-danger"><i class="bi bi-cart-fill"></i>{{ Firebase::database()->getReference('transaksi/unvalidated/' . Session::get('email') . '/Keranjang')->getSnapshot()->numChildren() }}</span>
+                  @endif
+                  @if(Firebase::database()->getReference('message/received/' . Session::get('email'))->getSnapshot()->exists())
+                    @php
+                      $count = 0;
+                      foreach(Firebase::database()->getReference('message/received/' . Session::get('email'))->getValue() as $sender){
+                        foreach($sender['message'] as $pesan){
+                          if(!$pesan['read']){
+                            $count += 1;
+                          }
+                        }
+                      }
+                    @endphp
+                    @if($count > 0)
+                      <span class="badge rounded-pill badge-notification bg-danger"><i class="bi bi-envelope-fill"></i>{{ $count }}</span>
+                    @endif
                   @endif
                 </a>
                 
@@ -40,7 +55,14 @@
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <a class="dropdown-item" aria-current="page" href="/dashboard/pesan" style="font-weight: 800;">
-                    <i class="bi bi-envelope-fill"></i> Pesan
+                    <i class="bi bi-envelope-fill"></i> Pesan 
+                    @if(Firebase::database()->getReference('message/received/' . Session::get('email'))->getSnapshot()->exists())
+                      @if($count > 0)
+                        <span class="badge rounded-pill badge-notification bg-danger">
+                          {{ $count }}
+                        </span>
+                      @endif
+                    @endif
                   </a>
                 </li>  
                 </li>

@@ -57,14 +57,16 @@ class PesanController extends Controller
                 $db->getReference('message/received/' . $request['dosen'] . '/' . Session::get('email') . '/message')->update([
                     'm' . $count => [
                         'message' => $pesan,
-                        'timestamp' => Carbon::now()->toDateTimeString()
+                        'timestamp' => Carbon::now()->toDateTimeString(),
+                        'read' => false
                     ],
                 ]);
             } else{
                 $db->getReference('message/received/' . $request['dosen'] . '/' . Session::get('email') . '/message')->update([
                     'm1' => [
                         'message' => $pesan,
-                        'timestamp' => Carbon::now()->toDateTimeString()
+                        'timestamp' => Carbon::now()->toDateTimeString(),
+                        'read' => false
                     ],
                 ]);
         

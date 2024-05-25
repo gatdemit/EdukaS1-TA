@@ -76,6 +76,19 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 ml-3">
                                         {{ Firebase::database()->getReference('users/' . $snapshot['sender'])->getValue()['name'] }}
+                                        @if(Firebase::database()->getReference('message/received/' . Session::get('email') . '/' . $snapshot['sender'])->getSnapshot()->exists())
+                                            @php
+                                            $count = 0;
+                                            foreach(Firebase::database()->getReference('message/received/' . Session::get('email') . '/' . $snapshot['sender'] . '/message')->getValue() as $pesan){
+                                                if(!$pesan['read']){
+                                                    $count += 1;
+                                                }
+                                            }
+                                            @endphp
+                                            @if($count > 0)
+                                            <span class="badge rounded-pill badge-notification bg-danger" id="notif{{ Str::replace('@', '', $snapshot['sender']) }}">{{ $count }}</span>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </a>
@@ -158,6 +171,24 @@
                             const div{!! Str::replace('@', '', $snapshot['sender']) !!} = document.getElementById("div{!! Str::replace('@', '', $snapshot['sender']) !!}");
                             var date = '{!! Carbon\Carbon::now() !!}';
                             var date_baru = '{!! date('H:i', strtotime(Carbon\Carbon::now())) !!}'
+                            const tab{!! Str::replace('@', '', $snapshot['sender']) !!} = document.getElementById("{!! Str::replace('@', '', $snapshot['sender']) !!}");
+                            const observer = new MutationObserver(()=>{
+                                div{!! Str::replace('@', '', $snapshot['sender']) !!}.lastElementChild.scrollIntoView(false);
+                                db.ref("message/received/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}/message").once('value', (snapshot)=>{
+                                    for(i = 1; i <= snapshot.numChildren(); i++){
+                                        db.ref(`message/received/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}/message/m${i}`).update({'read': true});
+                                    }
+                                });
+                                if({!! $count !!} > 0){
+                                    const notif{!! Str::replace('@', '', $snapshot['sender']) !!} = document.getElementById("notif{!! Str::replace('@', '', $snapshot['sender']) !!}");
+                                    notif{!! Str::replace('@', '', $snapshot['sender']) !!}.remove();
+                                }
+                            });
+
+                            observer.observe(tab{!! Str::replace('@', '', $snapshot['sender']) !!}, {
+                                childList: true,
+                                attributes: true
+                            });
 
                             const button{!! Str::replace('@', '', $snapshot['sender']) !!} = document.getElementById("button{{ Str::replace('@', '', $snapshot['sender']) }}");
 
@@ -185,7 +216,8 @@
                                         }
                                         db.ref("message/received/{!! $snapshot['sender'] !!}/{!! Session::get('email') !!}/message/" + ma).update({
                                             'message': message,
-                                            'timestamp': date
+                                            'timestamp': date,
+                                            'read': false
                                         });
     
                                         db.ref("message/sent/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}/message/" + ma).update({
@@ -207,29 +239,36 @@
                                                         </div>
                                                     `;
                                             div{!! Str::replace('@', '', $snapshot['sender']) !!}.insertAdjacentHTML('beforeend', messageChild);
+                                        }).then((snapshot)=>{
+                                            div{!! Str::replace('@', '', $snapshot['sender']) !!}.lastElementChild.scrollIntoView(false);
                                         });
                                     });
                                 }
                             });
 
-                            db.ref("message/received/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}").once('child_changed', (snapshot)=>{
-                                        const newMessage = snapshot.val()[`m${snapshot.numChildren()}`];
-                                        const time = new Date(newMessage['timestamp']);
-                                        const waktu = (time.getMinutes < 10 ? time.getHours() + ':0' + time.getMinutes() : time.getHours() + ':' + time.getMinutes());
-                                        console.log(newMessage);
-                                        const messageChild = `
-                                                    <div class="chat-message-left pb-4">
-                                                        <div>
-                                                            <div class="text-muted small text-nowrap mt-2 mx-2">${waktu}</div>
-                                                        </div>
-                                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                                            <div class="bold mb-1">{{ Firebase::database()->getReference('users/' . $snapshot['sender'])->getValue()['name'] }}</div>
-                                                            ${newMessage['message']}
-                                                        </div>
-                                                    </div>
-                                                `;
-                                        div{!! Str::replace('@', '', $snapshot['sender']) !!}.insertAdjacentHTML('beforeend', messageChild);
+                            db.ref("message/received/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}").on('child_changed', (snapshot)=>{
+                                const newMessage = snapshot.val()[`m${snapshot.numChildren()}`];
+                                const time = new Date(newMessage['timestamp']);
+                                const waktu = (time.getMinutes() < 10 ? time.getHours() + ':0' + time.getMinutes() : time.getHours() + ':' + time.getMinutes());
+                                const messageChild = `
+                                            <div class="chat-message-left pb-4">
+                                                <div>
+                                                    <div class="text-muted small text-nowrap mt-2 mx-2">${waktu}</div>
+                                                </div>
+                                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                    <div class="bold mb-1">{{ Firebase::database()->getReference('users/' . $snapshot['sender'])->getValue()['name'] }}</div>
+                                                    ${newMessage['message']}
+                                                </div>
+                                            </div>
+                                        `;
+                                
+                                    db.ref("message/sent/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}/message").once('value', (snap)=>{
+                                        if(div{!! Str::replace('@', '', $snapshot['sender']) !!}.childElementCount < snapshot.numChildren() + snap.numChildren()){
+                                            div{!! Str::replace('@', '', $snapshot['sender']) !!}.insertAdjacentHTML('beforeend', messageChild);
+                                            db.ref(`message/received/{!! Session::get('email') !!}/{!! $snapshot['sender'] !!}/message/m${snapshot.numChildren()}`).update({'read': true});
+                                        }
                                     });
+                            });
                         </script>
                     @endforeach
                 </div>

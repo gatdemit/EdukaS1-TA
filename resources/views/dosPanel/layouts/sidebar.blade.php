@@ -24,6 +24,23 @@
           <li class="nav-item">
             <a class="nav-link d-flex align-items-center gap-2" href="/dosPanel/pesan" style="color: black; font-weight: 600;">
               Pesan
+              @if(Firebase::database()->getReference('message/received/' . Session::get('email'))->getSnapshot()->exists())
+                @php
+                  $angka = 0;
+                  foreach(Firebase::database()->getReference('message/received/' . Session::get('email'))->getValue() as $sender){
+                    foreach($sender['message'] as $pesan){
+                      if(!$pesan['read']){
+                        $angka += 1;
+                      }
+                    }
+                  }
+                @endphp
+                @if($angka > 0)
+                  <span class="badge rounded-pill badge-notification bg-danger">
+                    {{ $angka }}
+                  </span>
+                @endif
+              @endif
             </a>
           </li>
         </ul>
